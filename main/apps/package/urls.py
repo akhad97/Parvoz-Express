@@ -1,0 +1,71 @@
+from django.urls import path
+from . import views
+
+
+urlpatterns = [
+    path(
+        'tourpackage-landing-search/',
+        view=views.tourpackage_landing_search_api_view,
+        name='tourpackage_landing_search'
+    ),
+    path(
+        'tourpackage-list/',
+        view=views.tourpackage_list_api_view,
+        name='tourpackage_list'
+    ),
+    path(
+        'tourpackage-create/',
+        view=views.tourpackage_create_api_view,
+        name='tourpackage_create'
+    ),
+    path(
+        '<uuid:guid>/tourpackage-detail/',
+        view=views.tourpackage_detail_api_view,
+        name='tourpackage_detail'
+    ),
+    path(
+        '<uuid:guid>/tourpackage-update/',
+        view=views.tourpackage_update_api_view,
+        name='tourpackage_update'
+    ),
+    path(
+        'tourpackage-analytics/',
+        view=views.tourpackage_analytics_api_view,
+        name='tourpackage_analytics'
+    ),
+    path(
+        'dashboard/',
+        view=views.dashboard_api_view,
+        name='dashboard_list'
+    ),
+    path(
+        'report/',
+        view=views.report_data_api_view,
+        name='report_data'
+    ),
+    path(
+        'tourpackagebook-create/',
+        view=views.tourpackage_book_create_api_view,
+        name='tourpackagebook_create'
+    ),
+    path(
+        'tourpackagebook-list/',
+        view=views.tourpackage_book_list_api_view,
+        name='tourpackagebook_list'
+    ),
+    path(
+        '<uuid:guid>/tourpackagebook-update/',
+        view=views.tourpackage_book_update_api_view,
+        name='tourpackagebook_update'
+    ),
+    path(
+        'contact-list/',
+        view=views.contact_list_api_view,
+        name='contact_list'
+    ),
+    path(
+        '<uuid:guid>/contact-update/',
+        view=views.contact_update_api_view,
+        name='contact_update'
+    ),
+]

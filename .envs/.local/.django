@@ -1,0 +1,4 @@
+PROJECT_NAME=parvozturizm
+DJANGO_SETTINGS_MODULE=config.settings.local
+SECRET_KEY=ye834nv)m2_lu+w0+iy05^d-*peq&ii99mk%n56i-2gz0kadqu
+DEBUG=True
