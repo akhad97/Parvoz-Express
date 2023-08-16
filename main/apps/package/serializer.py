@@ -1,10 +1,16 @@
 from rest_framework import serializers 
-from .models import TourPackage, TourPackageBook, Contact
+from .models import (
+    TourPackage, 
+    TourPackageBook, 
+    Contact,
+    FastContact
+)
 from ..hotel.serializers import HotelListSerializer
 from ..outfit.serializers import OutfitListSerializer
 from ..transport.serializers import TransportSerializer
 from ..flight.serializer.flight import FlightSerializer
 from ..employee.serializers import GuideSerializer
+
 
 
 
@@ -133,11 +139,6 @@ class TourPackageBookUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 class TourPackageBookListSerializer(serializers.ModelSerializer):
-    # flight = FlightSerializer()
-    # hotel = HotelListSerializer(many=True)
-    # outfit = OutfitListSerializer(many=True)
-    # transport = TransportSerializer(many=True)
-    # guide = GuideSerializer(many=True)
     tourpackage_guid = serializers.CharField(source='tourpackage.guid')
     tourpackage_title = serializers.CharField(source='tourpackage.title')
     tourpackage_start_date = serializers.CharField(source='tourpackage.start_date')
@@ -162,11 +163,6 @@ class TourPackageBookListSerializer(serializers.ModelSerializer):
             'tourpackage_price_for_person',
             'tourpackage_manager',
             'tourpackage_status',
-            # 'flight',
-            # 'hotel',
-            # 'outfit',
-            # 'transport',
-            # 'guide',
             'full_name',
             'phone_number',
             'is_viewed'
@@ -189,3 +185,27 @@ class ContanctSerializer(serializers.ModelSerializer):
             'youtube'
         )
 
+
+class FastContanctSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FastContact
+        fields = (
+            'id',
+            'guid',
+            'full_name',
+            'phone_number',
+            'is_viewed'
+        )
+
+
+class FastContactUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FastContact
+        fields = (
+            'is_viewed',
+        )
+
+    def update(self, instance, validated_data):
+        instance.is_viewed = validated_data.get('is_viewed', instance.is_viewed)
+        instance.save()
+        return instance

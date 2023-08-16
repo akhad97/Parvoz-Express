@@ -7,15 +7,8 @@ from ..hotel.models import Hotel
 from ..outfit.models import Outfit
 from ..flight.models.flight import Flight
 from ..employee.models import Manager, Guide
-from django.utils import timezone
-from django.utils.text import slugify
+from ..common.utils import upload_images
 
-def upload_landing_images(instance, filename):
-    path = "landing_images/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
 
 
 class StatusChoices(models.TextChoices):
@@ -87,7 +80,7 @@ class Contact(BaseModel):
     sub_title = models.CharField(max_length=200, null=True, blank=True)
     phone_number_1 = models.CharField(max_length=50, null=True, blank=True)
     phone_number_2 = models.CharField(max_length=50, null=True, blank=True)
-    landing_img = models.ImageField(upload_to=upload_landing_images, null=True, blank=True)
+    landing_img = models.ImageField(upload_to=upload_images(instance='self', path='landing_imgs/'), null=True)
     telegram = models.URLField(null=True, blank=True)
     instagram = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
@@ -100,3 +93,18 @@ class Contact(BaseModel):
 
     def __str__(self):
         return f'{self.title}'
+    
+
+
+class FastContact(BaseModel):
+    full_name = models.CharField(max_length=200, null=True, blank=True)
+    phone_number = models.CharField(max_length=50, null=True, blank=True)
+    is_viewed = models.BooleanField(default=False)
+
+    class Meta(BaseMeta):
+        verbose_name = _("FastContact")
+        verbose_name_plural = _("FastContact")
+
+
+    def __str__(self):
+        return f'{self.full_name}'

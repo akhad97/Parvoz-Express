@@ -1,7 +1,6 @@
 from django.db import models
 from ..common.models import BaseModel, BaseMeta
 from django.utils.translation import gettext as _
-# from ..package.models import TourPackage
 
 
 class Manager(BaseModel):

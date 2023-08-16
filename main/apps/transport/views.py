@@ -23,7 +23,6 @@ class TransportListAPIView(CustomListView):
     serializer_class = TransportSerializer
 
     def get_queryset(self):
-        # user = self.request.user
         params = self.request.query_params
         query = params.get('query', None)
 

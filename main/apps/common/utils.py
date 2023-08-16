@@ -6,9 +6,6 @@ from django.utils.text import slugify
 from ..common.validations import CustomValidationError
 
 
-
-
-
 def upload_images(instance, path):
     filename = os.path.basename(path)
     filename_without_extension, extension = os.path.splitext(filename.lower())

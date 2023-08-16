@@ -4,18 +4,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from ..common.models import BaseModel, BaseMeta
 from .managers.user import UserManager
-# from .region import Region
 from django.conf import settings
 
-
-# owner = settings.OWNER
-# moderator = settings.MODERATOR
-# salesman = settings.SALESMAN
-
-# class UserRoleChoices(models.TextChoices):
-#     OWNER = owner, _(owner)
-#     MODERATOR = moderator, _(moderator)
-#     SALESMAN = salesman, _(salesman)
 
 
 class Region(BaseModel):
@@ -44,7 +34,6 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_working_with_agent = models.BooleanField(default=False)
     is_for_finance = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
-    # user_role = models.CharField(max_length=50, choices=UserRoleChoices.choices)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False, 

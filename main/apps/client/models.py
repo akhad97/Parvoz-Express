@@ -7,66 +7,23 @@ from ..package.models import TourPackage
 from ..visa.models import Visa
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
-
-
-def upload_client_passport_images(instance, filename):
-    path = "client_images/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
-
-def upload_partner_passport_images(instance, filename):
-    path = "partner_images/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
-
-def upload_visa_client_passport_images(instance, filename):
-    path = "visa_client_images/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
-
-def upload_visa_partner_passport_images(instance, filename):
-    path = "visa_partner_images/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
-
-def upload_visa_file(instance, filename):
-    path = "visa_file/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
-
-
-def upload_partner_visa_file(instance, filename):
-    path = "partner_visa_file/"
-    filename_without_extension, extension = os.path.splitext(filename.lower())
-    timestamp = timezone.now().strftime("%Y-%m-%d.%H-%M-%S")
-    filename = f"{slugify(filename_without_extension)}.{timestamp}{extension}"
-    return os.path.join(path, filename)
+from ..common.utils import upload_images
 
 
 class Client(BaseModel):
     tour_package = models.ForeignKey(TourPackage, on_delete=models.SET_NULL, null=True, related_name='tourpackage_clients')
-    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, related_name='hotel_clients')
     visa  = models.ForeignKey(Visa, on_delete=models.SET_NULL, null=True)
     full_name = models.CharField(max_length=200)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_img = models.ImageField(upload_to=upload_client_passport_images)
+    passport_img = models.ImageField(upload_to=upload_images(instance='self', path='client_images/'), null=True)
     room_type = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_visa_file, null=True)
+    visa_file = models.FileField(upload_to=upload_images(instance='self', path='visa_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     outfit_size = models.CharField(max_length=50, null=True)
     
@@ -88,10 +45,10 @@ class Partner(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_image = models.ImageField(upload_to=upload_partner_passport_images)
+    passport_image = models.ImageField(upload_to=upload_images(instance='self', path='pass_partner_images/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_partner_visa_file, null=True)
+    visa_file = models.FileField(upload_to=upload_images(instance='self', path='pass_visa_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     outfit_size = models.CharField(max_length=50, null=True)
     
@@ -113,11 +70,11 @@ class VisaClient(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_img = models.ImageField(upload_to=upload_visa_client_passport_images)
+    passport_img = models.ImageField(upload_to=upload_images(instance='self', path='visa_client_pass_imgs/'), null=True)
     room_type = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_visa_file, null=True)
+    visa_file = models.FileField(upload_to=upload_images(instance='self', path='visa_client_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     
 
@@ -138,7 +95,7 @@ class VisaPartner(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_image = models.ImageField(upload_to=upload_visa_partner_passport_images)
+    passport_image = models.ImageField(upload_to=upload_images(instance='self', path='visa_partner_pass_imgs/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
     

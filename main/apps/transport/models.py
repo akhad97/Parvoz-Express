@@ -4,8 +4,6 @@ from ..common.models import BaseModel, BaseMeta
 from ..common.utils import upload_images
 
 
-
-
 class TransportTypeChoices(models.TextChoices):
     Bus = 'Bus', _('Bus')
     Microbus = 'Microbus', _('Microbus')

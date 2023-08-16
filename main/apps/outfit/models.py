@@ -3,8 +3,6 @@ from django.utils.translation import gettext as _
 from ..common.models import BaseModel, BaseMeta
 
 
-
-
 class OutfitTypeChoices(models.TextChoices):
     Jerkin = 'Jerkin', _('Jerkin')
     Badge = 'Badge', _('Badge')

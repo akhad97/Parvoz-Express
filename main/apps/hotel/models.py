@@ -5,8 +5,6 @@ from ..common.models import BaseModel, BaseMeta
 from ..common.utils import upload_images
 
 
-
-
 class NutritionTypeChoices(models.TextChoices):
     AI = 'AI', _('AI')
     BB = 'BB', _('BB')

@@ -8,7 +8,8 @@ from ..visa.models import Visa
 from .models import (
     TourPackage, 
     TourPackageBook, 
-    Contact
+    Contact,
+    FastContact
 )
 from .serializer import (
     TourPackageSerializer,
@@ -18,7 +19,9 @@ from .serializer import (
     TourPackageBookCreateSerializer,
     TourPackageBookListSerializer,
     ContanctSerializer,
-    TourPackageBookUpdateSerializer
+    TourPackageBookUpdateSerializer,
+    FastContanctSerializer,
+    FastContactUpdateSerializer
 )
 from ..common.views import CustomListView, CustomCreateAPIView, CustomDetailView
 from ..client.models import Client
@@ -97,8 +100,6 @@ class TourPackageLandingSearchAPIView(CustomListView):
     def get_queryset(self):
         params = self.request.query_params
         departure_city = params.get('departure_city', None)
-        # departure_city = params.get('departure_city', None)
-        # tour = params.get('tour', None)
         start_date = params.get('start_date', None)
         end_date = params.get('end_date', None)
         price_start = params.get('price_start', None)
@@ -264,7 +265,6 @@ class ReportDataAPIView(CustomListView):
             for other_expense in other_expenses:
                 drug_amount += other_expense.amount
 
-
             tourpackage_title = tourpackage.title
             place_of_arrival_1 = tourpackage.flight.place_of_arrival_1
             place_of_departure_1 = tourpackage.flight.place_of_departure_1
@@ -283,6 +283,15 @@ class ReportDataAPIView(CustomListView):
             landing_date_4 = tourpackage.flight.landing_time_4
             departure_date_4 = tourpackage.flight.departure_time_4
 
+            landing_date_1_format = None 
+            landing_date_2_format = None 
+            landing_date_3_format = None 
+            landing_date_4_format = None 
+            departure_date_1_format = None 
+            departure_date_2_format = None 
+            departure_date_3_format = None 
+            departure_date_4_format = None 
+
             if landing_date_1 is not None:
                 landing_date_1_format = (datetime.fromisoformat(str(landing_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
@@ -300,14 +309,14 @@ class ReportDataAPIView(CustomListView):
             else:
                 print("Date field is empty.", departure_date_2)
             if landing_date_3 is not None:
-                landing_date_3 = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                landing_date_3_format = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
                 print("Date field is empty.", landing_date_3)
             if departure_date_3 is not None:    
-                departure_date_3 = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
                 print("Date field is empty.", departure_date_3)
-                departure_date_3 = None
+                # departure_date_3 = None
             if landing_date_4 is not None:  
                 landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
@@ -326,7 +335,7 @@ class ReportDataAPIView(CustomListView):
             benefit_amount=0
             for benefit in benefits:
                 benefit_amount += benefit.total_amount
-
+            
             num_of_client_single = Client.objects.filter(tour_package=tourpackage, room_type='single').count()
             num_of_client_double = Client.objects.filter(tour_package=tourpackage, room_type='double').count()
             num_of_client_triple = Client.objects.filter(tour_package=tourpackage, room_type='triple').count()
@@ -411,8 +420,8 @@ class ReportDataAPIView(CustomListView):
                 'departure_date_1': departure_date_1_format,
                 'landing_date_2': landing_date_2_format,
                 'departure_date_2': departure_date_2_format,
-                'landing_date_3': landing_date_3,
-                'departure_date_3': departure_date_3,
+                'landing_date_3': landing_date_3_format,
+                'departure_date_3': departure_date_3_format,
                 'landing_date_4': landing_date_4_format,
                 'departure_date_4': departure_date_4_format,
                 'night': nights,
@@ -508,3 +517,36 @@ class ContactUpdteAPIView(generics.UpdateAPIView):
         return Response({'message': 'failed', 'details': serializer.errors})
 
 contact_update_api_view = ContactUpdteAPIView.as_view()
+
+
+
+class FastContactCreateAPIView(generics.CreateAPIView):
+    queryset = FastContact.objects.all()
+    serializer_class = FastContanctSerializer
+
+fast_contact_create_api_view = FastContactCreateAPIView.as_view()
+
+
+class FastContactUpdteAPIView(generics.UpdateAPIView):
+    queryset = FastContact.objects.all()
+    serializer_class = FastContactUpdateSerializer
+    lookup_field = 'guid'
+
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({'message': 'success'})
+        return Response({'message': 'failed', 'details': serializer.errors})
+
+fast_contact_update_api_view = FastContactUpdteAPIView.as_view()
+
+
+class FastContactListAPIView(CustomListView):
+    queryset = FastContact.objects.all()
+    serializer_class = FastContanctSerializer
+
+fast_contact_list_api_view = FastContactListAPIView.as_view()
+
+

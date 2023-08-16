@@ -68,4 +68,20 @@ urlpatterns = [
         view=views.contact_update_api_view,
         name='contact_update'
     ),
+    path(
+        'fastcontact-create/',
+        view=views.fast_contact_create_api_view,
+        name='fast_contact_create'
+    ),
+    path(
+        'fastcontact-list/',
+        view=views.fast_contact_list_api_view,
+        name='fast_contact_list'
+    ),
+    path(
+        '<uuid:guid>/fastcontact-update/',
+        view=views.fast_contact_update_api_view,
+        name='fast_contact_update'
+    ),
+
 ]
