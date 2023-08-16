@@ -1,75 +1,44 @@
-
+# Use the official Python image as the base image
 FROM python:3.10-slim-buster
 
+# Set an environment variable to prevent buffering of Python output
 ENV PYTHONUNBUFFERED 1
 
-RUN apt update
-RUN apt-get install -y cron 
-RUN alias py=python
+# Install system packages required for the image
+RUN apt-get update && apt-get install -y \
+    cron \
+    libpq-dev libmagic-dev gettext
 
+# Create a non-root user inside the container
+RUN addgroup --system django && adduser --system --ingroup django django
 
-RUN apt-get update \
-  # dependencies for building Python packages
-  && apt-get install -y build-essential \
-  # psycopg2 dependencies
-  && apt-get install -y libpq-dev libmagic-dev \
-  # Translations dependencies
-  && apt-get install -y gettext \
-  # cleaning up unused files
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && rm -rf /var/lib/apt/lists/*
-
-
+# Set the working directory
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
-
-RUN mkdir -p $HOME
-RUN mkdir $APP_HOME
-
+RUN mkdir -p $HOME $APP_HOME
 WORKDIR $APP_HOME
 
-RUN addgroup --system django \
-    && adduser --system --ingroup django django
-
-
-# Requirements are installed here to ensure they will be cached.
+# Copy and install Python requirements
 COPY ./requirements /requirements
-RUN pip install --no-cache-dir -r /requirements/production.txt \
-    && rm -rf /requirements
+RUN pip install --no-cache-dir -r /requirements/production.txt && rm -rf /requirements
 
+# Copy the entrypoint and start scripts
 COPY ./compose/production/django/entrypoint /entrypoint
-RUN sed -i 's/\r$//g' /entrypoint
-RUN chmod +x /entrypoint
-RUN chown django /entrypoint
+RUN chmod +x /entrypoint && chown django /entrypoint
 
 COPY ./compose/production/django/start /start
-RUN sed -i 's/\r$//g' /start
-RUN chmod +x /start
-RUN chown django /start
+RUN chmod +x /start && chown django /start
 
-
-
+# Copy the application code
 COPY --chown=django:django . $APP_HOME
-RUN chown -R django:django $APP_HOME
 
-COPY . $APP_HOME
-
-RUN mkdir $APP_HOME/main/static
-RUN chown django $APP_HOME/main/static
-
-RUN mkdir $APP_HOME/main/media
-RUN chown django $APP_HOME/main/media
-
+# Create necessary directories and set permissions
+RUN mkdir $APP_HOME/main/static && chown django $APP_HOME/main/static
+RUN mkdir $APP_HOME/main/media && chown django $APP_HOME/main/media
 RUN chmod gu+rw /var/run && chmod gu+s /usr/sbin/cron
 
+# Set the user for running the container
+USER django
 
-# USER django
-
-# EXPOSE 8000
-
-# CMD python manage.py runserver 0.0.0.0:8000
-
+# Specify the entrypoint command
 ENTRYPOINT ["/entrypoint"]
-
-
-
