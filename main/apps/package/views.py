@@ -218,6 +218,7 @@ class DashboardAPIView(CustomListView):
 dashboard_api_view = DashboardAPIView.as_view()
 
 
+
 class ReportDataAPIView(CustomListView):
     queryset = TourPackage.objects.filter(is_active=True)
     serializer_class = TourPackageSerializer
@@ -316,7 +317,6 @@ class ReportDataAPIView(CustomListView):
                 departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
                 print("Date field is empty.", departure_date_3)
-                # departure_date_3 = None
             if landing_date_4 is not None:  
                 landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
             else:
@@ -335,21 +335,30 @@ class ReportDataAPIView(CustomListView):
             benefit_amount=0
             for benefit in benefits:
                 benefit_amount += benefit.total_amount
-            
-            num_of_client_single = Client.objects.filter(tour_package=tourpackage, room_type='single').count()
-            num_of_client_double = Client.objects.filter(tour_package=tourpackage, room_type='double').count()
-            num_of_client_triple = Client.objects.filter(tour_package=tourpackage, room_type='triple').count()
-            num_of_client_quadriple = Client.objects.filter(tour_package=tourpackage, room_type='quad').count()
+
+            hotel_clients = Client.objects.filter(tour_package=tourpackage)
+            hotel_client_counts = {
+                hotel.title: {
+                    'single': hotel_clients.filter(room_type='single').count(),
+                    'double': hotel_clients.filter(room_type='double').count(),
+                    'triple': hotel_clients.filter(room_type='triple').count(),
+                    'quad': hotel_clients.filter(room_type='quad').count(),
+                }
+                for hotel in tourpackage.hotel.all()
+            }
+
 
             single_room_price = [hotel.single_room_price for hotel in tourpackage.hotel.all()]
             double_room_price = [hotel.double_room_price for hotel in tourpackage.hotel.all()]
             triple_room_price = [hotel.triple_room_price for hotel in tourpackage.hotel.all()]
             quadruple_room_price = [hotel.quadruple_room_price for hotel in tourpackage.hotel.all()]
 
-            hotel_single_room_total_price = [price * num_of_client_single * nights for price in single_room_price]
-            hotel_double_room_total_price = [price * num_of_client_double * nights for price in single_room_price]
-            hotel_triple_room_total_price = [price * num_of_client_triple * nights for price in single_room_price]
-            hotel_quad_room_total_price = [price * num_of_client_quadriple * nights for price in single_room_price]
+            # hotel_single_room_total_price = [price * num_of_client_single * nights for price in single_room_price]
+
+            hotel_single_room_total_price = [price * hotel_client_counts[hotel.title]['single'] * nights for hotel, price in zip(tourpackage.hotel.all(), single_room_price)]
+            hotel_double_room_total_price = [price * hotel_client_counts[hotel.title]['double'] * nights for hotel, price in zip(tourpackage.hotel.all(), double_room_price)]
+            hotel_triple_room_total_price = [price * hotel_client_counts[hotel.title]['triple'] * nights for hotel, price in zip(tourpackage.hotel.all(), triple_room_price)]
+            hotel_quad_room_total_price = [price * hotel_client_counts[hotel.title]['quad'] * nights for hotel, price in zip(tourpackage.hotel.all(), quadruple_room_price)]
             
             hotel_total_price = [
                 sum(prices) for prices in zip(
@@ -358,13 +367,25 @@ class ReportDataAPIView(CustomListView):
                     hotel_triple_room_total_price
                 )
             ]
+            
+            # additional_expense_for_hotel = []
+            # for item in tourpackage.hotel_data:
+            #     if "additional_expense" in item:
+            #         additional_expense_for_hotel.append(item["additional_expense"])
+            #     else:
+            #         additional_expense_for_hotel.append(0)
 
             additional_expense_for_hotel = []
-            for item in tourpackage.hotel_data:
-                if "additional_expense" in item:
-                    additional_expense_for_hotel.append(item["additional_expense"])
-                else:
-                    additional_expense_for_hotel.append(0)
+
+            if tourpackage.hotel_data:
+                for item in tourpackage.hotel_data:
+                    if "additional_expense" in item:
+                        additional_expense_for_hotel.append(item["additional_expense"])
+                    else:
+                        additional_expense_for_hotel.append(0)
+            else:
+                additional_expense_for_hotel = [0] * tourpackage.hotel.count() 
+
 
 
             food_price_for_each_hotel = [
@@ -433,15 +454,10 @@ class ReportDataAPIView(CustomListView):
                 'service_price': service_price,
                 'otper_expense': drug_amount,
                 'number_of_room': number_of_room,
-                # 'hotel_additional_expense': hotel_additional_expense,
-                # 'hotel_another_price_1': hotel_another_price_1,
-                # 'hotel_another_price_2': hotel_another_price_2,
-                # 'hotel_food_price': hotel_food_price,
-                # 'total_expense': total_expense,
-                'num_of_client_single': num_of_client_single,
-                'num_of_client_double': num_of_client_double,
-                'num_of_client_triple': num_of_client_triple,
-                'num_of_client_quad': num_of_client_quadriple,
+                # 'num_of_client_single': num_of_client_single,
+                # 'num_of_client_double': num_of_client_double,
+                # 'num_of_client_triple': num_of_client_triple,
+                # 'num_of_client_quad': num_of_client_quadriple,
                 'single_room_price': single_room_price,
                 'double_room_price': double_room_price,
                 'triple_room_price': triple_room_price,
@@ -458,7 +474,8 @@ class ReportDataAPIView(CustomListView):
                 'total_expense': total_expense,
                 'for_one_person': for_one_person,
                 'benefits': benefit_amount,
-                'benefit_total_expense': benefit_total_expense
+                'benefit_total_expense': benefit_total_expense,
+                'hotel_client_counts': hotel_client_counts
             }
             data.append(data_1)
         return Response(data)

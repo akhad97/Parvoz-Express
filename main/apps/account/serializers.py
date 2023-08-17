@@ -69,7 +69,7 @@ class UserLoginSerializer(TokenObtainPairSerializer):
 
 class UserListSerializer(serializers.ModelSerializer): 
     created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M")
-    region = serializers.CharField(source='region.title')
+    region = serializers.SerializerMethodField() 
     class Meta:
         model = User
         fields = (
@@ -90,6 +90,13 @@ class UserListSerializer(serializers.ModelSerializer):
             'created_at',
             'is_superuser'
         ) 
+    
+    def get_region(self, obj):
+        region = obj.region
+        if region:
+            return region.title 
+        else:
+            return None
 
 
 class UserUpdateSerializer(serializers.ModelSerializer): 

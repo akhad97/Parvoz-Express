@@ -69,7 +69,8 @@ class TourPackageUpdateSerializer(serializers.ModelSerializer):
             'outfit_data',
             'hotel_data',
             'status',
-            'is_active'
+            'is_active',
+            'currency'
         )
 
 
