@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Outfit, OutfitType, OutfitCalculation
+from .models import (
+    Outfit, 
+    OutfitType, 
+    OutfitCalculation,
+    FastContact
+)
 
 
 
@@ -29,3 +34,15 @@ class OutfitCalculationAdmin(admin.ModelAdmin):
     search_fields = ["id", ]
 
 admin.site.register(OutfitCalculation, OutfitCalculationAdmin)
+
+
+class FastContactAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "guid", 
+        "full_name", 
+        "phone_number", 
+        )
+    list_display_links = ('id' ,"guid",)
+
+admin.site.register(FastContact, FastContactAdmin)

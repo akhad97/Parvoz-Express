@@ -95,16 +95,3 @@ class Contact(BaseModel):
         return f'{self.title}'
     
 
-
-class FastContact(BaseModel):
-    full_name = models.CharField(max_length=200, null=True, blank=True)
-    phone_number = models.CharField(max_length=50, null=True, blank=True)
-    is_viewed = models.BooleanField(default=False)
-
-    class Meta(BaseMeta):
-        verbose_name = _("FastContact")
-        verbose_name_plural = _("FastContact")
-
-
-    def __str__(self):
-        return f'{self.full_name}'

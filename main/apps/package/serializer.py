@@ -2,9 +2,9 @@ from rest_framework import serializers
 from .models import (
     TourPackage, 
     TourPackageBook, 
-    Contact,
-    FastContact
+    Contact
 )
+from ..outfit.models import FastContact
 from ..hotel.serializers import HotelListSerializer
 from ..outfit.serializers import OutfitListSerializer
 from ..transport.serializers import TransportSerializer

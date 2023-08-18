@@ -8,9 +8,9 @@ from ..visa.models import Visa
 from .models import (
     TourPackage, 
     TourPackageBook, 
-    Contact,
-    FastContact
+    Contact
 )
+from ..outfit.models import FastContact
 from .serializer import (
     TourPackageSerializer,
     TourPackageCreateSerializer,
