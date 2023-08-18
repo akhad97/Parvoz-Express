@@ -220,6 +220,7 @@ CORS_ALLOW_METHODS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://abdullaevdev.uz",
     "http://66.55.68.250",
+    "https://cffd-84-54-74-20.ngrok-free.app",
     'http://localhost:5173',
     'http://localhost:3000',
     "http://127.0.0.1:8000",
@@ -228,6 +229,7 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "https://parvoz.site.uz",
     "http://66.55.68.250",
+    "https://cffd-84-54-74-20.ngrok-free.app",
     'http://localhost:5173',
     'http://localhost:3000',
     "http://127.0.0.1:8000",
