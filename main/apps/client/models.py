@@ -37,8 +37,6 @@ class Client(BaseModel):
     human_development = models.CharField(max_length=100, choices=HumanDevelopmentTypeChoices.choices, null=True)
     gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
 
-    
-
     class Meta(BaseMeta):
         verbose_name = _("Client")
         verbose_name_plural = _("Clients")
@@ -47,7 +45,6 @@ class Client(BaseModel):
     def __str__(self):
         return f'{self.full_name}'
     
-
 
 class Partner(BaseModel):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
