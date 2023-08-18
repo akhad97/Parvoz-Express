@@ -30,7 +30,7 @@ class Hotel(BaseModel):
     number_of_floor = models.PositiveIntegerField(default=0)
     number_of_room = models.PositiveIntegerField(default=0)
     nutrition = models.CharField(max_length=100, choices=NutritionTypeChoices.choices)
-    image = models.ImageField(upload_to=upload_images(instance='self', path='hotel_images/'), null=True)
+    image = models.ImageField(upload_to=upload_images(path='hotel_images/'), null=True)
     single_room_price = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     double_room_price = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     triple_room_price = models.DecimalField(max_digits=16, decimal_places=2, default=0)

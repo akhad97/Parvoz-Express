@@ -76,11 +76,8 @@ class TourPackageBook(BaseModel):
 
 
 class Contact(BaseModel):
-    title = models.CharField(max_length=200, null=True, blank=True)
-    sub_title = models.CharField(max_length=200, null=True, blank=True)
     phone_number_1 = models.CharField(max_length=50, null=True, blank=True)
     phone_number_2 = models.CharField(max_length=50, null=True, blank=True)
-    landing_img = models.ImageField(upload_to=upload_images(instance='self', path='landing_imgs/'), null=True)
     telegram = models.URLField(null=True, blank=True)
     instagram = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
@@ -92,6 +89,20 @@ class Contact(BaseModel):
 
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.phone_number_1}'
     
+
+
+class LandingData(BaseModel):
+    title = models.CharField(max_length=200, null=True, blank=True)
+    sub_title = models.CharField(max_length=200, null=True, blank=True)
+    landing_img = models.ImageField(upload_to=upload_images(path='landing_imgs/'), null=True)
+
+    class Meta(BaseMeta):
+        verbose_name = _("LandingData")
+        verbose_name_plural = _("LandingDatas")
+
+
+    def __str__(self):
+        return f'{self.title}'
 

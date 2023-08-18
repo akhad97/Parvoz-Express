@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     TourPackage, 
     Contact,
-    TourPackageBook
+    TourPackageBook,
+    LandingData
 )
 
 
@@ -40,12 +41,22 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "guid", 
-        "title", 
-        "sub_title", 
         "phone_number_1", 
         "phone_number_2"
         )
     list_display_links = ('id' ,"guid",)
-    search_fields = ["title", ]
 
 admin.site.register(Contact, ContactAdmin)
+
+
+class LandingDataAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "guid", 
+        "title", 
+        "sub_title"
+        )
+    list_display_links = ('id' ,"guid",)
+    search_fields = ["title", ]
+
+admin.site.register(LandingData, LandingDataAdmin)

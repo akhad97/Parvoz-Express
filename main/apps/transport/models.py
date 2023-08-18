@@ -14,7 +14,7 @@ class TransportTypeChoices(models.TextChoices):
 class Transport(BaseModel):
     transport_type = models.CharField(max_length=100, choices=TransportTypeChoices.choices)
     city = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=upload_images(instance='self', path="transport_images/"), null=True)
+    image = models.ImageField(upload_to=upload_images(path="transport_images/"), null=True)
     full_name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
 

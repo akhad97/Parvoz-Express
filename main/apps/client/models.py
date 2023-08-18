@@ -1,13 +1,21 @@
-import os
 from django.db import models
-from django.utils import timezone
 from ..common.models import BaseMeta, BaseModel
 from ..hotel.models import Hotel
 from ..package.models import TourPackage
 from ..visa.models import Visa
-from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from ..common.utils import upload_images
+
+
+class HumanDevelopmentTypeChoices(models.TextChoices):
+    Infant = 'Infant', _('Infant')
+    Child = 'Child', _('Child')
+    Adult = 'Adult', _('Adult')
+
+
+class GenderTypeChoices(models.TextChoices):
+    Male = 'Male', _('Male')
+    Female = 'Female', _('Female')
 
 
 class Client(BaseModel):
@@ -19,13 +27,16 @@ class Client(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_img = models.ImageField(upload_to=upload_images(instance='self', path='client_images/'), null=True)
+    passport_img = models.ImageField(upload_to=upload_images(path='client_images/'), null=True)
     room_type = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_images(instance='self', path='visa_files/'), null=True)
+    visa_file = models.FileField(upload_to=upload_images(path='visa_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     outfit_size = models.CharField(max_length=50, null=True)
+    human_development = models.CharField(max_length=100, choices=HumanDevelopmentTypeChoices.choices, null=True)
+    gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
+
     
 
     class Meta(BaseMeta):
@@ -45,10 +56,10 @@ class Partner(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_image = models.ImageField(upload_to=upload_images(instance='self', path='pass_partner_images/'), null=True)
+    passport_image = models.ImageField(upload_to=upload_images(path='pass_partner_images/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_images(instance='self', path='pass_visa_files/'), null=True)
+    visa_file = models.FileField(upload_to=upload_images(path='pass_visa_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     outfit_size = models.CharField(max_length=50, null=True)
     
@@ -70,11 +81,11 @@ class VisaClient(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_img = models.ImageField(upload_to=upload_images(instance='self', path='visa_client_pass_imgs/'), null=True)
+    passport_img = models.ImageField(upload_to=upload_images(path='visa_client_pass_imgs/'), null=True)
     room_type = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
-    visa_file = models.FileField(upload_to=upload_images(instance='self', path='visa_client_files/'), null=True)
+    visa_file = models.FileField(upload_to=upload_images(path='visa_client_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     
 
@@ -95,7 +106,7 @@ class VisaPartner(BaseModel):
     passport_expiration_date = models.DateField()
     series = models.CharField(max_length=100)
     series_number = models.PositiveIntegerField()
-    passport_image = models.ImageField(upload_to=upload_images(instance='self', path='visa_partner_pass_imgs/'), null=True)
+    passport_image = models.ImageField(upload_to=upload_images(path='visa_partner_pass_imgs/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
     
