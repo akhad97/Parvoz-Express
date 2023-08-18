@@ -2,8 +2,20 @@ from django.contrib import admin
 from .models import (
     TourPackage, 
     Contact,
-    TourPackageBook
+    TourPackageBook,
+    FastContact
 )
+
+class FastContactAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "guid", 
+        "full_name", 
+        "phone_number", 
+        )
+    list_display_links = ('id' ,"guid",)
+
+admin.site.register(FastContact, FastContactAdmin)
 
 
 class TourPackageAdmin(admin.ModelAdmin):
