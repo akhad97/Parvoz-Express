@@ -226,6 +226,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    "https://abdullaevdev.uz",
     "https://parvoz.site.uz",
     "http://66.55.68.250",
     'http://localhost:5173',

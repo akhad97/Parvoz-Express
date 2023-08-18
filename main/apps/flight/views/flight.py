@@ -62,6 +62,7 @@ class FlightListAPIView(CustomListView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
     lookup_field = 'guid'
+    search_fields = ['aviacompany_name_1', 'place_of_departure_1']
 
     def get_queryset(self):
         queryset = super().get_queryset()
