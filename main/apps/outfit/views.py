@@ -176,8 +176,11 @@ def outfitcalculation_analytics(request):
     remained_amount_percentage = get_remained_amount_percentage(model)
     unpaid_percentage = get_unpaid_percentage(model)
 
+    last_outfit = OutfitCalculation.objects.select_related('outfit').last()
+    
+
     data = {
-        'outfit': OutfitCalculation.objects.last().outfit.id,
+        'outfit': last_outfit.outfit.id if last_outfit else None,
         'prepayment_percentage': prepayment_percentage,
         'remained_amount_percentage': remained_amount_percentage,
         'unpaid_percentage': unpaid_percentage,

@@ -184,8 +184,10 @@ def managercalculation_analytics(request):
     remained_amount_percentage = get_remained_amount_percentage(model)
     unpaid_percentage = get_unpaid_percentage(model)
 
+    last_manager = model.objects.select_related('manager').last()
+
     data = {
-        'manager': model.objects.last().manager.full_name,
+        'manager': last_manager.manager.full_name if last_manager else None,
         **prepayment_percentage,
         **remained_amount_percentage,
         'unpaid_percentage': unpaid_percentage,
@@ -202,8 +204,10 @@ def guidecalculation_analytics(request):
     remained_amount_percentage = get_remained_amount_percentage(model)
     unpaid_percentage = get_unpaid_percentage(model)
 
+    last_guide = model.objects.select_related('guide').last()
+
     data = {
-        'guide': model.objects.last().guide.full_name,
+        'guide': last_guide.guide.full_name if last_guide else None,
         **prepayment_percentage,
         **remained_amount_percentage,
         'unpaid_percentage': unpaid_percentage,

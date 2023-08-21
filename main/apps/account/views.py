@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.renderers import JSONRenderer
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 from .serializers import (
     UserLoginSerializer,
@@ -22,7 +23,6 @@ User = get_user_model()
 class RegionListAPIView(generics.ListAPIView):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
-
 
 region_list_api_view = RegionListAPIView.as_view()
 
@@ -88,6 +88,18 @@ user_login_api_view = UserLoginView().as_view()
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserListSerializer
+
+    def get_queryset(self):
+        params = self.request.query_params
+        qs = User.objects.all()
+        phone_number = params.get('phone_number', None)
+        full_name = params.get('full_name', None)
+
+        if phone_number:
+            qs = qs.filter(Q(phone_number__icontains=phone_number))
+        if full_name:
+            qs = qs.filter(Q(full_name__icontains=full_name))
+        return qs
 
 
 user_list_api_view = UserListAPIView.as_view()

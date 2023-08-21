@@ -25,6 +25,11 @@ urlpatterns = [
         name='client_update'
     ),
     path(
+        '<uuid:guid>/client-delete/',
+        view=views.client_delete_api_view,
+        name='client_delete'
+    ),
+    path(
         '<uuid:guid>/partner-list/',
         view=views.partner_list_api_view,
         name='partner_list'
@@ -53,5 +58,10 @@ urlpatterns = [
         '<uuid:guid>/visaclient-update/',
         view=views.visa_client_update_api_view,
         name='visa_client_update'
+    ),
+    path(
+        '<uuid:guid>/visaclient-delete/',
+        view=views.visa_client_delete_api_view,
+        name='visa_client_delete'
     ),
 ]

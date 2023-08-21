@@ -34,6 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_working_with_agent = models.BooleanField(default=False)
     is_for_finance = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
+    is_agent = models.BooleanField(default=False)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False, 

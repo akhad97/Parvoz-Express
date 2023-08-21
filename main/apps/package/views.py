@@ -1,5 +1,7 @@
 from rest_framework import generics 
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 from django.db.models import Q
 from datetime import datetime, timezone
 from ..expense.models import OtherExpense
@@ -8,7 +10,8 @@ from ..visa.models import Visa
 from .models import (
     TourPackage, 
     TourPackageBook, 
-    Contact
+    Contact,
+    LandingData
 )
 from ..outfit.models import FastContact
 from .serializer import (
@@ -21,7 +24,8 @@ from .serializer import (
     ContanctSerializer,
     TourPackageBookUpdateSerializer,
     FastContanctSerializer,
-    FastContactUpdateSerializer
+    FastContactUpdateSerializer,
+    LandingDataSerializer
 )
 from ..common.views import CustomListView, CustomCreateAPIView, CustomDetailView
 from ..client.models import Client
@@ -70,18 +74,19 @@ class TourPackageUpdateAPIVIew(generics.UpdateAPIView):
     serializer_class = TourPackageUpdateSerializer
     lookup_field = 'guid'
 
-    def perform_update(self, serilizer):
+    def perform_update(self, serializer):
         guid = self.kwargs['guid']
         hotels = self.request.data['hotel']
         outfits = self.request.data['outfit']
         transports = self.request.data['transport']
-        tourpackages = TourPackage.objects.get(guid=guid)
-        tourpackages.hotel.set(hotels)
-        tourpackages.hotel.set(outfits)
-        tourpackages.hotel.set(transports)
-        tourpackages.save()
-        serilizer.save()
-        return Response(serilizer.data)
+        tourpackage = TourPackage.objects.get(guid=guid)
+        tourpackage.hotel.set(hotels)
+        tourpackage.outfit.set(outfits) 
+        tourpackage.transport.set(transports) 
+        tourpackage.save()
+        serializer.save()
+        return Response(serializer.data)
+
 
 tourpackage_update_api_view = TourPackageUpdateAPIVIew.as_view()
 
@@ -172,7 +177,7 @@ class DashboardAPIView(CustomListView):
 
 
     def get(self, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = TourPackage.objects.select_related('flight').filter(is_active=True)
         data= []
         
         for tourpackage in queryset:
@@ -217,14 +222,23 @@ class DashboardAPIView(CustomListView):
     
 dashboard_api_view = DashboardAPIView.as_view()
 
+from django.db.models import Prefetch
+from ..outfit.models import OutfitType
 
 
-class ReportDataAPIView(CustomListView):
+class ReportDataAPIView(generics.ListAPIView):
     queryset = TourPackage.objects.filter(is_active=True)
     serializer_class = TourPackageSerializer
 
     def get_queryset(self):
-        queryset = TourPackage.objects.filter(is_active=True)
+        queryset = TourPackage.objects.filter(is_active=True).select_related(
+            'flight', 
+            'manager'
+            ).prefetch_related(
+            'hotel',
+            'outfit',
+            'transport'
+            )
         month = self.request.query_params.get('month')
         year = self.request.query_params.get('year')
         if month and year:
@@ -242,8 +256,9 @@ class ReportDataAPIView(CustomListView):
                 Q(start_date__year__gte=year) |
                 Q(start_date__year__lte=year)
                 )
-        return queryset
 
+        return queryset
+    
     def get(self, *args, **kwargs):
         queryset = self.get_queryset()
         data = []
@@ -251,7 +266,7 @@ class ReportDataAPIView(CustomListView):
         for tourpackage in queryset:
             hotel_title = [hotel.title for hotel in tourpackage.hotel.all()] 
             number_of_room = [hotel.number_of_room for hotel in tourpackage.hotel.all()]
-            clients = Client.objects.filter(tour_package=tourpackage).count()
+            clients = Client.objects.filter(tour_package=tourpackage).select_related('tour_package').count()
             outfit_price = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()] 
             total_price = sum(outfit_price)
             first_expense = total_price * clients
@@ -261,7 +276,7 @@ class ReportDataAPIView(CustomListView):
             ticket_price = total_amount * clients
             service_price = clients * 24
 
-            other_expenses = OtherExpense.objects.filter(tourpackage=tourpackage)
+            other_expenses = OtherExpense.objects.filter(tourpackage=tourpackage).select_related('tourpackage')
             drug_amount=0
             for other_expense in other_expenses:
                 drug_amount += other_expense.amount
@@ -368,13 +383,6 @@ class ReportDataAPIView(CustomListView):
                 )
             ]
             
-            # additional_expense_for_hotel = []
-            # for item in tourpackage.hotel_data:
-            #     if "additional_expense" in item:
-            #         additional_expense_for_hotel.append(item["additional_expense"])
-            #     else:
-            #         additional_expense_for_hotel.append(0)
-
             additional_expense_for_hotel = []
 
             if tourpackage.hotel_data:
@@ -385,8 +393,6 @@ class ReportDataAPIView(CustomListView):
                         additional_expense_for_hotel.append(0)
             else:
                 additional_expense_for_hotel = [0] * tourpackage.hotel.count() 
-
-
 
             food_price_for_each_hotel = [
                 clients * nights * expense
@@ -427,6 +433,7 @@ class ReportDataAPIView(CustomListView):
             benefit_total_expense = benefit_amount - total_expense
 
             data_1 = {
+                'tourpackage_id': tourpackage.id,
                 'tourpackage_title': tourpackage_title,
                 'hotel': hotel_title,
                 'place_of_arrival_1': place_of_arrival_1,
@@ -454,10 +461,6 @@ class ReportDataAPIView(CustomListView):
                 'service_price': service_price,
                 'otper_expense': drug_amount,
                 'number_of_room': number_of_room,
-                # 'num_of_client_single': num_of_client_single,
-                # 'num_of_client_double': num_of_client_double,
-                # 'num_of_client_triple': num_of_client_triple,
-                # 'num_of_client_quad': num_of_client_quadriple,
                 'single_room_price': single_room_price,
                 'double_room_price': double_room_price,
                 'triple_room_price': triple_room_price,
@@ -480,7 +483,40 @@ class ReportDataAPIView(CustomListView):
             data.append(data_1)
         return Response(data)
 
+    
+
 report_data_api_view = ReportDataAPIView.as_view()
+
+# import csv
+# from django.http import HttpResponse
+# from rest_framework.decorators import api_view
+
+
+# class ExportReportDataView(ReportDataAPIView):
+
+#     def export_to_csv(self, queryset):
+#         response = HttpResponse(content_type='text/csv')
+#         response['Content-Disposition'] = 'attachment; filename="report_data.csv"'
+
+#         writer = csv.writer(response)
+#         header = [
+#             'tourpackage_title', 'hotel', 'place_of_arrival_1', 'place_of_departure_1',
+#             # ... add other header fields here ...
+#         ]
+#         writer.writerow(header)
+
+#         for data_row in queryset:
+#             row = [
+#                 data_row['tourpackage_title'], data_row['hotel'], data_row['place_of_arrival_1'], data_row['place_of_departure_1'],
+#                 # ... add other data fields here ...
+#             ]
+#             writer.writerow(row)
+#         return response
+    
+    
+
+# export_report_data_api_view = ExportReportDataView.as_view()
+
 
 
 class TourPackageBookCreateAPIView(generics.CreateAPIView):
@@ -536,7 +572,6 @@ class ContactUpdteAPIView(generics.UpdateAPIView):
 contact_update_api_view = ContactUpdteAPIView.as_view()
 
 
-
 class FastContactCreateAPIView(generics.CreateAPIView):
     queryset = FastContact.objects.all()
     serializer_class = FastContanctSerializer
@@ -567,3 +602,44 @@ class FastContactListAPIView(CustomListView):
 fast_contact_list_api_view = FastContactListAPIView.as_view()
 
 
+class LandingDataListAPIView(CustomListView):
+    queryset = LandingData.objects.all()
+    serializer_class = LandingDataSerializer
+
+landing_data_list_api_view = LandingDataListAPIView.as_view()
+
+
+
+class LandingDataListAPIView(APIView):
+    queryset = LandingData.objects.all()
+    serializer_class = LandingDataSerializer
+
+    def get(self, request, guid):
+        instance = LandingData.objects.get(guid=guid)
+        serializer = LandingDataSerializer(instance)
+        return Response(serializer.data)
+
+
+    def post(self, request):
+        serializer = LandingDataSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def put(self, request, guid):
+        instance = LandingData.objects.get(guid=guid)
+        serializer = LandingDataSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self, request, guid):
+        instance = LandingData.objects.get(guid=guid)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+landing_create_put_list_api_view = LandingDataListAPIView.as_view()

@@ -1,5 +1,6 @@
 from rest_framework import generics 
 from rest_framework.response import Response
+from django.db.models import Q
 from ...flight.models.flight import (
     Flight, 
     FlightType,
@@ -62,14 +63,14 @@ class FlightListAPIView(CustomListView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
     lookup_field = 'guid'
-    search_fields = ['aviacompany_name_1', 'place_of_departure_1']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        flight_type = self.request.query_params.get('flight_type', None)
-        if flight_type:
-            queryset = queryset.filter(flight_type__guid=flight_type)
-        return queryset
+        params = self.request.query_params
+        qs = Flight.objects.all()
+        aviacompany_name = params.get('search', None)
+        if aviacompany_name:
+            qs = qs.filter(Q(aviacompany_name_1__icontains=aviacompany_name))
+        return qs
 
 
 flight_list_api_view = FlightListAPIView.as_view()

@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+import debug_toolbar
 
 
 schema_view = get_schema_view(
@@ -40,6 +41,7 @@ urlpatterns = [
     path("api/v1/", include("main.apps.v1"), name="main"),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui-v1"),
+    path('__debug__', include(debug_toolbar.urls)),
 ]
 
 if settings.DEBUG:

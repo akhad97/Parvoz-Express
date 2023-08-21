@@ -27,5 +27,10 @@ urlpatterns = [
         '<uuid:guid>/update/', 
         views.user_update_api_view, 
         name='update'
-    )
+    ),
+    path(
+        'region-list/', 
+        views.region_list_api_view, 
+        name='region_list'
+    ),
 ]

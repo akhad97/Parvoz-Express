@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework import status
+from django.db.models import Q
 from .models import (
     Client, 
     Partner,
@@ -22,8 +24,13 @@ class ClientListAPIView(CustomListView):
 
     def get_queryset(self):
         guid = self.kwargs['guid']
-        clients = Client.objects.filter(tour_package__guid=guid)
+        params = self.request.query_params
+        clients = Client.objects.filter(tour_package__guid=guid).select_related('tour_package', 'hotel', 'visa')
+        full_name = params.get('search', None)
+        if full_name:
+            clients = clients.filter(Q(full_name__icontains=full_name))
         return clients
+    
     
 client_list_api_view = ClientListAPIView.as_view()
 
@@ -58,6 +65,21 @@ class ClientUpdateAPIView(generics.UpdateAPIView):
 
     
 client_update_api_view = ClientUpdateAPIView.as_view()
+
+
+class ClientDeleteAPIView(generics.DestroyAPIView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    lookup_field = 'guid'
+
+    def delete(self, request, *args, **kwargs):
+        guid = self.kwargs['guid']
+        instance = Client.objects.get(guid=guid)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    
+client_delete_api_view = ClientDeleteAPIView.as_view()
 
 
 class PartnerListAPIView(CustomListView):
@@ -123,3 +145,17 @@ class VisaClientUpdateAPIView(generics.UpdateAPIView):
 
 visa_client_update_api_view = VisaClientUpdateAPIView.as_view()
 
+
+class VisaClientDeleteAPIView(generics.DestroyAPIView):
+    queryset = VisaClient.objects.all()
+    serializer_class = VisaClientSerializer
+    lookup_field = 'guid'
+
+    def delete(self, request, *args, **kwargs):
+        guid = self.kwargs['guid']
+        instance = VisaClient.objects.get(guid=guid)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    
+visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()

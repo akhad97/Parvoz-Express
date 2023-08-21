@@ -7,9 +7,8 @@ from .models import (
 )
 
 
-
 class ClientSerializer(serializers.ModelSerializer):
-    hotel = serializers.CharField(source='hotel.title')
+    hotel = serializers.SerializerMethodField()
     class Meta:
         model = Client
         fields = (
@@ -29,8 +28,17 @@ class ClientSerializer(serializers.ModelSerializer):
             'remained_amount',
             'is_badge',
             'visa_file',
-            'outfit_size'
+            'outfit_size',
+            'human_development',
+            'gender_type'
         )
+    
+    def get_hotel(self, obj):
+        hotel = obj.hotel
+        if hotel is not None:
+            return hotel.title
+        else:
+            return None
 
 
 class ClientCreateSerializer(serializers.ModelSerializer):
@@ -53,7 +61,9 @@ class ClientCreateSerializer(serializers.ModelSerializer):
             'remained_amount',
             'is_badge',
             'visa_file',
-            'outfit_size'
+            'outfit_size',
+            'human_development',
+            'gender_type'
         )
 
 
@@ -76,7 +86,9 @@ class PartnerSerializer(serializers.ModelSerializer):
             'remained_amount',
             'is_badge',
             'visa_file',
-            'outfit_size'
+            'outfit_size',
+            'human_development',
+            'gender_type'
         )
 
 
@@ -96,7 +108,9 @@ class PartnerCreateSerializer(serializers.ModelSerializer):
             'remained_amount',
             'is_badge',
             'visa_file',
-            'outfit_size'
+            'outfit_size',
+            'human_development',
+            'gender_type'
         )
         
 

@@ -40,6 +40,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'is_working_with_agent',
             'is_for_finance',
             'is_manager',
+            'is_agent',
             'password',
             'confirm_password'
         )    
@@ -63,6 +64,14 @@ class UserLoginSerializer(TokenObtainPairSerializer):
         data['guid'] = self.user.guid
         data['phone_number'] = self.user.phone_number
         data['full_name'] = self.user.full_name
+        data['is_moderator'] = self.user.is_moderator
+        data['is_for_flight'] = self.user.is_for_flight
+        data['is_for_hotel'] = self.user.is_for_hotel
+        data['is_for_visa'] = self.user.is_for_visa
+        data['is_working_with_agent'] = self.user.is_working_with_agent
+        data['is_for_finance'] = self.user.is_for_finance
+        data['is_manager'] = self.user.is_manager
+        data['is_agent'] = self.user.is_agent
         data['is_superuser'] = self.user.is_superuser
         return data
     
@@ -86,6 +95,7 @@ class UserListSerializer(serializers.ModelSerializer):
             'is_working_with_agent',
             'is_for_finance',
             'is_manager',
+            'is_agent',
             'is_active',
             'created_at',
             'is_superuser'
@@ -110,5 +120,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'is_working_with_agent',
             'is_for_finance',
             'is_manager',
+            'is_agent',
             'is_active'
         ) 

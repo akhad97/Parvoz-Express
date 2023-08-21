@@ -2,7 +2,8 @@ from rest_framework import serializers
 from .models import (
     TourPackage, 
     TourPackageBook, 
-    Contact
+    Contact,
+    LandingData
 )
 from ..outfit.models import FastContact
 from ..hotel.serializers import HotelListSerializer
@@ -175,11 +176,8 @@ class ContanctSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'guid',
-            'title',
-            'sub_title',
             'phone_number_1',
             'phone_number_2',
-            'landing_img',
             'telegram',
             'instagram',
             'facebook',
@@ -210,3 +208,21 @@ class FastContactUpdateSerializer(serializers.ModelSerializer):
         instance.is_viewed = validated_data.get('is_viewed', instance.is_viewed)
         instance.save()
         return instance
+    
+
+class LandingDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LandingData
+        fields = (
+            'id',
+            'guid',
+            'title',
+            'title_uz',
+            'title_ru',
+            'title_en',
+            'sub_title',
+            'sub_title_uz',
+            'sub_title_ru',
+            'sub_title_en',
+            'landing_img'
+        )

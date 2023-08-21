@@ -59,6 +59,8 @@ class Partner(BaseModel):
     visa_file = models.FileField(upload_to=upload_images(path='pass_visa_files/'), null=True)
     is_badge = models.BooleanField(default=False)
     outfit_size = models.CharField(max_length=50, null=True)
+    human_development = models.CharField(max_length=100, choices=HumanDevelopmentTypeChoices.choices, null=True)
+    gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
     
 
     class Meta(BaseMeta):

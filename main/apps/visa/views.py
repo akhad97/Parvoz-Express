@@ -24,6 +24,15 @@ class VisaListAPIView(CustomListView):
     queryset = Visa.objects.all()
     serializer_class = VisaSerializer
 
+    def get_queryset(self):
+        params = self.request.query_params
+        qs = Visa.objects.all()
+        title = params.get('search', None)
+        if title:
+            qs = qs.filter(Q(tour_package__title__icontains=title)).select_related('tour_package')
+        return qs
+    
+
 visa_list_api_view = VisaListAPIView.as_view()
 
 

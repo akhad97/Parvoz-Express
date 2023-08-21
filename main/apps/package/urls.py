@@ -43,6 +43,11 @@ urlpatterns = [
         view=views.report_data_api_view,
         name='report_data'
     ),
+    # path(
+    #     'export-report/',
+    #     view=views.export_report_data_api_view,
+    #     name='export_report_data'
+    # ),
     path(
         'tourpackagebook-create/',
         view=views.tourpackage_book_create_api_view,
@@ -83,5 +88,29 @@ urlpatterns = [
         view=views.fast_contact_update_api_view,
         name='fast_contact_update'
     ),
-
+    path(
+        'landing-list/',
+        view=views.landing_data_list_api_view,
+        name='landing_data_list'
+    ),
+    path(
+        'landing-create/',
+        view=views.landing_create_put_list_api_view,
+        name='landing_create'
+    ),
+    path(
+        '<uuid:guid>/landing-detail/',
+        view=views.landing_create_put_list_api_view,
+        name='landing_detail'
+    ),
+    path(
+        '<uuid:guid>/landing-update/',
+        view=views.landing_create_put_list_api_view,
+        name='landing_update'
+    ),
+    path(
+        '<uuid:guid>/landing-delete/',
+        view=views.landing_create_put_list_api_view,
+        name='landing_delete'
+    ),
 ]

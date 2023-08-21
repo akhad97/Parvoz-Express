@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework_swagger",
     'django_filters',
+    'debug_toolbar',
 ]
 
 LOCAL_APPS = [
@@ -76,7 +77,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+}
 
 ROOT_URLCONF = 'config.urls'
 

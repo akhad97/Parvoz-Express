@@ -199,8 +199,10 @@ def hotelcalculation_analytics(request):
     remained_amount_percentage = get_remained_amount_percentage(model)
     unpaid_percentage = get_unpaid_percentage(model)
 
+    last_hotel = model.objects.select_related('hotel').last()
+
     data = {
-        'hotel': model.objects.last().hotel.title,
+        'hotel': last_hotel.hotel.title if last_hotel else None,
         **prepayment_percentage,
         **remained_amount_percentage,
         'unpaid_percentage': unpaid_percentage,
