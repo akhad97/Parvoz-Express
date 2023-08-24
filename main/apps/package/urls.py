@@ -29,6 +29,11 @@ urlpatterns = [
         name='tourpackage_update'
     ),
     path(
+        '<uuid:guid>/tourpackage-delete/',
+        view=views.tourpackage_delete_api_view,
+        name='tourpackage_delete'
+    ),
+    path(
         'tourpackage-analytics/',
         view=views.tourpackage_analytics_api_view,
         name='tourpackage_analytics'

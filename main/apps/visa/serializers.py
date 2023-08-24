@@ -11,6 +11,8 @@ from ..package.serializer import TourPackageSerializer
 
 class VisaSerializer(serializers.ModelSerializer):
     tour_package = TourPackageSerializer()
+    
+    
 
     class Meta:
         model = Visa
@@ -24,12 +26,14 @@ class VisaSerializer(serializers.ModelSerializer):
 
 
 class VisaCreateSerializer(serializers.ModelSerializer):
+    tourpackage_guid = serializers.CharField(source='tour_package.guid', read_only=True)
     class Meta:
         model = Visa
         fields = (
             'id',
             'guid',
             'tour_package',
+            'tourpackage_guid',
             'price_for_one',
             'total_amount'
         )

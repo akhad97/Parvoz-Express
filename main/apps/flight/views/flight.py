@@ -68,8 +68,11 @@ class FlightListAPIView(CustomListView):
         params = self.request.query_params
         qs = Flight.objects.all()
         aviacompany_name = params.get('search', None)
+        flight_type = params.get('flight_type', None)
         if aviacompany_name:
             qs = qs.filter(Q(aviacompany_name_1__icontains=aviacompany_name))
+        if flight_type:
+            qs = qs.filter(Q(flight_type__guid__iexact=flight_type))
         return qs
 
 
@@ -91,7 +94,7 @@ class FlightDetailAPIView(generics.RetrieveAPIView):
 flight_detail_list_api_view = FlightDetailAPIView.as_view()
 
 
-class FlightDetailAPIView(generics.RetrieveUpdateAPIView):
+class FlightDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
     lookup_field = 'guid'

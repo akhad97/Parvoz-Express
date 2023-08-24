@@ -1,10 +1,10 @@
-from django.db.models import Q, Sum
+from django.db.models import Q
 from django.utils import timezone
 from datetime import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count
-
+from rest_framework import generics
 from .models import Transport, TransportCalculation
 from .serializers import (
     TransportSerializer, 
@@ -49,6 +49,19 @@ class TransportDetailAPIView(CustomDetailView):
     lookup_field = 'guid'
 
 transport_detail_api_view = TransportDetailAPIView.as_view()
+
+
+class TransportDeleteAPIView(generics.DestroyAPIView):
+    queryset = Transport.objects.all()
+    serializer_class = TransportSerializer
+    loopup_field = 'guid'
+
+    def delete(self, request, *args, **kwargs):
+        transport = Transport.objects.get(guid=self.kwargs['guid'])
+        transport.delete()
+        return Response({'message': 'Transport successfully deleted!'})
+
+transport_delete_api_view = TransportDeleteAPIView.as_view()
 
 
 @api_view(['GET'])

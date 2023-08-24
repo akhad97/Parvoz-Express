@@ -35,6 +35,11 @@ urlpatterns = [
         name='transport-update'
     ),
     path(
+        'transport-delete/<uuid:guid>/',
+        view=views.transport_delete_api_view,
+        name='transport-delete'
+    ),
+    path(
         'transporttype-data/',
         view=views.transport_type_percentage_api_view,        
         name='transporttype_data'

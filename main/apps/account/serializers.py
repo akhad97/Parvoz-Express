@@ -123,3 +123,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'is_agent',
             'is_active'
         ) 
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField(required=False)
+    new_password1 = serializers.CharField()
+    new_password2 = serializers.CharField()

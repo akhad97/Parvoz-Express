@@ -1,22 +1,26 @@
 from rest_framework import generics 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q
+from django.utils import timezone
+from datetime import datetime
+from ...common.validations import CustomValidationError
 from ...flight.models.calculation import FlightCalculation
 from ...flight.serializer.calculation import (
     FlightCalculationSerializer, 
     FlightCalculationCreateSerializer
 )
 from ...common.views import CustomListView, CustomCreateAPIView
-from ...common.utils import get_prepayment_percentage, get_remained_amount_percentage, get_unpaid_percentage
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.db.models import Q, Sum
-from django.utils import timezone
-from datetime import datetime
-from ...common.validations import CustomValidationError
+from ...common.utils import (
+    get_prepayment_percentage, 
+    get_remained_amount_percentage, 
+    get_unpaid_percentage
+)
 
 
 
 class FlightCalculationListAPIView(CustomListView):
-    queryset = FlightCalculation.objects.all()
+    queryset = FlightCalculation.objects.all().select_related('flight')
     serializer_class = FlightCalculationSerializer
 
 flightcalculation_list_api_view = FlightCalculationListAPIView.as_view()

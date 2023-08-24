@@ -8,12 +8,14 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.renderers import JSONRenderer
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from .serializers import (
     UserLoginSerializer,
     UserRegistrationSerializer,
     UserListSerializer,
-    UserUpdateSerializer
+    UserUpdateSerializer,
+    PasswordChangeSerializer
 )
 from .models import User
 
@@ -114,10 +116,54 @@ class UserDetailAPIView(generics.RetrieveAPIView):
 user_detail_api_view = UserDetailAPIView.as_view()
 
 
-class UserUpdateAPIView(generics.RetrieveUpdateAPIView):
+class UserUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserUpdateSerializer
     lookup_field = 'guid'
 
 
-user_update_api_view = UserUpdateAPIView.as_view()
+user_update_delete_api_view = UserUpdateAPIView.as_view()
+
+
+
+class PasswordChangeAPIView(generics.GenericAPIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            if serializer.data['new_password1'] != serializer.data['new_password2']:
+                return Response({
+                    'status': 'error', 'message': _('These two fields should be the same'),
+                })
+            user = request.user 
+            user_id = serializer.validated_data.get('user_id', None) 
+            target_user = None
+            if user_id is not None:
+                try:
+                    target_user = User.objects.get(pk=user_id)
+                except User.DoesNotExist:
+                    return Response({
+                        'status': 'error', 'message': _('User does not exist'),
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+            if target_user and request.user.is_superuser:
+                user = target_user
+            else:
+                user = request.user
+            user.set_password(serializer.data['new_password1'])
+            user.save()
+            return Response({
+                'message': _('Password successfully updated')},
+                status=status.HTTP_200_OK
+                )
+        else:
+            return Response({
+                'status': 'error', 'message': _('Invalid data'),
+                'data': serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+                )
+
+password_change_api_view = PasswordChangeAPIView.as_view()
+

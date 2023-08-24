@@ -25,7 +25,7 @@ urlpatterns = [
     ),
     path(
         '<uuid:guid>/update/', 
-        views.user_update_api_view, 
+        views.user_update_delete_api_view, 
         name='update'
     ),
     path(
@@ -33,4 +33,9 @@ urlpatterns = [
         views.region_list_api_view, 
         name='region_list'
     ),
+    path(
+        "password-change/", 
+        view=views.password_change_api_view, 
+        name="password_change"
+    )
 ]

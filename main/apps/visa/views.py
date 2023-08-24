@@ -43,6 +43,19 @@ class VisaDetailAPIVIew(CustomDetailView):
 visa_detail_api_view = VisaDetailAPIVIew.as_view()
 
 
+class VisaDeleteAPIView(generics.DestroyAPIView):
+    queryset = Visa.objects.all()
+    serializer_class = VisaSerializer
+    loopup_field = 'guid'
+
+    def delete(self, request, *args, **kwargs):
+        visa = Visa.objects.get(guid=self.kwargs['guid'])
+        visa.delete()
+        return Response({'message': 'Visa successfully deleted!'})
+
+visa_delete_api_view = VisaDeleteAPIView.as_view()
+
+
 class VisaCreateAPIView(generics.CreateAPIView):
     queryset = Visa.objects.all()
     serializer_class = VisaCreateSerializer
@@ -132,3 +145,5 @@ class VisaBookUpdateAPIView(generics.UpdateAPIView):
         return Response({'message': 'failed', 'details': serializer.errors})
 
 visa_book_update_api_view = VisaBookUpdateAPIView.as_view()
+
+
