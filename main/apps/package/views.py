@@ -286,7 +286,7 @@ class ReportDataAPIView(generics.ListAPIView):
 
             flight_calculations = tourpackage.flight.calculations.all()
             total_amount = sum(calculation.total_amount for calculation in flight_calculations)
-            ticket_price = total_amount * clients
+            ticket_price = total_amount
             service_price = clients * 24
 
             other_expenses = OtherExpense.objects.filter(tourpackage=tourpackage).select_related('tourpackage')
