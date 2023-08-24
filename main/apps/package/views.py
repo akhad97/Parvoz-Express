@@ -390,7 +390,8 @@ class ReportDataAPIView(generics.ListAPIView):
                 sum(prices) for prices in zip(
                     hotel_single_room_total_price,
                     hotel_double_room_total_price,
-                    hotel_triple_room_total_price
+                    hotel_triple_room_total_price,
+                    hotel_quad_room_total_price
                 )
             ]
             
