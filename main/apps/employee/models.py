@@ -27,7 +27,7 @@ class Guide(BaseModel):
     city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=20, decimal_places=2)
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name='managers')
+    manager = models.ForeignKey(Manager, on_delete=models.DO_NOTHING, related_name='managers')
     is_active = models.BooleanField(default=True)
 
     class Meta(BaseMeta):
@@ -37,6 +37,12 @@ class Guide(BaseModel):
 
     def __str__(self):
         return f'{self.full_name}'
+    
+
+    def delete(self, *args, **kwargs):
+        if self.tourpackage_set.exists():
+            raise models.ProtectedError("This guide is associated with tour packages.", self)
+        super().delete(*args, **kwargs) 
 
     
 

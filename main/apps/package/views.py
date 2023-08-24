@@ -274,7 +274,9 @@ class ReportDataAPIView(generics.ListAPIView):
         data = []
 
         for tourpackage in queryset:
-            hotel_title = [hotel.title for hotel in tourpackage.hotel.all()] 
+            hotel_title = [hotel.title for hotel in tourpackage.hotel.all()]
+            hotel_start_date = [hotel.start_date for hotel in tourpackage.hotel.all()] 
+            hotel_end_date = [hotel.end_date for hotel in tourpackage.hotel.all()] 
             hotel_nights = [int(hotel.booking_duration) for hotel in tourpackage.hotel.all()] 
             number_of_room = [hotel.number_of_room for hotel in tourpackage.hotel.all()]
             clients = Client.objects.filter(tour_package=tourpackage).select_related('tour_package').count()
@@ -454,6 +456,8 @@ class ReportDataAPIView(generics.ListAPIView):
                 'tourpackage_id': tourpackage.id,
                 'tourpackage_title': tourpackage_title,
                 'hotel': hotel_title,
+                'hotel_start_date': hotel_start_date,
+                'hotel_end_date': hotel_end_date,
                 'place_of_arrival_1': place_of_arrival_1,
                 'place_of_departure_1': place_of_departure_1,
                 'place_of_arrival_2': place_of_arrival_2,
@@ -462,14 +466,14 @@ class ReportDataAPIView(generics.ListAPIView):
                 'place_of_departure_3': place_of_departure_3,
                 'place_of_arrival_4': place_of_arrival_4,
                 'place_of_departure_4': place_of_departure_4,
-                'landing_date_1': landing_date_1_format,
-                'departure_date_1': departure_date_1_format,
-                'landing_date_2': landing_date_2_format,
-                'departure_date_2': departure_date_2_format,
-                'landing_date_3': landing_date_3_format,
-                'departure_date_3': departure_date_3_format,
-                'landing_date_4': landing_date_4_format,
-                'departure_date_4': departure_date_4_format,
+                # 'landing_date_1': landing_date_1_format,
+                # 'departure_date_1': departure_date_1_format,
+                # 'landing_date_2': landing_date_2_format,
+                # 'departure_date_2': departure_date_2_format,
+                # 'landing_date_3': landing_date_3_format,
+                # 'departure_date_3': departure_date_3_format,
+                # 'landing_date_4': landing_date_4_format,
+                # 'departure_date_4': departure_date_4_format,
                 # 'night': nights,
                 'nights': hotel_nights,
                 'clients': clients,

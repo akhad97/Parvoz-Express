@@ -21,7 +21,7 @@ class FlightType(BaseModel):
 
 
 class Flight(BaseModel):
-    flight_type = models.ForeignKey(FlightType, on_delete=models.CASCADE)
+    flight_type = models.ForeignKey(FlightType, on_delete=models.DO_NOTHING)
     aviacompany_name_1 = models.CharField(max_length=100, null=True, blank=True)
     place_of_arrival_1 = models.CharField(max_length=100, null=True, blank=True)
     flight_name_1 = models.CharField(max_length=100, null=True, blank=True)

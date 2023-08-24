@@ -26,6 +26,12 @@ class Transport(BaseModel):
 
     def __str__(self):
         return f'{self.transport_type}'
+    
+    
+    def delete(self, *args, **kwargs):
+        if self.tourpackage_set.exists():
+            raise models.ProtectedError("This transport is associated with tour packages.", self)
+        super().delete(*args, **kwargs) 
 
 
 class TransportCalculation(BaseModel):

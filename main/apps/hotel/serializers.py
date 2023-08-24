@@ -25,7 +25,9 @@ class HotelListSerializer(serializers.ModelSerializer):
             'quadruple_room_price',
             'nutrition',
             'image',
-            'data'
+            'data',
+            'start_date',
+            'end_date'
         )
 
 
@@ -45,7 +47,9 @@ class HotelCreateSerializer(serializers.ModelSerializer):
             'quadruple_room_price',
             'nutrition',
             'image',
-            'data'
+            'data',
+            'start_date',
+            'end_date'
         )
 
 

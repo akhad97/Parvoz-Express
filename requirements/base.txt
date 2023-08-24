@@ -18,3 +18,4 @@ psycopg2-binary==2.9.2
 django-filter==21.1
 django-modeltranslation==0.18.2
 django-debug-toolbar==3.8.1
+opencv-python-headless

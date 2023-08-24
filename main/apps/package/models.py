@@ -10,7 +10,6 @@ from ..employee.models import Manager, Guide
 from ..common.utils import upload_images
 
 
-
 class StatusChoices(models.TextChoices):
     Created = 'Created', _('Created')
     Guide_expectations = 'Guide expectations', _('Guide expectations')
@@ -31,11 +30,11 @@ class TourPackage(BaseModel):
     additional_expense = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     number_of_seats = models.PositiveIntegerField()
     price_for_person = models.DecimalField(max_digits=20, decimal_places=2)
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, null=True)
+    flight = models.ForeignKey(Flight, on_delete=models.PROTECT, null=True)
     hotel = models.ManyToManyField(Hotel)
     outfit = models.ManyToManyField(Outfit)
     transport = models.ManyToManyField(Transport)
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name='tourpackage_managers', null=True)
+    manager = models.ForeignKey(Manager, on_delete=models.PROTECT, related_name='tourpackage_managers', null=True)
     guide = models.ManyToManyField(Guide)
     date_data = models.JSONField(null=True, blank=True)
     outfit_data = models.JSONField(null=True, blank=True)

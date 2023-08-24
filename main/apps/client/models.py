@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from ..common.utils import upload_images
 
 
+
 class HumanDevelopmentTypeChoices(models.TextChoices):
     Infant = 'Infant', _('Infant')
     Child = 'Child', _('Child')
@@ -45,6 +46,38 @@ class Client(BaseModel):
 
     def __str__(self):
         return f'{self.full_name}'
+    
+
+# # Helper function to crop faces
+# def crop_face(image_path):
+#     # Load image using OpenCV
+#     image = cv2.imread(image_path)
+#     image = cv2.imread(image_path)
+    
+    
+#     # Load face detection classifier (you might need to download a classifier XML file)
+#     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    
+#     # Detect faces
+#     faces = face_cascade.detectMultiScale(image, 1.4, 6)
+    
+#     if len(faces) == 0:
+#         return None  # No face detected
+    
+#     # Crop the first detected face
+#     x, y, w, h = faces[0]
+#     cropped_face = image[y:y+h, x:x+w]
+    
+#     return cropped_face
+
+# @receiver(post_save, sender=Client)
+# def crop_face_on_save(sender, instance, **kwargs):
+#     if instance.passport_img:
+#         cropped_face = crop_face(instance.passport_img.path)
+#         print('path', instance.passport_img.path)
+#         if cropped_face is not None:
+#             # Save the cropped face back to the image field
+#             cv2.imwrite(instance.passport_img.path, cropped_face) 
     
 
 class Partner(BaseModel):

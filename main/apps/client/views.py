@@ -46,7 +46,7 @@ class ClientCreateAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serialzier = ClientCreateSerializer(data=request.data)
         if serialzier.is_valid():
-            serialzier.save(created_by=request.user.full_name)
+            serialzier.save()
             return Response(serialzier.data, 
                             status=status.HTTP_201_CREATED)
         return Response(serialzier.errors, status=status.HTTP_400_BAD_REQUEST)

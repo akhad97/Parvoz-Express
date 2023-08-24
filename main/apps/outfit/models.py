@@ -4,9 +4,17 @@ from ..common.models import BaseModel, BaseMeta
 
 
 class OutfitTypeChoices(models.TextChoices):
-    Jerkin = 'Jerkin', _('Jerkin')
-    Badge = 'Badge', _('Badge')
-    Bag = 'Bag', _('Bag')
+    Kamzul = 'Kamzul', _('Kamzul')
+    Qol_sumka = "Qo'l sumka", _("Qo'l sumka")
+    Yon_sumka = 'Yon sumka', _('Yon sumka')
+    Beyjik = 'Beyjik', _('Beyjik')
+    Romol = "Ro'mol", _("Ro'mol")
+    Futbolka = 'Futbolka', _('Futbolka')
+    Pinka_koylak = "Pinka ko'ylak", _("Pinka ko'ylak")
+    Exrom = "Exrom", _("Exrom")
+    Bagach_sumka = 'Bagach sumka', _('Bagach sumka')
+    Yaxtak_shalvar = "Yaxtak va Shalvar", _("Yaxtak va Shalvar")
+    Ofis_sovgasi = "Ofis sovg'asi", _("Ofis sovg'asi")
 
 
 class OutfitType(BaseModel):
@@ -27,7 +35,7 @@ class OutfitType(BaseModel):
 
 
 class Outfit(BaseModel):
-    outfit_type = models.ForeignKey(OutfitType, on_delete=models.CASCADE)
+    outfit_type = models.ForeignKey(OutfitType, on_delete=models.DO_NOTHING)
     full_name = models.CharField(max_length=100, blank=True)
 
 
@@ -38,6 +46,12 @@ class Outfit(BaseModel):
 
     def __str__(self):
         return f'{self.id}'
+    
+    
+    def delete(self, *args, **kwargs):
+        if self.tourpackage_set.exists():
+            raise models.ProtectedError("This outfit is associated with tour packages.", self)
+        super().delete(*args, **kwargs) 
     
 
 class OutfitCalculation(BaseModel):
@@ -57,6 +71,7 @@ class OutfitCalculation(BaseModel):
 
     def __str__(self):
         return f'{self.id}'
+        
     
     
 class FastContact(BaseModel):

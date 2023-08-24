@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from ..common.models import BaseModel, BaseMeta
 from ..common.utils import upload_images
+from rest_framework.response import Response
 
 
 class NutritionTypeChoices(models.TextChoices):
@@ -36,6 +37,8 @@ class Hotel(BaseModel):
     triple_room_price = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     quadruple_room_price = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     data = models.JSONField(null=True, blank=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
 
 
     class Meta(BaseMeta):
@@ -45,6 +48,12 @@ class Hotel(BaseModel):
 
     def __str__(self):
         return f'{self.title}'
+    
+
+    def delete(self, *args, **kwargs):
+        if self.tourpackage_set.exists():
+            raise models.ProtectedError("This hotel is associated with tour packages.", self)
+        super().delete(*args, **kwargs)    
 
 
 class HotelCalculation(BaseModel):
