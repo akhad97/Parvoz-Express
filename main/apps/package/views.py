@@ -310,47 +310,47 @@ class ReportDataAPIView(generics.ListAPIView):
             landing_date_4 = tourpackage.flight.landing_time_4
             departure_date_4 = tourpackage.flight.departure_time_4
 
-            # landing_date_1_format = None 
-            # landing_date_2_format = None 
-            # landing_date_3_format = None 
-            # landing_date_4_format = None 
-            # departure_date_1_format = None 
-            # departure_date_2_format = None 
-            # departure_date_3_format = None 
-            # departure_date_4_format = None 
+            landing_date_1_format = None 
+            landing_date_2_format = None 
+            landing_date_3_format = None 
+            landing_date_4_format = None 
+            departure_date_1_format = None 
+            departure_date_2_format = None 
+            departure_date_3_format = None 
+            departure_date_4_format = None 
 
-            # if landing_date_1 is not None:
-            #     landing_date_1_format = (datetime.fromisoformat(str(landing_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", landing_date_1)
-            # if departure_date_1 is not None:
-            #     departure_date_1_format = (datetime.fromisoformat(str(departure_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", departure_date_1)
-            # if landing_date_2 is not None:
-            #     landing_date_2_format = (datetime.fromisoformat(str(landing_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", landing_date_2)
-            # if departure_date_2 is not None:
-            #     departure_date_2_format = (datetime.fromisoformat(str(departure_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", departure_date_2)
-            # if landing_date_3 is not None:
-            #     landing_date_3_format = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", landing_date_3)
-            # if departure_date_3 is not None:    
-            #     departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", departure_date_3)
-            # if landing_date_4 is not None:  
-            #     landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", landing_date_4)
-            # if departure_date_4 is not None: 
-            #     departure_date_4_format = (datetime.fromisoformat(str(departure_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
-            # else:
-            #     print("Date field is empty.", departure_date_4)
+            if landing_date_1 is not None:
+                landing_date_1_format = (datetime.fromisoformat(str(landing_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", landing_date_1)
+            if departure_date_1 is not None:
+                departure_date_1_format = (datetime.fromisoformat(str(departure_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", departure_date_1)
+            if landing_date_2 is not None:
+                landing_date_2_format = (datetime.fromisoformat(str(landing_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", landing_date_2)
+            if departure_date_2 is not None:
+                departure_date_2_format = (datetime.fromisoformat(str(departure_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", departure_date_2)
+            if landing_date_3 is not None:
+                landing_date_3_format = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", landing_date_3)
+            if departure_date_3 is not None:    
+                departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", departure_date_3)
+            if landing_date_4 is not None:  
+                landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", landing_date_4)
+            if departure_date_4 is not None: 
+                departure_date_4_format = (datetime.fromisoformat(str(departure_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+            else:
+                print("Date field is empty.", departure_date_4)
 
             # date_only_1 = landing_date_1.date()
             # date_only_2 = departure_date_1.date()
@@ -403,18 +403,25 @@ class ReportDataAPIView(generics.ListAPIView):
             else:
                 additional_expense_for_hotel = [0] * tourpackage.hotel.count()
 
-            final_food_price = [
-                clients * hotel_nights * expense for expense in additional_expense_for_hotel
-            ]
+            # final_food_price = [
+            #     clients * hotel_nights * expense for expense in additional_expense_for_hotel
+            # ]
+
+            # food_price_for_each_hotel = [
+            #     price * nights
+            #     for price, nights in zip(final_food_price, hotel_nights)
+            # ]
 
             food_price_for_each_hotel = [
-                price * nights
-                for price, nights in zip(final_food_price, hotel_nights)
+                clients * nights * expense
+                for nights, expense in zip(hotel_nights, additional_expense_for_hotel)
             ]
+            print(food_price_for_each_hotel)
+
                 
             hotel_food_sum = [
-                total_price + sum(food_prices)
-                for total_price, food_prices in zip(hotel_total_price, food_price_for_each_hotel)
+                total_price + food_price
+                for total_price, food_price in zip(hotel_total_price, food_price_for_each_hotel)
             ]
 
             currency = tourpackage.currency
@@ -455,14 +462,14 @@ class ReportDataAPIView(generics.ListAPIView):
                 'place_of_departure_3': place_of_departure_3,
                 'place_of_arrival_4': place_of_arrival_4,
                 'place_of_departure_4': place_of_departure_4,
-                # 'landing_date_1': landing_date_1_format,
-                # 'departure_date_1': departure_date_1_format,
-                # 'landing_date_2': landing_date_2_format,
-                # 'departure_date_2': departure_date_2_format,
-                # 'landing_date_3': landing_date_3_format,
-                # 'departure_date_3': departure_date_3_format,
-                # 'landing_date_4': landing_date_4_format,
-                # 'departure_date_4': departure_date_4_format,
+                'landing_date_1': landing_date_1_format,
+                'departure_date_1': departure_date_1_format,
+                'landing_date_2': landing_date_2_format,
+                'departure_date_2': departure_date_2_format,
+                'landing_date_3': landing_date_3_format,
+                'departure_date_3': departure_date_3_format,
+                'landing_date_4': landing_date_4_format,
+                'departure_date_4': departure_date_4_format,
                 # 'night': nights,
                 'nights': hotel_nights,
                 'clients': clients,

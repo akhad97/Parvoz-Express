@@ -2,6 +2,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
+from rest_framework import permissions
+from rest_framework.views import APIView
 from .models import (
     Client, 
     Partner,
@@ -35,9 +37,19 @@ class ClientListAPIView(CustomListView):
 client_list_api_view = ClientListAPIView.as_view()
 
 
-class ClientCreateAPIView(generics.CreateAPIView):
+
+class ClientCreateAPIView(APIView):
     queryset = Client.objects.all()
     serializer_class = ClientCreateSerializer
+    permissions = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        serialzier = ClientCreateSerializer(data=request.data)
+        if serialzier.is_valid():
+            serialzier.save(created_by=request.user.full_name)
+            return Response(serialzier.data, 
+                            status=status.HTTP_201_CREATED)
+        return Response(serialzier.errors, status=status.HTTP_400_BAD_REQUEST)
 
 client_create_api_view = ClientCreateAPIView.as_view()
 

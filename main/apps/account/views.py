@@ -121,7 +121,6 @@ class UserUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserUpdateSerializer
     lookup_field = 'guid'
 
-
 user_update_delete_api_view = UserUpdateAPIView.as_view()
 
 

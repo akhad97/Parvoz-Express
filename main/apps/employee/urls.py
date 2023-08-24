@@ -20,6 +20,11 @@ urlpatterns = [
         name='manager_detail'
     ),
     path(
+        '<uuid:guid>/manager-delete/',
+        view=views.manager_delete_api_view,
+        name='manager_delete'
+    ),
+    path(
         '<uuid:guid>/manager-update/',
         view=views.manager_update_api_view,
         name='manager_update'
@@ -63,6 +68,11 @@ urlpatterns = [
         '<uuid:guid>/guide-detail/',
         view=views.guide_detail_api_view,
         name='guide_detail'
+    ),
+    path(
+        '<uuid:guid>/guide-delete/',
+        view=views.guide_delete_api_view,
+        name='guide_delete'
     ),
     path(
         '<uuid:guid>/guide-update/',

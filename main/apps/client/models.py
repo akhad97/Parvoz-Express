@@ -36,6 +36,7 @@ class Client(BaseModel):
     outfit_size = models.CharField(max_length=50, null=True)
     human_development = models.CharField(max_length=100, choices=HumanDevelopmentTypeChoices.choices, null=True)
     gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
+    created_by = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta(BaseMeta):
         verbose_name = _("Client")

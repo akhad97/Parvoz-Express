@@ -30,7 +30,8 @@ class ClientSerializer(serializers.ModelSerializer):
             'visa_file',
             'outfit_size',
             'human_development',
-            'gender_type'
+            'gender_type',
+            'created_by'
         )
     
     def get_hotel(self, obj):
@@ -63,7 +64,8 @@ class ClientCreateSerializer(serializers.ModelSerializer):
             'visa_file',
             'outfit_size',
             'human_development',
-            'gender_type'
+            'gender_type',
+            'created_by'
         )
 
 

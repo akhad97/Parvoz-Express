@@ -96,6 +96,12 @@ class OutfitDetailAPIView(CustomDetailView):
         serializer.save()
 
         return self.success_response(results=serializer.data)
+    
+    
+    def delete(self, request, pk):
+        outfit = Outfit.objects.get(id=pk)
+        outfit.delete()
+        return Response({'message': 'Outfit successfully deleted!'})
 
 outfit_detail_api_view = OutfitDetailAPIView.as_view()
 

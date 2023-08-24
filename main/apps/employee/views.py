@@ -51,6 +51,13 @@ class ManagerDetailAPIView(generics.RetrieveAPIView):
 
 manager_detail_api_view = ManagerDetailAPIView.as_view()
 
+class ManagerDestroyAPIView(generics.DestroyAPIView):
+    queryset = Manager.objects.all()
+    serializer_class = ManagerSerializer
+    lookup_field = 'guid'
+
+manager_delete_api_view = ManagerDestroyAPIView.as_view()
+
 
 class ManagerUpdateAPIView(generics.UpdateAPIView):
     queryset = Manager.objects.all()
@@ -104,6 +111,14 @@ class GuideDetailAPIView(generics.RetrieveAPIView):
     lookup_field = 'guid'
 
 guide_detail_api_view = GuideDetailAPIView.as_view()
+
+
+class GuideDeleteAPIView(generics.DestroyAPIView):
+    queryset = Guide.objects.all()
+    serializer_class = GuideSerializer
+    lookup_field = 'guid'
+
+guide_delete_api_view = GuideDeleteAPIView.as_view()
 
 
 class GuideUpdateAPIView(generics.UpdateAPIView):
