@@ -33,6 +33,14 @@ class FlightCalculationCreateAPIView(CustomCreateAPIView):
 flightcalculation_create_api_view = FlightCalculationCreateAPIView.as_view()
 
 
+class FlightCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FlightCalculation.objects.all()
+    serializer_class = FlightCalculationSerializer
+    lookup_field='guid'
+
+flightcalculation_delete_api_view = FlightCalculationDeleteAPIView.as_view()
+
+
 @api_view(['GET'])
 def flight_calculation_analytics(self):
     model = FlightCalculation

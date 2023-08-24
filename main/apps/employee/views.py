@@ -143,7 +143,7 @@ class ManagerCalculationListAPIView(CustomListView):
 managercalculation_list_api_view = ManagerCalculationListAPIView.as_view()
 
 
-class ManagerCalculationDetailAPIView(generics.RetrieveAPIView):
+class ManagerCalculationDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ManagerCalculation.objects.all()
     serializer_class = ManagerCalculationListSerializer
 
@@ -170,7 +170,7 @@ class GuideCalculationListAPIView(CustomListView):
 guidecalculation_list_api_view = GuideCalculationListAPIView.as_view()
 
 
-class GuideCalculationDetailAPIView(generics.RetrieveAPIView):
+class GuideCalculationDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = GuideCalculation.objects.all()
     serializer_class = GuideCalculationListSerializer
 

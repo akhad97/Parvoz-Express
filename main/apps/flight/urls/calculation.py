@@ -23,4 +23,9 @@ urlpatterns = [
         view=calculation.single_flight_calculation_detail_api_view,
         name='single_flightcalculation_detail'
     ),
+    path(
+        '<uuid:guid>/flightcalculation-delete/',
+        view=calculation.flightcalculation_delete_api_view,
+        name='flightcalculation_delete'
+    ),
 ]

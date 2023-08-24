@@ -70,6 +70,14 @@ class VisaCalculationListAPIView(CustomListView):
 visacalculation_list_api_view = VisaCalculationListAPIView.as_view()
 
 
+class VisaCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = VisaCalculation.objects.all()
+    serializer_class = VisaCalculationSerializer
+    lookup_field='guid'
+
+visacalculation_delete_api_view = VisaCalculationDeleteAPIView.as_view()
+
+
 class VisaCalculationCreateAPIView(generics.CreateAPIView):
     queryset = VisaCalculation.objects.all()
     serializer_class = VisaCalculationCreateSerializer

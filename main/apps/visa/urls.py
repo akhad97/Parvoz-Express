@@ -34,7 +34,12 @@ urlpatterns = [
         view=views.visacalculation_create_api_view,
         name='visacalculation_create'
     ),
-     path(
+    path(
+        '<uuid:guid>/visacalculation-delete/',
+        view=views.visacalculation_delete_api_view,
+        name='visacalculation_delete'
+    ),
+    path(
         'single-visacalculation-detail/<int:pk>/',
         view=views.single_visa_calculation_detail_api_view,
         name='single_visa_calculation_detail'

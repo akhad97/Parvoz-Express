@@ -41,7 +41,7 @@ class TransportCalculation(BaseModel):
     number_of_days = models.IntegerField()
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     prepayment = models.DecimalField(max_digits=20, decimal_places=2)
-    remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
+    remained_amount = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
 
 
     class Meta(BaseMeta):

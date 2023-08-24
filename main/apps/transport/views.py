@@ -94,6 +94,14 @@ class TransportCalculationListAPIView(CustomListView):
 transportcalculation_list_api_view = TransportCalculationListAPIView.as_view()
 
 
+class TransportCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TransportCalculation.objects.all()
+    serializer_class = TransportCalculationSerializer
+    lookup_field='guid'
+
+transportcalculation_delete_api_view = TransportCalculationDeleteAPIView.as_view()
+
+
 class SingleTransportCalculationDetailAPIView(CustomListView):
     queryset = TransportCalculation.objects.all()
     serializer_class = TransportCalculationSerializer

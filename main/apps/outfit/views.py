@@ -3,7 +3,12 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
 from datetime import datetime
-from .models import Outfit, OutfitType, OutfitCalculation
+from rest_framework import generics
+from .models import (
+    Outfit, 
+    OutfitType, 
+    OutfitCalculation
+)
 from .serializers import (
     OutfitTypeListSerializer,
     OutfitTypeCreateSerializer,
@@ -126,6 +131,15 @@ class OutfitCalculationListAPIView(CustomListView):
 
 
 outfit_calculation_list_api_view = OutfitCalculationListAPIView.as_view()
+
+
+class OutfitCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = OutfitCalculation.objects.all()
+    serializer_class = OutfitCalculationCreateSerializer
+    lookup_field='guid'
+
+
+outfit_calculation_delete_api_view = OutfitCalculationDeleteAPIView.as_view()
 
 class OutfitCalculationCreateAPIView(CustomCreateAPIView):
     queryset = OutfitCalculation.objects.all()

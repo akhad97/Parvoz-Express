@@ -56,6 +56,7 @@ class VisaCalculationSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        data['remained_amount'] = instance.total_amount - instance.prepayment
         qs = VisaCalculation.objects.filter(visa=instance.visa)
         prepayment_sum = qs.aggregate(prepayment_sum=Sum('prepayment'))['prepayment_sum'] or 0
         remained_amount_sum = qs.aggregate(remained_amount_sum=Sum('remained_amount'))['remained_amount_sum'] or 0

@@ -41,6 +41,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'is_for_finance',
             'is_manager',
             'is_agent',
+            'is_outfit',
             'password',
             'confirm_password'
         )    
@@ -72,6 +73,7 @@ class UserLoginSerializer(TokenObtainPairSerializer):
         data['is_for_finance'] = self.user.is_for_finance
         data['is_manager'] = self.user.is_manager
         data['is_agent'] = self.user.is_agent
+        data['is_outfit'] = self.user.is_outfit
         data['is_superuser'] = self.user.is_superuser
         return data
     
@@ -96,6 +98,7 @@ class UserListSerializer(serializers.ModelSerializer):
             'is_for_finance',
             'is_manager',
             'is_agent',
+            'is_outfit',
             'is_active',
             'created_at',
             'is_superuser'
@@ -121,6 +124,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'is_for_finance',
             'is_manager',
             'is_agent',
+            'is_outfit',
             'is_active'
         ) 
 

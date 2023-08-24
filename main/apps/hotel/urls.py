@@ -45,6 +45,11 @@ urlpatterns = [
         name='hotelcalculation_detail'
     ),
     path(
+        '<uuid:guid>/hotelcalculation-delete/',
+        view=views.hotelcalculation_delete_api_view,
+        name='hotelcalculation_delete'
+    ),
+    path(
         'hotelbook-create/',
         view=views.hotelbook_create_api_view,
         name='hotel_landing_create'

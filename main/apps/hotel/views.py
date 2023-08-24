@@ -154,6 +154,14 @@ class HotelCalculationCreateAPIView(CustomCreateAPIView):
 hotelcalculation_create_api_view = HotelCalculationCreateAPIView.as_view()
 
 
+class HotelCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HotelCalculation.objects.all()
+    serializer_class = HotelCalculationCreateSerializer
+    lookup_field='guid'
+
+hotelcalculation_delete_api_view = HotelCalculationDeleteAPIView.as_view()
+
+
 class SingleHotelCalculationDetailAPIView(CustomListView):
     queryset = HotelCalculation.objects.all()
     serializer_class = HotelCalculationListSerializer

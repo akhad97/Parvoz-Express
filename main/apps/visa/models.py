@@ -24,7 +24,7 @@ class VisaCalculation(BaseModel):
     number_of_day = models.PositiveIntegerField(default=0)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     prepayment = models.DecimalField(max_digits=20, decimal_places=2)
-    remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
+    remained_amount = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
 
 
     class Meta(BaseMeta):

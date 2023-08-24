@@ -62,6 +62,11 @@ class ManagerCalculationListSerializer(serializers.ModelSerializer):
             'remained_amount'
         )
     
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['remained_amount'] = instance.total_amount - instance.prepayment
+        return data
+    
 
 class ManagerCalculationCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,6 +96,11 @@ class GuideCalculationListSerializer(serializers.ModelSerializer):
             'prepayment',
             'remained_amount'
         )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['remained_amount'] = instance.total_amount - instance.prepayment
+        return data
     
 
 class GuideCalculationCreateSerializer(serializers.ModelSerializer):

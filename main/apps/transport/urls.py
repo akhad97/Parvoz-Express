@@ -30,6 +30,11 @@ urlpatterns = [
         name='transportcalculation_create'
     ),
     path(
+        '<uuid:guid>/transportcalculation-delete/',
+        view=views.transportcalculation_delete_api_view,
+        name='transportcalculation-delete'
+    ),
+    path(
         'transport-update/<uuid:guid>/',
         view=views.transport_detail_api_view,
         name='transport-update'

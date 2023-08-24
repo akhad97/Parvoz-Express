@@ -40,6 +40,11 @@ urlpatterns = [
         name='outfitcalculation_list'
     ),
     path(
+        '<uuid:guid>/outfitcalculation-delete/',
+        view=views.outfit_calculation_delete_api_view,
+        name='outfit_calculation_delete'
+    ),
+    path(
         'single-outfitcalculation-detail/<int:pk>/',
         view=views.single_outfit_calculation_detail_api_view,
         name='outfitcalculation_detail'
