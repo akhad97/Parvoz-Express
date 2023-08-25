@@ -253,20 +253,19 @@ class ReportDataAPIView(generics.ListAPIView):
         year = self.request.query_params.get('year')
         if month and year:
             queryset = queryset.filter(
-                Q(start_date__month__gte=month, start_date__year__gte=year) |
-                Q(start_date__month__lte=month, start_date__year__lte=year)
+                Q(start_date__month=month, start_date__year=year) |
+                Q(start_date__month=month, start_date__year=year)
                 )
         elif month:
             queryset = queryset.filter(
-                Q(start_date__month__gte=month) |
-                Q(start_date__month__lte=month)
+                Q(start_date__month=month) |
+                Q(start_date__month=month)
             ) 
         elif year:
             queryset = queryset.filter(
-                Q(start_date__year__gte=year) |
-                Q(start_date__year__lte=year)
+                Q(start_date__year=year) |
+                Q(start_date__year=year)
                 )
-
         return queryset
     
     def get(self, *args, **kwargs):
