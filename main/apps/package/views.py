@@ -469,10 +469,10 @@ class ReportDataAPIView(generics.ListAPIView):
 
             hotel_total_price = [
                 sum(prices) for prices in zip(
-                    hotel_single_room_total_price,
-                    hotel_double_room_total_price,
-                    hotel_triple_room_total_price,
-                    hotel_quad_room_total_price
+                    single_total_prices_with_room_counts,
+                    double_total_prices_with_room_counts,
+                    triple_total_prices_with_room_counts,
+                    quad_total_prices_with_room_counts
                 )
             ]
             
@@ -583,6 +583,10 @@ class ReportDataAPIView(generics.ListAPIView):
                 'hotel_client_counts': hotel_client_counts,
                 'client_count_by_room_type': client_count_by_room_type,
                 # 'total_prices_with_room_counts':total_prices_with_room_counts
+                'single_total_prices_with_room_counts':single_total_prices_with_room_counts,
+                'double_total_prices_with_room_counts': double_total_prices_with_room_counts,
+                'triple_total_prices_with_room_counts': triple_total_prices_with_room_counts,
+                'quad_total_prices_with_room_counts': quad_total_prices_with_room_counts
             }
             data.append(data_1)
         return Response(data)
