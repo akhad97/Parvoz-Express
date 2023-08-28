@@ -391,8 +391,8 @@ class ReportDataAPIView(generics.ListAPIView):
             triple_room_price = [hotel.triple_room_price for hotel in tourpackage.hotel.all()]
             quadruple_room_price = [hotel.quadruple_room_price for hotel in tourpackage.hotel.all()]
 
-            hotel_single_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            hotel_double_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_single_room_total_price = [price * hotel_client_counts[hotel.title]['single'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_double_room_total_price = [price * hotel_client_counts[hotel.title]['double'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
             hotel_triple_room_total_price = [price * hotel_client_counts[hotel.title]['triple'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
             hotel_quad_room_total_price = [price * hotel_client_counts[hotel.title]['quad'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
             
