@@ -391,46 +391,46 @@ class ReportDataAPIView(generics.ListAPIView):
             triple_room_price = [hotel.triple_room_price for hotel in tourpackage.hotel.all()]
             quadruple_room_price = [hotel.quadruple_room_price for hotel in tourpackage.hotel.all()]
 
-            # hotel_single_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            # hotel_double_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            # hotel_triple_room_total_price = [price * hotel_client_counts[hotel.title]['triple'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            # hotel_quad_room_total_price = [price * hotel_client_counts[hotel.title]['quad'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_single_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_double_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_triple_room_total_price = [price * hotel_client_counts[hotel.title]['triple'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
+            hotel_quad_room_total_price = [price * hotel_client_counts[hotel.title]['quad'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
             
-            hotel_single_room_total_price = [
-            [
-                count * (price * nights) 
-                for count, (price, nights) in zip(room_counts, zip(single_room_price, hotel_nights))
-            ]
-            for room_counts in client_count_by_room_type
-            ]
-            hotel_single_room_total_price = [sum(values) for values in zip(*hotel_single_room_total_price)]
+            # hotel_single_room_total_price = [
+            # [
+            #     count * (price * nights) 
+            #     for count, (price, nights) in zip(room_counts, zip(single_room_price, hotel_nights))
+            # ]
+            # for room_counts in client_count_by_room_type
+            # ]
+            # hotel_single_room_total_price = [sum(values) for values in zip(*hotel_single_room_total_price)]
 
-            hotel_double_room_total_price = [
-            [
-                count * (price * nights) 
-                for count, (price, nights) in zip(room_counts, zip(double_room_price, hotel_nights))
-            ]
-            for room_counts in client_count_by_room_type
-            ]
-            hotel_double_room_total_price = [sum(values) for values in zip(*hotel_double_room_total_price)]  
+            # hotel_double_room_total_price = [
+            # [
+            #     count * (price * nights) 
+            #     for count, (price, nights) in zip(room_counts, zip(double_room_price, hotel_nights))
+            # ]
+            # for room_counts in client_count_by_room_type
+            # ]
+            # hotel_double_room_total_price = [sum(values) for values in zip(*hotel_double_room_total_price)]  
 
-            hotel_triple_room_total_price = [
-            [
-                count * (price * nights) 
-                for count, (price, nights) in zip(room_counts, zip(triple_room_price, hotel_nights))
-            ]
-            for room_counts in client_count_by_room_type
-            ]
-            hotel_triple_room_total_price = [sum(values) for values in zip(*hotel_triple_room_total_price)]
+            # hotel_triple_room_total_price = [
+            # [
+            #     count * (price * nights) 
+            #     for count, (price, nights) in zip(room_counts, zip(triple_room_price, hotel_nights))
+            # ]
+            # for room_counts in client_count_by_room_type
+            # ]
+            # hotel_triple_room_total_price = [sum(values) for values in zip(*hotel_triple_room_total_price)]
 
-            hotel_quad_room_total_price = [
-            [
-                count * (price * nights) 
-                for count, (price, nights) in zip(room_counts, zip(quadruple_room_price, hotel_nights))
-            ]
-            for room_counts in client_count_by_room_type
-            ]
-            hotel_quad_room_total_price = [sum(values) for values in zip(*hotel_quad_room_total_price)]       
+            # hotel_quad_room_total_price = [
+            # [
+            #     count * (price * nights) 
+            #     for count, (price, nights) in zip(room_counts, zip(quadruple_room_price, hotel_nights))
+            # ]
+            # for room_counts in client_count_by_room_type
+            # ]
+            # hotel_quad_room_total_price = [sum(values) for values in zip(*hotel_quad_room_total_price)]       
 
             hotel_total_price = [
                 sum(prices) for prices in zip(
