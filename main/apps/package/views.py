@@ -582,7 +582,7 @@ class ReportDataAPIView(generics.ListAPIView):
                 'benefit_total_expense': benefit_total_expense,
                 'hotel_client_counts': hotel_client_counts,
                 'client_count_by_room_type': client_count_by_room_type,
-                'total_prices_with_room_counts':total_prices_with_room_counts
+                # 'total_prices_with_room_counts':total_prices_with_room_counts
             }
             data.append(data_1)
         return Response(data)
