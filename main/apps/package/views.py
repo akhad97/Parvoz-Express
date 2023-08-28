@@ -274,14 +274,26 @@ class ReportDataAPIView(generics.ListAPIView):
 
         for tourpackage in queryset:
             hotel_title = [hotel.title for hotel in tourpackage.hotel.all()]
-            hotel_start_date = [hotel.start_date for hotel in tourpackage.hotel.all()] 
-            hotel_end_date = [hotel.end_date for hotel in tourpackage.hotel.all()] 
+            # hotel_start_date = [hotel.start_date for hotel in tourpackage.hotel.all()] 
+            # hotel_end_date = [hotel.end_date for hotel in tourpackage.hotel.all()] 
             hotel_nights = [int(hotel.booking_duration) for hotel in tourpackage.hotel.all()] 
             number_of_room = [hotel.number_of_room for hotel in tourpackage.hotel.all()]
             clients = Client.objects.filter(tour_package=tourpackage).select_related('tour_package').count()
             outfit_price = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()] 
             total_price = sum(outfit_price)
             first_expense = total_price * clients
+
+            each_room_type_count = tourpackage.hotel_data
+            client_count_by_room_type = []
+
+            for hotel in each_room_type_count:
+                room_counts = []
+                for i in range(1, 5):  # Assuming there are room_1_count to room_4_count keys
+                    room_count_key = f'rooms_{i}_count'
+                    room_counts.append(hotel.get(room_count_key, 0))
+                client_count_by_room_type.append(room_counts)
+
+            print('room_counts_list', client_count_by_room_type)
 
             flight_calculations = tourpackage.flight.calculations.all()
             total_amount = sum(calculation.total_amount for calculation in flight_calculations)
@@ -321,35 +333,35 @@ class ReportDataAPIView(generics.ListAPIView):
             departure_date_4_format = None 
 
             if landing_date_1 is not None:
-                landing_date_1_format = (datetime.fromisoformat(str(landing_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                landing_date_1_format = (datetime.fromisoformat(str(landing_date_1)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", landing_date_1)
             if departure_date_1 is not None:
-                departure_date_1_format = (datetime.fromisoformat(str(departure_date_1)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                departure_date_1_format = (datetime.fromisoformat(str(departure_date_1)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", departure_date_1)
             if landing_date_2 is not None:
-                landing_date_2_format = (datetime.fromisoformat(str(landing_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                landing_date_2_format = (datetime.fromisoformat(str(landing_date_2)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", landing_date_2)
             if departure_date_2 is not None:
-                departure_date_2_format = (datetime.fromisoformat(str(departure_date_2)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                departure_date_2_format = (datetime.fromisoformat(str(departure_date_2)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", departure_date_2)
             if landing_date_3 is not None:
-                landing_date_3_format = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                landing_date_3_format = (datetime.fromisoformat(str(landing_date_3)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", landing_date_3)
             if departure_date_3 is not None:    
-                departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                departure_date_3_format = (datetime.fromisoformat(str(departure_date_3)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", departure_date_3)
             if landing_date_4 is not None:  
-                landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                landing_date_4_format = (datetime.fromisoformat(str(landing_date_4)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", landing_date_4)
             if departure_date_4 is not None: 
-                departure_date_4_format = (datetime.fromisoformat(str(departure_date_4)).astimezone(timezone.utc)).strftime('%Y-%m-%d')
+                departure_date_4_format = (datetime.fromisoformat(str(departure_date_4)).astimezone(timezone.utc)).strftime('%d-%m-%Y')
             else:
                 print("Date field is empty.", departure_date_4)
 
@@ -374,7 +386,6 @@ class ReportDataAPIView(generics.ListAPIView):
                 for hotel in tourpackage.hotel.all()
             }
 
-
             single_room_price = [hotel.single_room_price for hotel in tourpackage.hotel.all()]
             double_room_price = [hotel.double_room_price for hotel in tourpackage.hotel.all()]
             triple_room_price = [hotel.triple_room_price for hotel in tourpackage.hotel.all()]
@@ -395,7 +406,6 @@ class ReportDataAPIView(generics.ListAPIView):
             ]
             
             additional_expense_for_hotel = []
-
             if tourpackage.hotel_data:
                 for item in tourpackage.hotel_data:
                     if "additional_expense" in item:
@@ -418,8 +428,6 @@ class ReportDataAPIView(generics.ListAPIView):
                 clients * nights * expense
                 for nights, expense in zip(hotel_nights, additional_expense_for_hotel)
             ]
-            print(food_price_for_each_hotel)
-
                 
             hotel_food_sum = [
                 total_price + food_price
@@ -501,7 +509,8 @@ class ReportDataAPIView(generics.ListAPIView):
                 'for_one_person': for_one_person,
                 'benefits': benefit_amount,
                 'benefit_total_expense': benefit_total_expense,
-                'hotel_client_counts': hotel_client_counts
+                'hotel_client_counts': hotel_client_counts,
+                'client_count_by_room_type': client_count_by_room_type
             }
             data.append(data_1)
         return Response(data)
