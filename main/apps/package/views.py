@@ -429,10 +429,7 @@ class ReportDataAPIView(generics.ListAPIView):
             # for r_count in client_count_by_room_type]
 
 
-            hotel_quad_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), quadruple_room_price, hotel_nights)]
-
-            # Assuming room_counts_list is already generated from the previous code
-            # Example room_counts_list: [[1, 2, 0, 0], [0, 0, 0, 0]]
+            # hotel_quad_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), quadruple_room_price, hotel_nights)]
 
             total_prices_with_room_counts = []
 
