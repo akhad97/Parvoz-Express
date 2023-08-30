@@ -420,12 +420,12 @@ class ReportDataAPIView(generics.ListAPIView):
             hotel_triple_room_total_price = [price * third_element * nights for hotel, third_element, price, nights in zip(tourpackage.hotel.all(), third_elements, single_room_price, hotel_nights)]
             hotel_quad_room_total_price = [price * fourth_element * nights for hotel, fourth_element, price, nights in zip(tourpackage.hotel.all(), fourth_elements, single_room_price, hotel_nights)]
 
-            total_prices_with_room_counts = []
-            for room_counts, total_price in zip(client_count_by_room_type, hotel_quad_room_total_price):
-                multiplied_prices = [count * total_price for count in room_counts]
-                total_prices_with_room_counts.append(multiplied_prices)
+            # total_prices_with_room_counts = []
+            # for room_counts, total_price in zip(client_count_by_room_type, hotel_quad_room_total_price):
+            #     multiplied_prices = [count * total_price for count in room_counts]
+            #     total_prices_with_room_counts.append(multiplied_prices)
 
-            print(total_prices_with_room_counts)
+            # print(total_prices_with_room_counts)
 
             hotel_total_price = [
                 sum(prices) for prices in zip(
@@ -541,7 +541,7 @@ class ReportDataAPIView(generics.ListAPIView):
                 'benefit_total_expense': benefit_total_expense,
                 'hotel_client_counts': hotel_client_counts,
                 'client_count_by_room_type': client_count_by_room_type,
-                'total_prices_with_room_counts':total_prices_with_room_counts
+                # 'total_prices_with_room_counts':total_prices_with_room_counts
             }
             data.append(data_1)
         return Response(data)
