@@ -230,9 +230,11 @@ class DashboardAPIView(CustomListView):
     
 dashboard_api_view = DashboardAPIView.as_view()
 
+
 from django.db.models import Prefetch
 from ..outfit.models import OutfitType
 from decimal import Decimal
+from ..outfit.models import Outfit
 
 
 
@@ -274,21 +276,27 @@ class ReportDataAPIView(generics.ListAPIView):
 
         for tourpackage in queryset:
             hotel_title = [hotel.title for hotel in tourpackage.hotel.all()]
-            # hotel_start_date = [hotel.start_date for hotel in tourpackage.hotel.all()] 
-            # hotel_end_date = [hotel.end_date for hotel in tourpackage.hotel.all()] 
             hotel_nights = [int(hotel.booking_duration) for hotel in tourpackage.hotel.all()] 
             number_of_room = [hotel.number_of_room for hotel in tourpackage.hotel.all()]
             clients = Client.objects.filter(tour_package=tourpackage).select_related('tour_package').count()
             outfit_price = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()] 
             total_price = sum(outfit_price)
-            first_expense = total_price * clients
+            # first_expense = total_price * clients
+
+            outfit_prices = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()]
+            outfitdata = tourpackage.outfit_data
+            first_expense = 0 
+            for i, outfit_data in enumerate(outfitdata):
+                outfit_sum = sum(map(int, outfit_data.values()))
+                outfit_multiplier = outfit_prices[i]
+                first_expense += int(outfit_sum * outfit_multiplier) 
+            print('first_expense', first_expense)
 
             each_room_type_count = tourpackage.hotel_data
-
             client_count_by_room_type = []
             for hotel in each_room_type_count:
                 room_counts = []
-                for i in range(1, 5):  # Assuming there are room_1_count to room_4_count keys
+                for i in range(1, 5): 
                     room_count_key = f'rooms_{i}_count'
                     room_counts.append(hotel.get(room_count_key, 0))
                 client_count_by_room_type.append(room_counts)
@@ -365,10 +373,6 @@ class ReportDataAPIView(generics.ListAPIView):
             else:
                 print("Date field is empty.", departure_date_4)
 
-            # date_only_1 = landing_date_1.date()
-            # date_only_2 = departure_date_1.date()
-            # night_difference = date_only_1 - date_only_2
-            # nights = night_difference.days 
 
             benefits = Client.objects.filter(tour_package=tourpackage)
             benefit_amount=0
@@ -392,7 +396,6 @@ class ReportDataAPIView(generics.ListAPIView):
             quadruple_room_price = [hotel.quadruple_room_price for hotel in tourpackage.hotel.all()]
 
             first_elements = []
-
             for room_counts in client_count_by_room_type:
                 first_element = room_counts[0] if room_counts else None
                 first_elements.append(first_element)
@@ -417,71 +420,12 @@ class ReportDataAPIView(generics.ListAPIView):
             hotel_triple_room_total_price = [price * third_element * nights for hotel, third_element, price, nights in zip(tourpackage.hotel.all(), third_elements, single_room_price, hotel_nights)]
             hotel_quad_room_total_price = [price * fourth_element * nights for hotel, fourth_element, price, nights in zip(tourpackage.hotel.all(), fourth_elements, single_room_price, hotel_nights)]
 
-
-
-            # hotel_double_room_total_price = [price * hotel_client_counts[hotel.title]['double'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            # hotel_triple_room_total_price = [price * hotel_client_counts[hotel.title]['triple'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-            # hotel_quad_room_total_price = [price * hotel_client_counts[hotel.title]['quad'] * nights for hotel, price, nights in zip(tourpackage.hotel.all(), single_room_price, hotel_nights)]
-
-            # hotel_single_room_total_price = [
-            #     [count * price * nights for count, price, nights in zip(room_counts, single_room_price, hotel_nights)]
-            #     for room_counts, single_room_price, hotel_nights in zip(client_count_by_room_type, single_room_price, hotel_nights)
-            # ]
-            # hotel_single_room_total_price = [price * cli * nights for hotel, cli, price, nights in zip(tourpackage.hotel.all(), client_count_by_room_type[0], single_room_price, hotel_nights)]
-        
-
-
-            
-            # hotel_single_room_total_price = [
-            # [
-            #     count * (price * nights) 
-            #     for count, (price, nights) in zip(r_count, zip(single_room_price, hotel_nights))
-            # ]
-            # for r_count in client_count_by_room_type]
-            # hotel_single_room_total_price = [sum(values) for values in zip(*hotel_single_room_total_price)]
-
-            # hotel_double_room_total_price = [
-            # [
-            #     count * (price * nights) 
-            #     for count, (price, nights) in zip(r_count, zip(double_room_price, hotel_nights))
-            # ]
-            # for r_count in client_count_by_room_type]
-
-            # hotel_double_room_total_price = [sum(values) for values in zip(*hotel_double_room_total_price)]  
-
-            # hotel_triple_room_total_price = [
-            # [
-            #     count * (price * nights) 
-            #     for count, (price, nights) in zip(r_count, zip(triple_room_price, hotel_nights))
-            # ]
-            # for r_count in client_count_by_room_type]
-            # hotel_triple_room_total_price = [sum(values) for values in zip(*hotel_triple_room_total_price)]
-
-            # hotel_quad_room_total_price = [
-            # [
-            #     count * (price * nights) 
-            #     for count, (price, nights) in zip(r_count, zip(quadruple_room_price, hotel_nights))
-            # ]
-            # for r_count in client_count_by_room_type]
-
-
-            # hotel_quad_room_total_price = [price * nights for hotel, price, nights in zip(tourpackage.hotel.all(), quadruple_room_price, hotel_nights)]
-
             total_prices_with_room_counts = []
-
             for room_counts, total_price in zip(client_count_by_room_type, hotel_quad_room_total_price):
                 multiplied_prices = [count * total_price for count in room_counts]
                 total_prices_with_room_counts.append(multiplied_prices)
 
             print(total_prices_with_room_counts)
-
-
-            
-
-            
-            
-            # hotel_quad_room_total_price = [sum(values) for values in zip(*hotel_quad_room_total_price)]  
-
 
             hotel_total_price = [
                 sum(prices) for prices in zip(
@@ -569,7 +513,6 @@ class ReportDataAPIView(generics.ListAPIView):
                 'departure_date_3': departure_date_3_format,
                 'landing_date_4': landing_date_4_format,
                 'departure_date_4': departure_date_4_format,
-                # 'night': nights,
                 'nights': hotel_nights,
                 'clients': clients,
                 'outfit_price': outfit_price,
@@ -602,8 +545,6 @@ class ReportDataAPIView(generics.ListAPIView):
             }
             data.append(data_1)
         return Response(data)
-
-    
 
 report_data_api_view = ReportDataAPIView.as_view()
 
