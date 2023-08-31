@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.utils import timezone
@@ -15,7 +15,9 @@ from .serializers import (
     ManagerCalculationListSerializer,
     ManagerCalculationCreateSerializer,
     GuideCalculationListSerializer,
-    GuideCalculationCreateSerializer
+    GuideCalculationCreateSerializer,
+    GuideLoginSerializer,
+    ManagerLoginSerializer
 )
 from ..common.views import CustomListView
 from ..common.utils import (
@@ -23,6 +25,62 @@ from ..common.utils import (
     get_remained_amount_percentage, 
     get_unpaid_percentage
 )
+from django.contrib.auth.hashers import check_password
+
+
+class GuideLoginAPIView(generics.GenericAPIView):
+    queryset = Guide.objects.all()
+    serializer_class = GuideLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = GuideLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            phone_number = serializer.validated_data['phone_number']
+            password = serializer.validated_data['password']
+            try:
+                guide = Guide.objects.get(phone_number=phone_number)
+            except Guide.DoesNotExist:
+                return Response({'message':'Guide not found!'}, status=status.HTTP_404_NOT_FOUND)
+            response_data = {
+                'data': serializer.data,
+                'guid':guide.guid
+            }
+            if check_password(password, guide.password):
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid phone number or password', 'status':status.HTTP_401_UNAUTHORIZED})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+guide_login_api_view = GuideLoginAPIView.as_view()
+
+
+class ManagerLoginAPIView(generics.GenericAPIView):
+    queryset = Manager.objects.all()
+    serializer_class = ManagerLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = ManagerLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            phone_number = serializer.validated_data['phone_number']
+            password = serializer.validated_data['password']
+            try:
+                manager = Manager.objects.get(phone_number=phone_number)
+            except Manager.DoesNotExist:
+                return Response({'message':'Manager not found!'}, status=status.HTTP_404_NOT_FOUND)
+            response_data = {
+                'data': serializer.data,
+                'guid':manager.guid
+            }
+            if check_password(password, manager.password):
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid phone number or password', 'status':status.HTTP_401_UNAUTHORIZED})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+manager_login_api_view = ManagerLoginAPIView.as_view()
+
 
 class ManagerListAPIView(CustomListView):
     queryset = Manager.objects.all()

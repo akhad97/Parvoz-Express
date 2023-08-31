@@ -40,7 +40,6 @@ class TourPackageListAPIVIew(CustomListView):
         title = params.get('title')
         status = params.get('status')
 
-
         qs = TourPackage.objects.filter(is_active=True)
 
         if title:

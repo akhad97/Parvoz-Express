@@ -1,6 +1,7 @@
 from django.db import models
 from ..common.models import BaseModel, BaseMeta
 from django.utils.translation import gettext as _
+from django.contrib.auth.hashers import make_password
 
 
 class Manager(BaseModel):
@@ -10,6 +11,15 @@ class Manager(BaseModel):
     phone_number = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=20, decimal_places=2)
     is_active = models.BooleanField(default=True)
+    password = models.CharField(max_length=128, null=True)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
 
     class Meta(BaseMeta):
         verbose_name = _("Manager")
@@ -29,6 +39,16 @@ class Guide(BaseModel):
     price = models.DecimalField(max_digits=20, decimal_places=2)
     manager = models.ForeignKey(Manager, on_delete=models.DO_NOTHING, related_name='managers')
     is_active = models.BooleanField(default=True)
+    password = models.CharField(max_length=128, null=True)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+    
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.set_password(self.password)
+        super().save(*args, **kwargs)
+
 
     class Meta(BaseMeta):
         verbose_name = _("Guide")

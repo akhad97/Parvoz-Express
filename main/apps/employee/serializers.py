@@ -19,7 +19,8 @@ class ManagerSerializer(serializers.ModelSerializer):
             'city',
             'phone_number',
             'price',
-            'is_active'
+            'password',
+            'is_active',
         )
 
     def create(self, validated_data):
@@ -39,6 +40,7 @@ class GuideSerializer(serializers.ModelSerializer):
             'phone_number',
             'price',
             'manager',
+            'password',
             'is_active'
         )
         
@@ -114,4 +116,26 @@ class GuideCalculationCreateSerializer(serializers.ModelSerializer):
             'total_amount',
             'prepayment',
             'remained_amount'
+        )
+
+
+class GuideLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guide 
+        fields = (
+            'id',
+            'guid',
+            'phone_number',
+            'password'
+        )
+
+
+class ManagerLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manager 
+        fields = (
+            'id',
+            'guid',
+            'phone_number',
+            'password'
         )

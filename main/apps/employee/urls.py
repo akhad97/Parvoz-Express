@@ -55,6 +55,16 @@ urlpatterns = [
         name='guide_list'
     ),
     path(
+        'manager-login/',
+        view=views.manager_login_api_view,
+        name='manager_login'
+    ),
+    path(
+        'guide-login/',
+        view=views.guide_login_api_view,
+        name='guide_login'
+    ),
+    path(
         'guide-list/',
         view=views.guide_list_api_view,
         name='guide_list'
