@@ -119,7 +119,7 @@ urlpatterns = [
         name='landing_delete'
     ),
     path(
-        'manager-tourpackage-list/',
+        'manager-guide-tourpackage-list/',
         view=views.manager_guide_tourpakcage_list_api_view,
         name='manager_tourpakcage_list'
     ),
