@@ -25,7 +25,8 @@ from .serializer import (
     TourPackageBookUpdateSerializer,
     FastContanctSerializer,
     FastContactUpdateSerializer,
-    LandingDataSerializer
+    LandingDataSerializer,
+    TourPackageManagerGuideSerializer
 )
 from ..common.views import CustomListView, CustomCreateAPIView, CustomDetailView
 from ..client.models import Client
@@ -672,3 +673,35 @@ class LandingDataListAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 landing_create_put_list_api_view = LandingDataListAPIView.as_view()
+
+
+
+class ManagerGuidePackageListAPIView(CustomListView):
+    serializer_class = TourPackageManagerGuideSerializer
+
+    def get_queryset(self):
+        params = self.request.query_params
+        manager_guid = params.get('manager_guid', None)
+        guide_guid = params.get('guide_guid', None)
+        queryset = TourPackage.objects.filter(is_active=True)
+        if manager_guid:
+            queryset = queryset.filter(manager__guid=manager_guid) 
+        if guide_guid:
+            queryset = queryset.filter(guide__guid=guide_guid) 
+        return queryset
+    
+manager_guide_tourpakcage_list_api_view = ManagerGuidePackageListAPIView.as_view()
+
+
+# class GuidePackageListAPIView(CustomListView):
+#     serializer_class = TourPackageSerializer
+
+#     def get_queryset(self):
+#         params = self.request.query_params
+#         guide_guid = params.get('guide_guid')
+#         queryset = TourPackage.objects.filter(is_active=True)
+#         if guide_guid:
+#             queryset = queryset.filter(guide__guid=guide_guid) 
+#         return queryset
+    
+# guide_tourpakcage_list_api_view = GuidePackageListAPIView.as_view()

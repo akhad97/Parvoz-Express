@@ -34,3 +34,14 @@ class OtherExpenseCreateSerializer(serializers.ModelSerializer):
             'description',
             'amount'
         )
+
+
+class TourpackageOtherExpenseCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OtherExpense
+        fields = (
+            'tourpackage',
+            'title',
+            'description',
+            'amount'
+        )

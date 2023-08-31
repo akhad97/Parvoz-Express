@@ -13,6 +13,23 @@ from ..flight.serializer.flight import FlightSerializer
 from ..employee.serializers import GuideSerializer
 
 
+class TourPackageManagerGuideSerializer(serializers.ModelSerializer):
+    client_count = serializers.SerializerMethodField()
+    class Meta:
+        model = TourPackage
+        fields = (
+            'id',
+            'guid',
+            'title',
+            'start_date',
+            'end_date',
+            'client_count',
+            'is_active'
+        )
+
+    def get_client_count(self, obj):
+        return obj.tourpackage_clients.count()
+    
 
 
 class TourPackageSerializer(serializers.ModelSerializer):

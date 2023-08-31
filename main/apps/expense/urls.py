@@ -5,6 +5,11 @@ from . import views
 
 urlpatterns = [
     path(
+        'tourpackage-otherexpense-create/',
+        view=views.tourpackage_otherexpense_create_api_view,
+        name='tourpackage_otherexpense_create'
+    ),
+    path(
         'otherexpense-list/',
         view=views.otherexpense_list_api_view,
         name='otherexpense_list'

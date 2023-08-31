@@ -118,4 +118,9 @@ urlpatterns = [
         view=views.landing_create_put_list_api_view,
         name='landing_delete'
     ),
+    path(
+        'manager-tourpackage-list/',
+        view=views.manager_guide_tourpakcage_list_api_view,
+        name='manager_tourpakcage_list'
+    ),
 ]

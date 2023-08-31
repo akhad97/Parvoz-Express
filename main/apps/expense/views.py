@@ -5,12 +5,18 @@ from rest_framework.response import Response
 from .models import OtherExpense
 from .serializers import (
     OtherExpenseListSerializer,
-    OtherExpenseCreateSerializer
+    OtherExpenseCreateSerializer,
+    TourpackageOtherExpenseCreateSerializer
 )
 from ..common.views import CustomListView, CustomDetailView, CustomCreateAPIView
 from .models import calculate_category_percentages
 
 
+class TourpakcageOtherExpenseCreateAPIView(CustomCreateAPIView):
+    queryset = OtherExpense.objects.all()
+    serializer_class = TourpackageOtherExpenseCreateSerializer
+
+tourpackage_otherexpense_create_api_view = TourpakcageOtherExpenseCreateAPIView.as_view()
 
 
 class OtherExpenseListAPIView(CustomListView):
