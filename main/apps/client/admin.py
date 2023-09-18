@@ -9,14 +9,15 @@ from .models import (
 class ClientAdmin(admin.ModelAdmin):
     list_display = (
         "guid", 
-        "full_name", 
+        "first_name", 
+        "last_name",
         "dob", 
         "room_type", 
         "total_amount", 
         "remained_amount"
         )
     list_display_links = ("guid",)
-    search_fields = ["id", "full_name"]
+    search_fields = ["id", "first_name"]
 
 admin.site.register(Client, ClientAdmin)
 
@@ -27,10 +28,11 @@ class VisaClientAdmin(admin.ModelAdmin):
         "guid", 
         "visa", 
         "hotel", 
-        "full_name"
+        "first_name", 
+        "last_name",
         )
     list_display_links = ("guid",)
-    search_fields = ["id", "full_name"]
+    search_fields = ["id", "first_name"]
 
 admin.site.register(VisaClient, VisaClientAdmin)
 
@@ -38,12 +40,13 @@ admin.site.register(VisaClient, VisaClientAdmin)
 class PartnerAdmin(admin.ModelAdmin):
     list_display = (
         "guid", 
-        "full_name", 
+        "first_name", 
+        "last_name",
         "dob", 
         "total_amount", 
         "remained_amount"
         )
     list_display_links = ("guid",)
-    search_fields = ["id", "full_name"]
+    search_fields = ["id", "first_name"]
 
 admin.site.register(Partner, PartnerAdmin)
