@@ -69,6 +69,15 @@ class ClientUpdateAPIView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({'message': 'visa file updated succesfully'})
+        return Response({'message': 'failed', 'details': serializer.errors})
+    
+    
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
