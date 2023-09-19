@@ -23,10 +23,10 @@ class Client(BaseModel):
     tour_package = models.ForeignKey(TourPackage, on_delete=models.SET_NULL, null=True, related_name='tourpackage_clients')
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, related_name='hotel_clients')
     visa  = models.ForeignKey(Visa, on_delete=models.SET_NULL, null=True)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
-    passport_series = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    middle_name = models.CharField(max_length=200, null=True)
+    passport_series = models.CharField(max_length=100, null=True)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
     # series_number = models.PositiveIntegerField()
@@ -47,49 +47,18 @@ class Client(BaseModel):
 
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.first_name} {self.last_name}'
     
-
-# # Helper function to crop faces
-# def crop_face(image_path):
-#     # Load image using OpenCV
-#     image = cv2.imread(image_path)
-#     image = cv2.imread(image_path)
-    
-    
-#     # Load face detection classifier (you might need to download a classifier XML file)
-#     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    
-#     # Detect faces
-#     faces = face_cascade.detectMultiScale(image, 1.4, 6)
-    
-#     if len(faces) == 0:
-#         return None  # No face detected
-    
-#     # Crop the first detected face
-#     x, y, w, h = faces[0]
-#     cropped_face = image[y:y+h, x:x+w]
-    
-#     return cropped_face
-
-# @receiver(post_save, sender=Client)
-# def crop_face_on_save(sender, instance, **kwargs):
-#     if instance.passport_img:
-#         cropped_face = crop_face(instance.passport_img.path)
-#         print('path', instance.passport_img.path)
-#         if cropped_face is not None:
-#             # Save the cropped face back to the image field
-#             cv2.imwrite(instance.passport_img.path, cropped_face) 
     
 
 class Partner(BaseModel):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    middle_name = models.CharField(max_length=200, null=True)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
-    passport_series = models.CharField(max_length=100)
+    passport_series = models.CharField(max_length=100, null=True)
     passport_image = models.ImageField(upload_to=upload_images(path='pass_partner_images/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
@@ -106,18 +75,18 @@ class Partner(BaseModel):
 
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.first_name} {self.last_name}'
 
 
 class VisaClient(BaseModel):
     visa  = models.ForeignKey(Visa, on_delete=models.SET_NULL, null=True)
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    middle_name = models.CharField(max_length=200, null=True)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
-    passport_series = models.CharField(max_length=100)
+    passport_series = models.CharField(max_length=100, null=True)
     passport_img = models.ImageField(upload_to=upload_images(path='visa_client_pass_imgs/'), null=True)
     room_type = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
@@ -132,18 +101,18 @@ class VisaClient(BaseModel):
 
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.first_name} {self.last_name}'
     
 
 
 class VisaPartner(BaseModel):
     visa_client = models.ForeignKey(VisaClient, on_delete=models.CASCADE, null=True)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    middle_name = models.CharField(max_length=200, null=True)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
-    passport_series = models.CharField(max_length=100)
+    passport_series = models.CharField(max_length=100, null=True)
     passport_image = models.ImageField(upload_to=upload_images(path='visa_partner_pass_imgs/'), null=True)
     total_amount = models.DecimalField(max_digits=20, decimal_places=2)
     remained_amount = models.DecimalField(max_digits=20, decimal_places=2)
@@ -155,4 +124,4 @@ class VisaPartner(BaseModel):
 
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.first_name} {self.last_name}'
