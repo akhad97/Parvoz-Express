@@ -11,8 +11,8 @@ ENV XDG_RUNTIME_DIR /tmp/runtime-root
 
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y && apt-get install -y wkhtmltopdf \
-    cron \
-    libpq-dev libmagic-dev gettext
+    && cron \
+    && libpq-dev libmagic-dev gettext
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
