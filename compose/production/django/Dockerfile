@@ -4,10 +4,10 @@ FROM python:3.10-slim-buster
 # Set an environment variable to prevent buffering of Python output
 ENV PYTHONUNBUFFERED 1
 
-# RUN mkdir /tmp/runtime-root 
-# RUN chmod +x /tmp/runtime-root 
+RUN mkdir /tmp/runtime-root 
+RUN chmod +x /tmp/runtime-root 
 
-# ENV XDG_RUNTIME_DIR /tmp/runtime-root
+ENV XDG_RUNTIME_DIR /tmp/runtime-root
 
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y wkhtmltopdf \
@@ -40,7 +40,6 @@ COPY --chown=django:django . $APP_HOME
 
 # Create necessary directories and set permissions
 RUN mkdir $APP_HOME/main/static && chown django $APP_HOME/main/static
-RUN chmod +x $APP_HOME/main/static
 RUN mkdir $APP_HOME/main/media && chown django $APP_HOME/main/media
 RUN chmod gu+rw /var/run && chmod gu+s /usr/sbin/cron
 
