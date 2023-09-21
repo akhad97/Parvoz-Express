@@ -4,25 +4,14 @@ FROM python:3.10-slim-buster
 # Set an environment variable to prevent buffering of Python output
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /tmp/runtime-root 
-RUN chmod +x /tmp/runtime-root 
-
-ENV XDG_RUNTIME_DIR /tmp/runtime-root
-
 # Install system packages required for the image
-RUN apt-get update \
-    && apt-get install -y \
-        cron \
-        libpq-dev \
-        libmagic-dev \
-        gettext \
-        wkhtmltopdf 
+RUN apt-get update && apt-get install -y \
+    cron \
+    libpq-dev libmagic-dev gettext
 
-
-#
+RUN apt-get install -y wkhtmltopdf\
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
-
 
 # Set the working directory
 ENV HOME=/home/app
