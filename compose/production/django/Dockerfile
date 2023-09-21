@@ -12,11 +12,11 @@ ENV XDG_RUNTIME_DIR /tmp/runtime-root
 # Install system packages required for the image
 RUN apt-get update \
     && apt-get install -y \
-        wkhtmltopdf \
         cron \
         libpq-dev \
         libmagic-dev \
-        gettext
+        gettext \
+        wkhtmltopdf 
 
 
 #
