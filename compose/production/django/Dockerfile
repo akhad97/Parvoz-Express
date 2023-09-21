@@ -5,7 +5,7 @@ FROM python:3.10-slim-buster
 ENV PYTHONUNBUFFERED 1
 
 # Install system packages required for the image
-RUN apt-get update && apt-get install -y wkhtmltopdf && && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     && apt-get -y install wkhtmltopdf \
     # dependencies for building Python packages
     && apt-get install -y build-essential \
