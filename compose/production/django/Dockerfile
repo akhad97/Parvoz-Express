@@ -10,8 +10,8 @@ RUN chmod +x /tmp/runtime-root
 ENV XDG_RUNTIME_DIR /tmp/runtime-root
 
 # Install system packages required for the image
-RUN apt-get update && apt-get -y install wkhtmltopdf \
-    apt-get install -y \
+RUN apt-get update \
+    apt-get install -y wkhtmltopdf \
     cron \
     libpq-dev libmagic-dev gettext
 
