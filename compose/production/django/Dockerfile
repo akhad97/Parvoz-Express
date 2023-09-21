@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y wkhtmltopdf \
     cron \
     libpq-dev libmagic-dev gettext
 
+#
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
 
