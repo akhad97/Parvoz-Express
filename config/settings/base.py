@@ -65,6 +65,8 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'
+os.environ['XDG_RUNTIME_DIR'] = '/tmp/runtime-root'
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -93,7 +95,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # 'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

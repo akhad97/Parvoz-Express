@@ -123,4 +123,11 @@ urlpatterns = [
         view=views.manager_guide_tourpakcage_list_api_view,
         name='manager_tourpakcage_list'
     ),
+
+
+    path(
+        'tourpackage-pdf/<int:pk>',
+        view=views.tourpackage_pdf_api_view,
+        name='tourpackage_pdf'
+    ),
 ]

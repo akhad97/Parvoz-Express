@@ -693,15 +693,54 @@ class ManagerGuidePackageListAPIView(CustomListView):
 manager_guide_tourpakcage_list_api_view = ManagerGuidePackageListAPIView.as_view()
 
 
-# class GuidePackageListAPIView(CustomListView):
-#     serializer_class = TourPackageSerializer
 
-#     def get_queryset(self):
-#         params = self.request.query_params
-#         guide_guid = params.get('guide_guid')
-#         queryset = TourPackage.objects.filter(is_active=True)
-#         if guide_guid:
-#             queryset = queryset.filter(guide__guid=guide_guid) 
-#         return queryset
-    
-# guide_tourpakcage_list_api_view = GuidePackageListAPIView.as_view()
+
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+import pdfkit
+from .models import TourPackage
+
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from rest_framework.generics import RetrieveAPIView
+import logging
+
+
+class TourPackagePDFView(RetrieveAPIView):
+    serializer_class = TourPackageSerializer
+    queryset = TourPackage.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        html_content = render_to_string('index.html', {'data': serializer.data})
+        options = {
+            'encoding': 'UTF-8',
+            'page-size': 'A4',
+            'margin-top': '10mm',
+            'margin-right': '10mm',
+            'margin-bottom': '10mm',
+            'margin-left': '10mm',
+            "enable-local-file-access": "",
+            "--load-error-handling": "ignore"
+        }
+        pdf_file = pdfkit.from_string(html_content, False, options=options)  # Remove the second argument (False)
+        response = HttpResponse(pdf_file, content_type='application/pdf')  # Use HttpResponse instead of Response
+        response['Content-Disposition'] = f'attachment; filename="{instance.title}.pdf"'
+        return response
+
+tourpackage_pdf_api_view = TourPackagePDFView.as_view()
+
+
+# import uuid, pdfkit
+# from datetime import datetime
+# from django.template.loader import render_to_string
+# from django.core.files.base import ContentFile
+# from io import BytesIO
+
+# from posox.celery import app
+# from celery import shared_task
+
+
+
