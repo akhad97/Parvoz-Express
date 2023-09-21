@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev libmagic-dev gettext \
     wkhtmltopdf
 
-RUN chmod +x /usr/local/bin/wkhtmltopdf
+RUN chmod +x /usr/bin/wkhtmltopdf
 
 
 # Create a non-root user inside the container
