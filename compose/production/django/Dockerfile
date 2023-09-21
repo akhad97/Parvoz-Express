@@ -40,6 +40,7 @@ COPY --chown=django:django . $APP_HOME
 
 # Create necessary directories and set permissions
 RUN mkdir $APP_HOME/main/static && chown django $APP_HOME/main/static
+RUN chmod +x $APP_HOME/main/static
 RUN mkdir $APP_HOME/main/media && chown django $APP_HOME/main/media
 RUN chmod gu+rw /var/run && chmod gu+s /usr/sbin/cron
 
