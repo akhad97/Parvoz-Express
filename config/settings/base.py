@@ -64,7 +64,7 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
+#
 WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
 os.environ['XDG_RUNTIME_DIR'] = '/tmp/runtime-root'
 
