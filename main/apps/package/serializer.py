@@ -39,6 +39,8 @@ class TourPackageSerializer(serializers.ModelSerializer):
     transport = TransportSerializer(many=True)
     guide = GuideSerializer(many=True)
 
+    transport_full_names = serializers.SerializerMethodField()
+
     class Meta:
         model = TourPackage
         fields = (
@@ -61,8 +63,13 @@ class TourPackageSerializer(serializers.ModelSerializer):
             'hotel_data',
             'status',
             'currency',
-            'is_active'
+            'is_active',
+            'transport_full_names'
         )
+
+    def get_transport_full_names(self, obj):
+        # Get the full names of associated transports
+        return [transport.full_name for transport in obj.transport.all()]
 
 
 class TourPackageUpdateSerializer(serializers.ModelSerializer):

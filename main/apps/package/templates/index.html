@@ -304,20 +304,20 @@
   <body>
     <div class="wrapper">
       <div class="page">
-        <img class="page__bg" src="img/mecca.png" alt="mecca" />
+        {% comment %} <img class="page__bg" src="img/mecca.png" alt="mecca" /> {% endcomment %}
         <header class="header">
-          <img class="logo" src="./img/logo.png" alt="logo" />
+          {% comment %} <img class="logo" src="./img/logo.png" alt="logo" /> {% endcomment %}
           <h2 class="header__title">ORZUINGIZ BIZ BILAN</h2>
           <p class="header__subtitle">JAZEERA AIRWAYS</p>
           <p class="header__date">
             SANA: <br />
             20.08.2023 - 07.09.2023
           </p>
-          <img class="header__img" src="img/plane-wing.png" alt="plane-wing" />
-          <img class="header__wave" src="img/wave.svg" alt="wave" />
+          {% comment %} <img class="header__img" src="img/plane-wing.png" alt="plane-wing" /> {% endcomment %}
+          {% comment %} <img class="header__wave" src="img/wave.svg" alt="wave" /> {% endcomment %}
         </header>
         <main>
-          <img class="main-bg" src="img/airplane.jpg" alt="airplane" />
+          {% comment %} <img class="main-bg" src="img/airplane.jpg" alt="airplane" /> {% endcomment %}
           <div class="races">
             <div class="races__card">
               <div class="races__card-body">
@@ -350,7 +350,7 @@
                 </p>
               </div>
             </div>
-            <img class="races__plane" src="img/plane.png" alt="plane" />
+            {% comment %} <img class="races__plane" src="img/plane.png" alt="plane" /> {% endcomment %}
             <div class="races__card">
               <div class="races__card-body">
                 <h3 class="races__card-title">Namangan</h3>
@@ -382,7 +382,7 @@
                 </p>
               </div>
             </div>
-            <img class="races__plane" src="img/plane.png" alt="plane" />
+            {% comment %} <img class="races__plane" src="img/plane.png" alt="plane" /> {% endcomment %}
             <div class="races__card">
               <div class="races__card-body">
                 <h3 class="races__card-title">Namangan</h3>
@@ -445,7 +445,7 @@
                 </p>
               </div>
             </div>
-            <img class="races__plane" src="img/plane.png" alt="plane" />
+            {% comment %} <img class="races__plane" src="img/plane.png" alt="plane" /> {% endcomment %}
             <div class="races__card">
               <div class="races__card-body">
                 <h3 class="races__card-title">Namangan</h3>
@@ -477,7 +477,7 @@
                 </p>
               </div>
             </div>
-            <img class="races__plane" src="img/plane.png" alt="plane" />
+            {% comment %} <img class="races__plane" src="img/plane.png" alt="plane" /> {% endcomment %}
             <div class="races__card">
               <div class="races__card-body">
                 <h3 class="races__card-title">Namangan</h3>
@@ -511,36 +511,40 @@
             </div>
           </div>
           <div class="transport">
-            <img class="transport__visa-img" src="img/visa.png" alt="bus" />
+            {% comment %} <img class="transport__visa-img" src="img/visa.png" alt="bus" /> {% endcomment %}
             <h2 class="transport__title">ТРАНСПОРТ</h2>
             <div class="transport__cards">
+              {% for transport in transport_data %}
               <div class="transport__card">
-                <img class="transport__card-img" src="img/bus.jpg" alt="bus" />
-                <h3 class="transport__card-title">Bus Tolibxon</h3>
+                {% comment %} <img class="transport__card-img" src="img/bus.jpg" alt="bus" /> {% endcomment %}
+                <h3 class="transport__card-title">{{transport.transport_type}}</h3>
               </div>
-              <div class="transport__card">
-                <img class="transport__card-img" src="img/bus.jpg" alt="bus" />
-                <h3 class="transport__card-title">Bus Tolibxon</h3>
-              </div>
+              {% comment %} <div class="transport__card">
+                {% comment %} <img class="transport__card-img" src="img/bus.jpg" alt="bus" /> 
+                <h3 class="transport__card-title">{{transport.transport_type}} {{transport.full_name}}</h3>
+              </div> {% endcomment %}
             </div>
           </div>
+          {% endfor %}
           <div class="hotels">
             <h2 class="hotels__title">ОТЕЛИ</h2>
             <div class="hotels__cards">
+              {% for hotel in hotel_data %}
               <div class="hotels__card">
-                <img class="hotels__card-img" src="img/bus.jpg" alt="bus" />
-                <h3 class="hotels__card-title">Bus Tolibxon</h3>
+                {% comment %} <img class="hotels__card-img" src="img/bus.jpg" alt="bus" /> {% endcomment %}
+                <h3 class="hotels__card-title">{{hotel.title}}</h3>
               </div>
-              <div class="hotels__card">
-                <img class="hotels__card-img" src="img/bus.jpg" alt="bus" />
+              {% comment %} <div class="hotels__card">
+                {% comment %} <img class="hotels__card-img" src="img/bus.jpg" alt="bus" /> 
                 <h3 class="hotels__card-title">Bus Tolibxon</h3>
-              </div>
+              </div> {% endcomment %}
             </div>
           </div>
+          {% endfor %}
         </main>
       </div>
       <div class="page">
-        <img class="page__bg" src="img/mecca.png" alt="mecca" />
+        {% comment %} <img class="page__bg" src="img/mecca.png" alt="mecca" /> {% endcomment %}
         <table class="table">
           <thead class="table-head">
             <tr>

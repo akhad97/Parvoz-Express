@@ -1,3 +1,37 @@
+
+stages:
+  - test
+  - deploy
+
+variables:
+  DJANGO_SECRET_KEY: "ye834nv)m2_lu+w0+iy05^d-*peq&ii99mk%n56i-2gz0kadqu"
+  DEBUG: "False"
+
+before_script:
+  - export DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+  - export DEBUG=$DEBUG
+
+test:
+  stage: test
+  script:
+    - docker-compose run web python manage.py test
+
+deploy:
+  stage: deploy
+  only:
+    - master # Only deploy when commits are pushed to master
+  script:
+    - docker-compose -f production.yml up -d # Start the Docker containers
+
+
+
+
+
+
+
+
+
+
 # stages:
 #   - build
 #   - test
@@ -33,22 +67,6 @@
 #     - aws configure set default.region $AWS_DEFAULT_REGION
 #     - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name your-eks-cluster-name
 #     - kubectl apply -f your-kubernetes-deployment.yaml
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -118,3 +136,6 @@
 #     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY proxmox@192.168.0.137 "
 #         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
 #         docker run -d -p 5000:8000 $CONTAINER_IMAGE"
+
+
+

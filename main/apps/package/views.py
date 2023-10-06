@@ -714,7 +714,14 @@ class TourPackagePDFView(RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        html_content = render_to_string('index.html', {'data': serializer.data})
+        transport_data = instance.transport.values('full_name', 'transport_type', 'image')
+        hotel_data = instance.hotel.values('title', 'image')
+        html_content = render_to_string('index.html', 
+                                        {
+                                            'data': serializer.data, 
+                                            'transport_data': transport_data,
+                                            'hotel_data': hotel_data
+                                            })
         options = {
             'encoding': 'UTF-8',
             'page-size': 'A4',

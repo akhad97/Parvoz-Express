@@ -104,4 +104,14 @@ class LandingData(BaseModel):
 
     def __str__(self):
         return f'{self.title}'
+    
+
+class PDFImage(BaseModel):
+    logo = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    mecca = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    airplane = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    plane = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    airplane_wing = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    visa = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
+    wave = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
 
