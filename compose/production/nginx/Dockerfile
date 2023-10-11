@@ -22,5 +22,5 @@ RUN chown -R django:django $LOGS/nginx-error.log
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./.envs/.production/nginx.conf /etc/nginx/conf.d
 
-
+EXPOSE 7777
 
