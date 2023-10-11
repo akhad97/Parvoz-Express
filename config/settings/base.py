@@ -239,17 +239,17 @@ CORS_ALLOW_METHODS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://abdullaevdev.uz",
-    "http://66.55.68.250",
+    "https://api.parvoz.site.uz",
+    "http://45.129.170.136",
     'http://localhost:5173',
     'http://localhost:3000',
     "http://127.0.0.1:8000",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://abdullaevdev.uz",
+    "https://api.parvoz.site.uz",
     "https://parvoz.site.uz",
-    "http://66.55.68.250",
+    "http://45.129.170.136",
     'http://localhost:5173',
     'http://localhost:3000',
     "http://127.0.0.1:8000",
