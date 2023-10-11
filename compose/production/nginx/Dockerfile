@@ -20,7 +20,7 @@ RUN chown -R django:django $LOGS/nginx-error.log
 
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./.envs/.production/nginx.conf /etc/nginx/conf.d
+COPY ./.envs/.production/nginx.conf /etc/nginx/conf.d/parvoz.conf
 
-EXPOSE 7777
+# EXPOSE 7777
 
