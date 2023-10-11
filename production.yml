@@ -47,7 +47,7 @@ services:
     volumes:
       - static_volume:/home/app/web/main/static
       - media_volume:/home/app/web/main/media
-    # ports:
-    #   - "7777:7777"
+    ports:
+      - "7777:7777"
     depends_on:
       - django
