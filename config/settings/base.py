@@ -60,7 +60,7 @@ LOCAL_APPS = [
     "main.apps.transport.apps.TransportConfig",
     "main.apps.flight.apps.FlightConfig",
     "main.apps.visa.apps.VisaConfig",
-    "main.apps.employee.apps.EmployeeConfig"
+    "main.apps.employee.apps.EmployeeConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -248,7 +248,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://api.parvoz.site.uz",
-    "https://parvoz.site.uz",
+    "https://expressparvoz.uz",
     "http://45.129.170.136",
     'http://localhost:5173',
     'http://localhost:3000',

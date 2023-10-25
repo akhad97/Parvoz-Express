@@ -38,7 +38,6 @@ class TourPackageSerializer(serializers.ModelSerializer):
     outfit = OutfitListSerializer(many=True)
     transport = TransportSerializer(many=True)
     guide = GuideSerializer(many=True)
-
     transport_full_names = serializers.SerializerMethodField()
 
     class Meta:
@@ -68,7 +67,6 @@ class TourPackageSerializer(serializers.ModelSerializer):
         )
 
     def get_transport_full_names(self, obj):
-        # Get the full names of associated transports
         return [transport.full_name for transport in obj.transport.all()]
 
 
