@@ -157,6 +157,7 @@ class TourPackageLandingSearchAPIView(CustomListView):
 
 tourpackage_landing_search_api_view = TourPackageLandingSearchAPIView.as_view()
 
+#
 
 class DashboardAPIView(CustomListView):
     queryset = TourPackage.objects.filter(is_active=True)
