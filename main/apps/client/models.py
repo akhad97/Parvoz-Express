@@ -41,6 +41,7 @@ class Client(BaseModel):
     human_development = models.CharField(max_length=100, choices=HumanDevelopmentTypeChoices.choices, null=True)
     gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
     created_by = models.CharField(max_length=100, null=True, blank=True)
+    contract_file = models.FileField(upload_to=upload_images(path='client_contract_files/'), null=True)
 
     class Meta(BaseMeta):
         verbose_name = _("Client")

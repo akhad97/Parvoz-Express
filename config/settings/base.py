@@ -63,6 +63,14 @@ LOCAL_APPS = [
     "main.apps.employee.apps.EmployeeConfig",
 ]
 
+
+# ...
+
+# Celery settings
+# CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+# CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'

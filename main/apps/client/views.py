@@ -1,3 +1,9 @@
+import pdfkit
+import json
+import requests
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from datetime import datetime
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,6 +23,8 @@ from .serializers import (
     VisaClientSerializer
 )
 from ..common.views import CustomListView
+from django.core.files.base import ContentFile
+
 
 
 class ClientListAPIView(CustomListView):
@@ -180,3 +188,94 @@ class VisaClientDeleteAPIView(generics.DestroyAPIView):
 
     
 visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
+
+
+
+class ClientPDFView(APIView):
+    def post(self, request, *args, **kwargs):
+        global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
+        image = request.data.get('image')
+        agent_id = request.query_params.get('agent_id')
+        select = request.data.get('select')
+        select_1 = request.data.get('select_1')
+        select_2 = request.data.get('select_2')
+        select_3 = request.data.get('select_3')
+        select_4 = request.data.get('select_4')
+        select_5 = request.data.get('select_5')
+        select_6 = request.data.get('select_6')
+        select_7 = request.data.get('select_7')
+        select_8 = request.data.get('select_8')
+        guid = kwargs.get('guid', None)
+        if guid is not None:
+            get_request_url = f'http://0.0.0.0:8000/api/v1/client/client-pdf/{guid}'
+            # get_request_params = {'param1': 'value1', 'param2': 'value2'}
+            get_response = requests.get(get_request_url)
+            get_response_data = get_response.json() if get_response.status_code == 200 else None
+            return Response({'message': 'Image saved successfully', 'get_response_data': get_response_data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Client ID (pk) not provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def get(self, request, guid, *args, **kwargs):
+        client = Client.objects.get(guid=guid)
+        serializer = ClientSerializer(client)
+        client_first_name = client.first_name
+        client_last_name = client.last_name
+        client_middle_name = client.middle_name
+        client_passport_series = client.passport_series
+
+        tourpackage_start_year = client.tour_package.start_date.year
+        tourpackage_start_month = client.tour_package.start_date.strftime('%B')
+        tourpackage_start_day = client.tour_package.start_date.day
+        tourpackage_end_year = client.tour_package.end_date.year
+        tourpackage_end_month = client.tour_package.end_date.strftime('%B')
+        tourpackage_end_day = client.tour_package.end_date.day
+
+        year =  datetime.now().year
+        month =  datetime.now().strftime('%B')
+        day =  datetime.now().day
+        hotel_name = client.hotel.title
+        html_content = render_to_string('client.html', 
+                                        {
+                                            'data': serializer.data, 
+                                            'client_first_name': client_first_name,
+                                            'client_last_name': client_last_name,
+                                            'client_middle_name': client_middle_name,
+                                            'client_passport_series': client_passport_series,
+                                            'year': year,
+                                            'month': month,
+                                            'day': day,
+                                            'hotel_name': hotel_name,
+                                            'tourpackage_start_year': tourpackage_start_year,
+                                            'tourpackage_start_month': tourpackage_start_month,
+                                            'tourpackage_start_day': tourpackage_start_day,
+                                            'tourpackage_end_year': tourpackage_end_year,
+                                            'tourpackage_end_month': tourpackage_end_month,
+                                            'tourpackage_end_day': tourpackage_end_day,
+                                            'agent_id': agent_id,
+                                            'image': image,
+                                            'select': select,
+                                            'select_1': select_1,
+                                            'select_2': select_2,
+                                            'select_3': select_3,
+                                            'select_4': select_4,
+                                            'select_5': select_5,
+                                            'select_6': select_6,
+                                            'select_7': select_7,
+                                            'select_8': select_8
+                                        })
+        pdf_file = pdfkit.from_string(html_content, False) 
+        response = HttpResponse(pdf_file, content_type='application/pdf') 
+        filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf'
+        client.contract_file.save(f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf', ContentFile(pdf_file))
+        contract_file_url = client.contract_file.url
+        response_content = {
+            'contract_file_url': contract_file_url,
+            'message': 'PDF generated successfully'
+        }
+        response = HttpResponse(json.dumps(response_content), content_type='application/json')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
+
+client_pdf_api_view = ClientPDFView.as_view()

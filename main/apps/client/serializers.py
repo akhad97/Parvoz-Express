@@ -2,8 +2,7 @@ from rest_framework import serializers
 from .models import (
     Client, 
     Partner,
-    VisaClient,
-    VisaPartner
+    VisaClient
 )
 
 
@@ -33,7 +32,8 @@ class ClientSerializer(serializers.ModelSerializer):
             'outfit_size',
             'human_development',
             'gender_type',
-            'created_by'
+            'created_by',
+            'contract_file'
         )
     
     def get_hotel(self, obj):

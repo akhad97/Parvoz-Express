@@ -733,8 +733,8 @@ class TourPackagePDFView(RetrieveAPIView):
             "enable-local-file-access": "",
             "--load-error-handling": "ignore"
         }
-        pdf_file = pdfkit.from_string(html_content, False, options=options)  # Remove the second argument (False)
-        response = HttpResponse(pdf_file, content_type='application/pdf')  # Use HttpResponse instead of Response
+        pdf_file = pdfkit.from_string(html_content, False, options=options) 
+        response = HttpResponse(pdf_file, content_type='application/pdf') 
         response['Content-Disposition'] = f'attachment; filename="{instance.title}.pdf"'
         return response
 

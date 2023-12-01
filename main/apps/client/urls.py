@@ -64,4 +64,9 @@ urlpatterns = [
         view=views.visa_client_delete_api_view,
         name='visa_client_delete'
     ),
+    path(
+        'client-pdf/<uuid:guid>/',
+        view=views.client_pdf_api_view,
+        name='client_pdf'
+    ),
 ]

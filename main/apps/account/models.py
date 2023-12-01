@@ -18,6 +18,16 @@ class Region(BaseModel):
     def __str__(self):
         return f'{self.title}'
 
+class AgentIDTypeChoices(models.TextChoices):
+    NMA10001 = 'NMA1/0001', _('NMA1/0001')
+    NMA20001 = 'NMA2/0001', _('NMA2/0001')
+    NMA30001 = 'NMA3/0001', _('NMA3/0001')
+    NMA40001 = 'NMA4/0001', _('NMA4/0001')
+    QQN0001 = 'QQN/0001', _('QQN/0001')
+    MRN0001 = 'MRN/0001', _('MRN/0001')
+    AZN0001 = 'AZN/0001', _('AZN/0001')
+    TAS0001 = 'TAS/0001', _('TAS/0001')
+    SKD0001 = 'SKD/0001', _('SKD/0001')
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -36,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_manager = models.BooleanField(default=False)
     is_agent = models.BooleanField(default=False)
     is_outfit = models.BooleanField(default=False)
+    agent_id = models.CharField(max_length=255, choices=AgentIDTypeChoices.choices, null=True, blank=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False, 
