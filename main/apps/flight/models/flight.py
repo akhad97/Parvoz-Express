@@ -34,6 +34,7 @@ class Flight(BaseModel):
     departure_date_1 = models.DateField(null=True, blank=True)
     departure_time_1 = models.DateTimeField(null=True, blank=True)
     phone_number_1 = models.CharField(max_length=50, null=True, blank=True)
+    price_for_one = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     aviacompany_name_2 = models.CharField(max_length=100, null=True, blank=True)
     place_of_arrival_2 = models.CharField(max_length=100, null=True, blank=True)
     flight_name_2 = models.CharField(max_length=100, null=True, blank=True)

@@ -33,12 +33,12 @@ class FlightCalculationCreateAPIView(CustomCreateAPIView):
 flightcalculation_create_api_view = FlightCalculationCreateAPIView.as_view()
 
 
-class FlightCalculationDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+class FlightCalculationUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FlightCalculation.objects.all()
     serializer_class = FlightCalculationSerializer
     lookup_field='guid'
 
-flightcalculation_delete_api_view = FlightCalculationDeleteAPIView.as_view()
+flightcalculation_delete_api_view = FlightCalculationUpdateDeleteAPIView.as_view()
 
 
 @api_view(['GET'])
@@ -63,8 +63,8 @@ class SingleFlightCalculationDetailAPIView(CustomListView):
     serializer_class = FlightCalculationSerializer
 
     def get_queryset(self):
-        params = self.request.query_params
         qs = FlightCalculation.objects.filter(flight=self.kwargs['pk'])
+        params = self.request.query_params
         from_date = params.get('from_date', None)
         to_date = params.get('to_date', None)
         total_amount = params.get('total_amount', None)

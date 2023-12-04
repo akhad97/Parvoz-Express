@@ -16,7 +16,8 @@ class OtherExpenseListSerializer(serializers.ModelSerializer):
             'tourpackage',
             'title',
             'description',
-            'amount'
+            'amount',
+            'confirmed'
         )
 
 
@@ -32,7 +33,8 @@ class OtherExpenseCreateSerializer(serializers.ModelSerializer):
             'tourpackage',
             'title',
             'description',
-            'amount'
+            'amount',
+            'confirmed'
         )
 
 
