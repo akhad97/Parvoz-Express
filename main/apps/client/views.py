@@ -193,7 +193,7 @@ visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 
 class ClientPDFView(APIView):
     agent_id=None
-    # image=None
+    image=None
     def post(self, request, *args, **kwargs):
         global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
         image = request.data.get('image')
@@ -266,6 +266,7 @@ class ClientPDFView(APIView):
                                             # 'select_7': select_7,
                                             # 'select_8': select_8
                                         })
+        print(html_content)
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
         filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf'
