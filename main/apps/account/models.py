@@ -19,15 +19,15 @@ class Region(BaseModel):
         return f'{self.title}'
 
 class AgentIDTypeChoices(models.TextChoices):
-    NMA10001 = 'NMA1/0001', _('NMA1/0001')
-    NMA20001 = 'NMA2/0001', _('NMA2/0001')
-    NMA30001 = 'NMA3/0001', _('NMA3/0001')
-    NMA40001 = 'NMA4/0001', _('NMA4/0001')
-    QQN0001 = 'QQN/0001', _('QQN/0001')
-    MRN0001 = 'MRN/0001', _('MRN/0001')
-    AZN0001 = 'AZN/0001', _('AZN/0001')
-    TAS0001 = 'TAS/0001', _('TAS/0001')
-    SKD0001 = 'SKD/0001', _('SKD/0001')
+    NMA10001 = 'NMA1', _('NMA1')
+    NMA20001 = 'NMA2', _('NMA2')
+    NMA30001 = 'NMA3', _('NMA3')
+    NMA40001 = 'NMA4', _('NMA4')
+    QQN0001 = 'QQN', _('QQN')
+    MRN0001 = 'MRN', _('MRN')
+    AZN0001 = 'AZN', _('AZN')
+    TAS0001 = 'TAS', _('TAS')
+    SKD0001 = 'SKD', _('SKD')
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):

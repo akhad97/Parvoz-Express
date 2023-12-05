@@ -40,22 +40,22 @@ class ClientListAPIView(CustomListView):
         created_by = params.get('created_by', None)
         if full_name:
             clients = clients.filter(Q(full_name__icontains=full_name))
-        if created_by=='NMA1/0001':
-            clients = clients.filter(created_by='NMA1/0001')
-        if created_by=='NMA2/0001':
-            clients = clients.filter(created_by='NMA2/0001')
-        if created_by=='NMA3/0001':
-            clients = clients.filter(created_by='NMA3/0001')
-        if created_by=='NMA4/0001':
-            clients = clients.filter(created_by='NMA4/0001')
-        if created_by=='QQN/0001':
+        if created_by=='NMA1':
+            clients = clients.filter(created_by='NMA1')
+        if created_by=='NMA2':
+            clients = clients.filter(created_by='NMA2')
+        if created_by=='NMA3':
+            clients = clients.filter(created_by='NMA3')
+        if created_by=='NMA4':
+            clients = clients.filter(created_by='NMA4')
+        if created_by=='QQN':
             clients = clients.filter(created_by='QQN/0001')
-        if created_by=='MRN/0001':
-            clients = clients.filter(created_by='MRN/0001')
-        if created_by=='TAS/0001':
-            clients = clients.filter(created_by='TAS/0001')
-        if created_by=='SKD/0001':
-            clients = clients.filter(created_by='SKD/0001')
+        if created_by=='MRN':
+            clients = clients.filter(created_by='MRN')
+        if created_by=='TAS':
+            clients = clients.filter(created_by='TAS')
+        if created_by=='SKD':
+            clients = clients.filter(created_by='SKD')
         return clients
     
     
@@ -221,7 +221,7 @@ class ClientPDFView(APIView):
     # select_7=""
     # select_8=""
     def post(self, request, *args, **kwargs):
-        global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
+        global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8, number, price_for_number, price_for_text, address
         image = request.data.get('image')
         agent_id = request.query_params.get('agent_id')
         select = request.data.get('select')
@@ -233,9 +233,13 @@ class ClientPDFView(APIView):
         select_6 = request.data.get('select_6')
         select_7 = request.data.get('select_7')
         select_8 = request.data.get('select_8')
+        number = request.data.get('number')
+        price_for_number = request.data.get('price_for_number')
+        price_for_text = request.data.get('price_for_text')
+        address = request.data.get('address')
         guid = kwargs.get('guid', None)
         if guid is not None:
-            get_request_url = f'https://api.parvoz.site.uz/api/v1/client/client-pdf/{guid}'
+            get_request_url = f'https://5d63-84-54-74-20.ngrok-free.app/api/v1/client/client-pdf/{guid}'
             # get_request_params = {'param1': 'value1', 'param2': 'value2'}
             get_response = requests.get(get_request_url)
             get_response_data = get_response.json() if get_response.status_code == 200 else None
@@ -290,7 +294,11 @@ class ClientPDFView(APIView):
                                             'select_5': select_5,
                                             'select_6': select_6,
                                             'select_7': select_7,
-                                            'select_8': select_8
+                                            'select_8': select_8,
+                                            'number': number,
+                                            'price_for_number': price_for_number,
+                                            'price_for_text': price_for_text,
+                                            'address': address
                                         })
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
