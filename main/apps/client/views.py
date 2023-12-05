@@ -193,7 +193,7 @@ visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 
 class ClientPDFView(APIView):
     agent_id=None
-    image=None
+    # image=None
     def post(self, request, *args, **kwargs):
         global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
         image = request.data.get('image')
@@ -255,7 +255,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': self.agent_id,
-                                            'image': self.image,
+                                            # 'image': self.image,
                                             # 'select': select,
                                             # 'select_1': select_1,
                                             # 'select_2': select_2,
