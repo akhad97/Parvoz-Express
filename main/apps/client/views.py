@@ -194,6 +194,15 @@ visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 class ClientPDFView(APIView):
     agent_id=None
     image=None
+    select=None
+    select_1=None
+    select_2=None
+    select_3=None
+    select_4=None
+    select_5=None
+    select_6=None
+    select_7=None
+    select_8=None
     def post(self, request, *args, **kwargs):
         global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
         image = request.data.get('image')
@@ -256,15 +265,15 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': self.agent_id,
                                             # 'image': self.image,
-                                            # 'select': select,
-                                            # 'select_1': select_1,
-                                            # 'select_2': select_2,
-                                            # 'select_3': select_3,
-                                            # 'select_4': select_4,
-                                            # 'select_5': select_5,
-                                            # 'select_6': select_6,
-                                            # 'select_7': select_7,
-                                            # 'select_8': select_8
+                                            'select': select,
+                                            'select_1': select_1,
+                                            'select_2': select_2,
+                                            'select_3': select_3,
+                                            'select_4': select_4,
+                                            'select_5': select_5,
+                                            'select_6': select_6,
+                                            'select_7': select_7,
+                                            'select_8': select_8
                                         })
         print(html_content)
         pdf_file = pdfkit.from_string(html_content, False) 
