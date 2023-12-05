@@ -5,12 +5,14 @@ FROM python:3.10-slim-buster
 ENV PYTHONUNBUFFERED 1
 
 # Install system packages required for the image
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     cron \
-    libpq-dev libmagic-dev gettext 
-    # apt-get -y install wkhtmltopdf 
+    libpq-dev libmagic-dev gettext \
+    && apt-get install -y --no-install-recommends \
+    wkhtmltopdf
+
     
-RUN apt-get -y install wkhtmltopdf
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
