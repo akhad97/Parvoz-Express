@@ -207,7 +207,7 @@ class ClientPDFView(APIView):
         select_8 = request.data.get('select_8')
         guid = kwargs.get('guid', None)
         if guid is not None:
-            get_request_url = f'https://expressparvoz.uz/api/v1/client/client-pdf/{guid}'
+            get_request_url = f'https://api.parvoz.site.uz/api/v1/client/client-pdf/{guid}'
             # get_request_params = {'param1': 'value1', 'param2': 'value2'}
             get_response = requests.get(get_request_url)
             get_response_data = get_response.json() if get_response.status_code == 200 else None
