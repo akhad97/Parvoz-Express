@@ -73,7 +73,7 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'
+# WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'
 
 os.environ['XDG_RUNTIME_DIR'] = '/tmp/runtime-root'
 
@@ -255,11 +255,11 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
     "https://api.parvoz.site.uz",
     "https://expressparvoz.uz",
+    'https://5d63-84-54-74-20.ngrok-free.app',
     "http://45.129.170.136",
     'http://localhost:5173',
     'http://localhost:3000',

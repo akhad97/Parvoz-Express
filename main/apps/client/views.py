@@ -218,7 +218,7 @@ class ClientPDFView(APIView):
         select_8 = request.data.get('select_8')
         guid = kwargs.get('guid', None)
         if guid is not None:
-            get_request_url = f'https://api.parvoz.site.uz/api/v1/client/client-pdf/{guid}'
+            get_request_url = f'https://5d63-84-54-74-20.ngrok-free.app/api/v1/client/client-pdf/{guid}'
             # get_request_params = {'param1': 'value1', 'param2': 'value2'}
             get_response = requests.get(get_request_url)
             get_response_data = get_response.json() if get_response.status_code == 200 else None
@@ -265,17 +265,16 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': self.agent_id,
                                             # 'image': self.image,
-                                            'select': select,
-                                            'select_1': select_1,
-                                            'select_2': select_2,
-                                            'select_3': select_3,
-                                            'select_4': select_4,
-                                            'select_5': select_5,
-                                            'select_6': select_6,
-                                            'select_7': select_7,
-                                            'select_8': select_8
+                                            'select': self.select,
+                                            'select_1': self.select_1,
+                                            'select_2': self.select_2,
+                                            'select_3': self.select_3,
+                                            'select_4': self.select_4,
+                                            'select_5': self.select_5,
+                                            'select_6': self.select_6,
+                                            'select_7': self.select_7,
+                                            'select_8': self.select_8
                                         })
-        print(html_content)
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
         filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf'
