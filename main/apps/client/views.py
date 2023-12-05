@@ -192,17 +192,17 @@ visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 
 
 class ClientPDFView(APIView):
-    agent_id=None
-    image=None
-    select=None
-    select_1=None
-    select_2=None
-    select_3=None
-    select_4=None
-    select_5=None
-    select_6=None
-    select_7=None
-    select_8=None
+    # agent_id=None
+    # image=None
+    # select=None
+    # select_1=None
+    # select_2=None
+    # select_3=None
+    # select_4=None
+    # select_5=None
+    # select_6=None
+    # select_7=None
+    # select_8=None
     def post(self, request, *args, **kwargs):
         global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8
         image = request.data.get('image')
@@ -216,15 +216,15 @@ class ClientPDFView(APIView):
         select_6 = request.data.get('select_6')
         select_7 = request.data.get('select_7')
         select_8 = request.data.get('select_8')
-        guid = kwargs.get('guid', None)
-        if guid is not None:
-            get_request_url = f'https://5d63-84-54-74-20.ngrok-free.app/api/v1/client/client-pdf/{guid}'
-            # get_request_params = {'param1': 'value1', 'param2': 'value2'}
-            get_response = requests.get(get_request_url)
-            get_response_data = get_response.json() if get_response.status_code == 200 else None
-            return Response({'message': 'Image saved successfully', 'get_response_data': get_response_data}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Client ID (pk) not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        # guid = kwargs.get('guid', None)
+        # if guid is not None:
+        #     get_request_url = f'https://5d63-84-54-74-20.ngrok-free.app/api/v1/client/client-pdf/{guid}'
+        #     # get_request_params = {'param1': 'value1', 'param2': 'value2'}
+        #     get_response = requests.get(get_request_url)
+        #     get_response_data = get_response.json() if get_response.status_code == 200 else None
+        #     return Response({'message': 'Image saved successfully', 'get_response_data': get_response_data}, status=status.HTTP_200_OK)
+        # else:
+        #     return Response({'error': 'Client ID (pk) not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
 
     def get(self, request, guid, *args, **kwargs):
@@ -263,17 +263,17 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_year': tourpackage_end_year,
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
-                                            'agent_id': self.agent_id,
+                                            # 'agent_id': self.agent_id,
                                             # 'image': self.image,
-                                            'select': self.select,
-                                            'select_1': self.select_1,
-                                            'select_2': self.select_2,
-                                            'select_3': self.select_3,
-                                            'select_4': self.select_4,
-                                            'select_5': self.select_5,
-                                            'select_6': self.select_6,
-                                            'select_7': self.select_7,
-                                            'select_8': self.select_8
+                                            # 'select': self.select,
+                                            # 'select_1': self.select_1,
+                                            # 'select_2': self.select_2,
+                                            # 'select_3': self.select_3,
+                                            # 'select_4': self.select_4,
+                                            # 'select_5': self.select_5,
+                                            # 'select_6': self.select_6,
+                                            # 'select_7': self.select_7,
+                                            # 'select_8': self.select_8
                                         })
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
