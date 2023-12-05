@@ -5,9 +5,11 @@ FROM python:3.10-slim-buster
 ENV PYTHONUNBUFFERED 1
 
 # Install system packages required for the image
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get -y install wkhtmltopdf \ 
+    apt-get install -y \
     cron \
     libpq-dev libmagic-dev gettext 
+    
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
@@ -39,8 +41,6 @@ RUN chmod gu+rw /var/run && chmod gu+s /usr/sbin/cron
 
 # Set the user for running the container
 USER django
-
-RUN apt-get -y install wkhtmltopdf 
 
 # Specify the entrypoint command
 ENTRYPOINT ["/entrypoint"]
