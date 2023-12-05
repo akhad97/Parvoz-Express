@@ -252,7 +252,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_year': tourpackage_end_year,
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
-                                            'agent_id': agent_id,
+                                            # 'agent_id': agent_id,
                                             'image': image,
                                             'select': select,
                                             'select_1': select_1,
