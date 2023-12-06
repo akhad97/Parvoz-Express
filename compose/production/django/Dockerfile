@@ -8,10 +8,10 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y \
     cron \
     # wkhtmltopdf \
-    libpq-dev libmagic-dev gettext \
-    libxrender1 fontconfig libxext6 libjpeg62-turbo
+    libpq-dev libmagic-dev gettext 
+    
 
-# RUN apt-get install -y xvfb
+RUN apt-get install -y libxrender1 fontconfig libxext6 libjpeg62-turbo
 RUN apt-get install -y wget
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
