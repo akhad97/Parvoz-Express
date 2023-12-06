@@ -43,8 +43,10 @@ RUN chmod +x /start && chown django /start
 COPY --chown=django:django . $APP_HOME
 
 # Create necessary directories and set permissions
-RUN mkdir $APP_HOME/main/static && chown django $APP_HOME/main/static
-RUN mkdir $APP_HOME/main/media && chown django $APP_HOME/main/media
+# Create necessary directories and set permissions
+RUN mkdir -p $APP_HOME/main/static && chown -R django:django $APP_HOME/main/static
+RUN mkdir -p $APP_HOME/main/media && chown -R django:django $APP_HOME/main/media
+
 RUN chmod gu+rw /var/run
 
 # Set the user for running the container
