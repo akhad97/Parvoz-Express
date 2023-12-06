@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM debian:buster
+FROM python:3.10-slim-buster
 
 # Set an environment variable to prevent buffering of Python output
 ENV PYTHONUNBUFFERED 1
@@ -7,10 +7,9 @@ ENV PYTHONUNBUFFERED 1
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y \
     cron \
-    libxrender1 fontconfig libxext6 libjpeg62-turbo \
     libpq-dev libmagic-dev gettext 
     
-
+RUN apt-get install -y libxrender1 
 RUN apt-get install -y wget
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
