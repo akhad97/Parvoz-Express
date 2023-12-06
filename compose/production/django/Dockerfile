@@ -5,7 +5,9 @@ FROM python:3.10-slim-buster
 ENV PYTHONUNBUFFERED 1
 
 # Install system packages required for the image
-RUN wkhtmltopdf && apt-get update && apt-get install -y \
+RUN wkhtmltopdf \
+    && apt-get update \
+    && apt-get install -y \
     cron \
     libpq-dev libmagic-dev gettext 
     
