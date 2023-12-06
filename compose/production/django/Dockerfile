@@ -26,9 +26,9 @@ RUN apt-get update && \
 
 # Download and install wkhtmltopdf
 RUN wget wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && \
-    dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb && \
-    apt-get install -f -y && \
-    rm wkhtmltox_0.12.6-1.bionic_amd64.deb
+    # dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+    apt-get install -f -y && 
+    # rm wkhtmltox_0.12.6-1.bionic_amd64.deb
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
