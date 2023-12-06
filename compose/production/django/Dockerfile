@@ -9,15 +9,26 @@ ENV PYTHONUNBUFFERED 1
 #     cron \
 #     libpq-dev libmagic-dev gettext 
     
-
-RUN apt-get update && apt-get -y install netcat &&  apt-get -y install gettext && apt-get -y install nano && apt-get -y install wkhtmltopdf
-
 # RUN apt-get install -y wget
 # RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 # RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 # RUN cp wkhtmltox/bin/wkhtmlto* /usr/bin/
 
-# RUN chmod +x /usr/bin/wkhtmltopdf
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    ca-certificates \
+    fontconfig \
+    libxrender1 \
+    libfreetype6 \
+    xfonts-75dpi \
+    xfonts-base
+
+# Download and install wkhtmltopdf
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+    apt-get install -f -y && \
+    rm wkhtmltox_0.12.6-1.bionic_amd64.deb
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
@@ -43,10 +54,8 @@ RUN chmod +x /start && chown django /start
 COPY --chown=django:django . $APP_HOME
 
 # Create necessary directories and set permissions
-# Create necessary directories and set permissions
-RUN mkdir -p $APP_HOME/main/static && chown -R django:django $APP_HOME/main/static
-RUN mkdir -p $APP_HOME/main/media && chown -R django:django $APP_HOME/main/media
-
+RUN mkdir $APP_HOME/main/static && chown django $APP_HOME/main/static
+RUN mkdir $APP_HOME/main/media && chown django $APP_HOME/main/media
 RUN chmod gu+rw /var/run
 
 # Set the user for running the container
