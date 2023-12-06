@@ -25,7 +25,7 @@ RUN apt-get update && \
     xfonts-base
 
 # Download and install wkhtmltopdf
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+RUN wget wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && \
     dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb && \
     apt-get install -f -y && \
     rm wkhtmltox_0.12.6-1.bionic_amd64.deb
