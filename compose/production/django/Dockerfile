@@ -7,8 +7,9 @@ ENV PYTHONUNBUFFERED 1
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y \
     cron \
-    apt-get install -y wkhtmltopdf \
-    libpq-dev libmagic-dev gettext 
+    wkhtmltopdf \
+    libpq-dev libmagic-dev gettext
+
 
 
 # Create a non-root user inside the container
