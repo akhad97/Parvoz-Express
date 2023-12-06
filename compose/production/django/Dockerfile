@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python:3.10-slim-buster
+FROM debian:buster
 
 # Set an environment variable to prevent buffering of Python output
 ENV PYTHONUNBUFFERED 1
