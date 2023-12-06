@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev libmagic-dev gettext 
 
     
-RUN apt-get install -y wget
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+# RUN apt-get install -y wget
+# RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 # RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 # RUN cp wkhtmltox/bin/wkhtmlto* /usr/bin/
 
