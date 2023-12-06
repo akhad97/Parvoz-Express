@@ -6,11 +6,15 @@ ENV PYTHONUNBUFFERED 1
 
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y \
-    wkhtmltopdf \
     cron \
+    # wkhtmltopdf \
     libpq-dev libmagic-dev gettext
 
-
+RUN apt-get install -y xvfb
+RUN apt-get install -y wget
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN tar xvJf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN cp wkhtmltox/bin/wkhtmlto* /usr/bin/
 
 # Create a non-root user inside the container
 RUN addgroup --system django && adduser --system --ingroup django django
