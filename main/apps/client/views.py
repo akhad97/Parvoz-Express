@@ -209,17 +209,21 @@ visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 
 
 class ClientPDFView(APIView):
-    # agent_id=""
-    # image=None
-    # select=""
-    # select_1=""
-    # select_2=""
-    # select_3=""
-    # select_4=""
-    # select_5=""
-    # select_6=""
-    # select_7=""
-    # select_8=""
+    agent_id=None
+    image=None
+    select=None
+    select_1=None
+    select_2=None
+    select_3=None
+    select_4=None
+    select_5=None
+    select_6=None
+    select_7=None
+    select_8=None
+    number=None 
+    price_for_number=None
+    price_for_text=None 
+    address=None
     def post(self, request, *args, **kwargs):
         global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8, number, price_for_number, price_for_text, address
         image = request.data.get('image')
@@ -284,21 +288,21 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_year': tourpackage_end_year,
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
-                                            'agent_id': agent_id,
-                                            'image': image,
-                                            'select': select,
-                                            'select_1': select_1,
-                                            'select_2': select_2,
-                                            'select_3': select_3,
-                                            'select_4': select_4,
-                                            'select_5': select_5,
-                                            'select_6': select_6,
-                                            'select_7': select_7,
-                                            'select_8': select_8,
-                                            'number': number,
-                                            'price_for_number': price_for_number,
-                                            'price_for_text': price_for_text,
-                                            'address': address
+                                            'agent_id': self.agent_id,
+                                            'image': self.image,
+                                            'select': self.select,
+                                            'select_1': self.select_1,
+                                            'select_2': self.select_2,
+                                            'select_3': self.select_3,
+                                            'select_4': self.select_4,
+                                            'select_5': self.select_5,
+                                            'select_6': self.select_6,
+                                            'select_7': self.select_7,
+                                            'select_8': self.select_8,
+                                            'number': self.number,
+                                            'price_for_number': self.price_for_number,
+                                            'price_for_text': self.price_for_text,
+                                            'address': self.address
                                         })
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
