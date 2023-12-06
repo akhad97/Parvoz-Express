@@ -8,7 +8,8 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y \
     cron \
     # wkhtmltopdf \
-    libpq-dev libmagic-dev gettext
+    libpq-dev libmagic-dev gettext \
+    libxrender1 fontconfig libxext6 libjpeg62-turbo
 
 # RUN apt-get install -y xvfb
 RUN apt-get install -y wget
