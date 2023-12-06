@@ -7,8 +7,8 @@ ENV PYTHONUNBUFFERED 1
 # Install system packages required for the image
 RUN apt-get update && apt-get install -y \
     cron \
-    libpq-dev libmagic-dev gettext \
-    wkhtmltopdf
+    wkhtmltopdf \
+    libpq-dev libmagic-dev gettext 
 
 RUN chmod +x /usr/local/bin/wkhtmltopdf
 RUN chmod +x /usr/bin/wkhtmltopdf
