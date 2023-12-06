@@ -12,9 +12,7 @@ ENV PYTHONUNBUFFERED 1
 RUN set -e && apt-get update && \
     apt-get install -y \
         cron \
-        libpq-dev \
-        libmagic-dev \
-        gettext \
+        libpq-dev libmagic-dev gettext \
         libxrender1 \
         wget
 
