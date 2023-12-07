@@ -269,7 +269,7 @@ class ClientPDFView(APIView):
         tourpackage_end_month = client.tour_package.end_date.strftime('%B')
         tourpackage_end_day = client.tour_package.end_date.day
 
-        BASE_URL = 'https://api.parvoz.site.uz/media/'
+        BASE_URL = 'https://api.parvoz.site.uz/media'
         year =  datetime.now().year
         month =  datetime.now().strftime('%B')
         day =  datetime.now().day
