@@ -41,7 +41,6 @@ class Client(BaseModel):
     gender_type = models.CharField(max_length=100, choices=GenderTypeChoices.choices, null=True)
     created_by = models.CharField(max_length=100, null=True, blank=True)
     contract_file = models.FileField(upload_to=upload_images(path='client_contract_files/'), null=True)
-    contract_signin_image = models.ImageField(upload_to=upload_images(path='client_contract_signin_images/'), null=True)
     contract_agent_id = models.CharField(max_length=255, null=True, blank=True)
     contract_select = models.CharField(max_length=255, null=True, blank=True)
     contract_select_1 = models.CharField(max_length=255, null=True, blank=True)
@@ -56,7 +55,7 @@ class Client(BaseModel):
     contract_price_for_number = models.CharField(max_length=255, null=True, blank=True)
     contract_price_for_text = models.CharField(max_length=255, null=True, blank=True)
     contract_address = models.CharField(max_length=255, null=True, blank=True)
-    test = models.TextField(null=True, blank=True)
+    image_data = models.TextField(null=True, blank=True)
 
 
     class Meta(BaseMeta):
