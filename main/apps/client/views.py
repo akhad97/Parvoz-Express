@@ -295,7 +295,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': client_agent_id,
-                                            'image': client_signin_image,
+                                            'image': complete_signin_image_url,
                                             'select': client_select,
                                             'select_1': client_select_1,
                                             'select_2': client_select_2,
