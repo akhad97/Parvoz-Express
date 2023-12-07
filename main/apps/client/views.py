@@ -269,7 +269,8 @@ class ClientPDFView(APIView):
         tourpackage_end_month = client.tour_package.end_date.strftime('%B')
         tourpackage_end_day = client.tour_package.end_date.day
 
-        BASE_URL = 'https://api.parvoz.site.uz/media'
+        BASE_URL = 'https://api.parvoz.site.uz/media/'
+        complete_signin_image_url = urljoin(BASE_URL, str(client_signin_image))
         year =  datetime.now().year
         month =  datetime.now().strftime('%B')
         day =  datetime.now().day
@@ -292,7 +293,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': client_agent_id,
-                                            'image': urljoin(BASE_URL, str(client_signin_image)),
+                                            'image': complete_signin_image_url,
                                             'select': client_select,
                                             'select_1': client_select_1,
                                             'select_2': client_select_2,
@@ -314,7 +315,9 @@ class ClientPDFView(APIView):
         contract_file_url = client.contract_file.url
         response_content = {
             'contract_file_url': contract_file_url,
-            'message': 'PDF generated successfully'
+            'message': 'PDF generated successfully',
+            'complete_signin_image_url': complete_signin_image_url
+
         }
         response = HttpResponse(json.dumps(response_content), content_type='application/json')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
