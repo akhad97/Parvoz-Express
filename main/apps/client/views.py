@@ -235,6 +235,7 @@ class ClientContractDataAPIView(APIView):
 client_contract_data_api_view = ClientContractDataAPIView.as_view()
         
 from urllib.parse import urljoin
+import random
 
 class ClientPDFView(APIView):
 
@@ -309,10 +310,11 @@ class ClientPDFView(APIView):
                                             'price_for_text': client_price_for_text,
                                             'address': client_address
                                         })
+        random_number = random.randint(1, 100000)
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
-        filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}_1.pdf'
-        client.contract_file.save(f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf', ContentFile(pdf_file))
+        filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}_{random_number}.pdf'
+        client.contract_file.save(filename, ContentFile(pdf_file))
         contract_file_url = client.contract_file.url
         response_content = {
             'contract_file_url': contract_file_url,
