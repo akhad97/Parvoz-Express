@@ -270,7 +270,7 @@ class ClientPDFView(APIView):
         tourpackage_end_day = client.tour_package.end_date.day
 
         # BASE_URL = ' https://bb1b-84-54-74-20.ngrok-free.app/media/'
-        BASE_URL = ' https://api.parvoz.site.uz/'
+        BASE_URL = ' https://api.parvoz.site.uz/media/'
         complete_signin_image_url = urljoin(BASE_URL, str(client_signin_image))
         year =  datetime.now().year
         month =  datetime.now().strftime('%B')
@@ -311,7 +311,7 @@ class ClientPDFView(APIView):
                                         })
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
-        filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf'
+        filename = f'{client.first_name}_{client.last_name}_{year}_{month}_{day}_1.pdf'
         client.contract_file.save(f'{client.first_name}_{client.last_name}_{year}_{month}_{day}.pdf', ContentFile(pdf_file))
         contract_file_url = client.contract_file.url
         response_content = {
