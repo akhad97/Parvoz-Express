@@ -214,7 +214,7 @@ class ClientContractDataAPIView(APIView):
             client = Client.objects.get(guid=self.kwargs['guid'])
         except Client.DoesNotExist:
             raise Http404('Client not found')
-        client.contract_Signin_image = request.data.get('image')
+        client.contract_signin_image = request.data.get('image')
         client.contract_agent_id = request.data.get('agent_id')
         client.contract_select = request.data.get('select')
         client.contract_select_1 = request.data.get('select_1')
@@ -247,7 +247,7 @@ class ClientPDFView(APIView):
         client_middle_name = client.middle_name
         client_passport_series = client.passport_series
 
-        client_signin_image = client.contract_Signin_image
+        client_signin_image = client.contract_signin_image
         client_agent_id = client.contract_agent_id
         client_select = client.contract_select
         client_select_1 = client.contract_select_1
