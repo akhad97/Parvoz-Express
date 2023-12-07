@@ -56,6 +56,7 @@ class Client(BaseModel):
     contract_price_for_number = models.CharField(max_length=255, null=True, blank=True)
     contract_price_for_text = models.CharField(max_length=255, null=True, blank=True)
     contract_address = models.CharField(max_length=255, null=True, blank=True)
+    test = models.TextField(null=True, blank=True)
 
 
     class Meta(BaseMeta):

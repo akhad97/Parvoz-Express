@@ -214,7 +214,7 @@ class ClientContractDataAPIView(APIView):
             client = Client.objects.get(guid=self.kwargs['guid'])
         except Client.DoesNotExist:
             raise Http404('Client not found')
-        client.contract_signin_image = request.data.get('image')
+        client.test = request.data.get('image')
         client.contract_agent_id = request.data.get('agent_id')
         client.contract_select = request.data.get('select')
         client.contract_select_1 = request.data.get('select_1')
@@ -263,6 +263,8 @@ class ClientPDFView(APIView):
         client_price_for_text = client.contract_price_for_text
         client_address = client.contract_address
 
+        test = client.test
+
         tourpackage_start_year = client.tour_package.start_date.year
         tourpackage_start_month = client.tour_package.start_date.strftime('%B')
         tourpackage_start_day = client.tour_package.start_date.day
@@ -295,7 +297,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': client_agent_id,
-                                            'image': client_signin_image.url,
+                                            # 'image': client_signin_image.url,
                                             'select': client_select,
                                             'select_1': client_select_1,
                                             'select_2': client_select_2,
@@ -308,7 +310,8 @@ class ClientPDFView(APIView):
                                             'number': client_number,
                                             'price_for_number': client_price_for_number,
                                             'price_for_text': client_price_for_text,
-                                            'address': client_address
+                                            'address': client_address,
+                                            'test': test
                                         })
         random_number = random.randint(1, 100000)
         pdf_file = pdfkit.from_string(html_content, False) 
@@ -336,9 +339,9 @@ from django.views.generic import View
 class ExampleView(View):
     def get(self, request, guid, *args, **kwargs):
         client = Client.objects.get(guid=guid)
-        client_signin_image = client.contract_signin_image
+        client_signin_image = client.test
         data = {
-            'image':client_signin_image.url
+            'test':test
         }
         return render(request, 'client.html', data)
     
