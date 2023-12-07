@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-import locale
-from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
@@ -216,10 +214,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOCALE = 'uz_UZ'
-locale.setlocale(locale.LC_TIME, LOCALE)
 
-USE_L10N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
