@@ -65,6 +65,11 @@ urlpatterns = [
         name='visa_client_delete'
     ),
     path(
+        'client-contract-data/<uuid:guid>/',
+        view=views.client_contract_data_api_view,
+        name='client_contract_data'
+    ),
+    path(
         'client-pdf/<uuid:guid>/',
         view=views.client_pdf_api_view,
         name='client_pdf'

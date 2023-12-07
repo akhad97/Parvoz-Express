@@ -206,51 +206,37 @@ class VisaClientDeleteAPIView(generics.DestroyAPIView):
     
 visa_client_delete_api_view = VisaClientDeleteAPIView.as_view()
 
+from django.http import Http404
 
+class ClientContractDataAPIView(APIView):
+     def post(self, request, *args, **kwargs):
+        try:
+            client = Client.objects.get(guid=self.kwargs['guid'])
+        except Client.DoesNotExist:
+            raise Http404('Client not found')
+        client.contract_Signin_image = request.data.get('image')
+        client.contract_agent_id = request.data.get('agent_id')
+        client.contract_select = request.data.get('select')
+        client.contract_select_1 = request.data.get('select_1')
+        client.contract_select_2 = request.data.get('select_2')
+        client.contract_select_3 = request.data.get('select_3')
+        client.contract_select_4 = request.data.get('select_4')
+        client.contract_select_5 = request.data.get('select_5')
+        client.contract_select_6 = request.data.get('select_6')
+        client.contract_select_7 = request.data.get('select_7')
+        client.contract_select_8 = request.data.get('select_8')
+        client.contract_number = request.data.get('number')
+        client.contract_price_for_number = request.data.get('price_for_number')
+        client.contract_price_for_text = request.data.get('price_for_text')
+        client.contract_address = request.data.get('address')
+        client.save()
+        return Response({'message': 'Data saved successfully'})
+        
+client_contract_data_api_view = ClientContractDataAPIView.as_view()
+        
+from urllib.parse import urljoin
 
 class ClientPDFView(APIView):
-    agent_id=None
-    image=None
-    select=None
-    select_1=None
-    select_2=None
-    select_3=None
-    select_4=None
-    select_5=None
-    select_6=None
-    select_7=None
-    select_8=None
-    number=None 
-    price_for_number=None
-    price_for_text=None 
-    address=None
-    def post(self, request, *args, **kwargs):
-        global image, agent_id, select, select_1, select_2, select_3, select_4, select_5, select_6, select_7, select_8, number, price_for_number, price_for_text, address
-        image = request.data.get('image')
-        agent_id = request.query_params.get('agent_id')
-        select = request.data.get('select')
-        select_1 = request.data.get('select_1')
-        select_2 = request.data.get('select_2')
-        select_3 = request.data.get('select_3')
-        select_4 = request.data.get('select_4')
-        select_5 = request.data.get('select_5')
-        select_6 = request.data.get('select_6')
-        select_7 = request.data.get('select_7')
-        select_8 = request.data.get('select_8')
-        number = request.data.get('number')
-        price_for_number = request.data.get('price_for_number')
-        price_for_text = request.data.get('price_for_text')
-        address = request.data.get('address')
-        guid = kwargs.get('guid', None)
-        if guid is not None:
-            get_request_url = f'https://5d63-84-54-74-20.ngrok-free.app/api/v1/client/client-pdf/{guid}'
-            # get_request_params = {'param1': 'value1', 'param2': 'value2'}
-            get_response = requests.get(get_request_url)
-            get_response_data = get_response.json() if get_response.status_code == 200 else None
-            return Response({'message': 'Image saved successfully', 'get_response_data': get_response_data}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Client ID (pk) not provided'}, status=status.HTTP_400_BAD_REQUEST)
-
 
     def get(self, request, guid, *args, **kwargs):
         client = Client.objects.get(guid=guid)
@@ -260,6 +246,22 @@ class ClientPDFView(APIView):
         client_middle_name = client.middle_name
         client_passport_series = client.passport_series
 
+        client_signin_image = client.contract_Signin_image
+        client_agent_id = client.contract_agent_id
+        client_select = client.contract_select
+        client_select_1 = client.contract_select_1
+        client_select_2 = client.contract_select_2
+        client_select_3 = client.contract_select_3
+        client_select_4 = client.contract_select_4
+        client_select_5 = client.contract_select_5
+        client_select_6 = client.contract_select_6
+        client_select_7 = client.contract_select_7
+        client_select_8 = client.contract_select_8
+        client_number = client.contract_number
+        client_price_for_number = client.contract_price_for_number
+        client_price_for_text = client.contract_price_for_text
+        client_address = client.contract_address
+
         tourpackage_start_year = client.tour_package.start_date.year
         tourpackage_start_month = client.tour_package.start_date.strftime('%B')
         tourpackage_start_day = client.tour_package.start_date.day
@@ -267,6 +269,7 @@ class ClientPDFView(APIView):
         tourpackage_end_month = client.tour_package.end_date.strftime('%B')
         tourpackage_end_day = client.tour_package.end_date.day
 
+        BASE_URL = 'https://api.parvoz.site.uz/media/'
         year =  datetime.now().year
         month =  datetime.now().strftime('%B')
         day =  datetime.now().day
@@ -288,21 +291,21 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_year': tourpackage_end_year,
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
-                                            'agent_id': self.agent_id,
-                                            'image': self.image,
-                                            'select': self.select,
-                                            'select_1': self.select_1,
-                                            'select_2': self.select_2,
-                                            'select_3': self.select_3,
-                                            'select_4': self.select_4,
-                                            'select_5': self.select_5,
-                                            'select_6': self.select_6,
-                                            'select_7': self.select_7,
-                                            'select_8': self.select_8,
-                                            'number': self.number,
-                                            'price_for_number': self.price_for_number,
-                                            'price_for_text': self.price_for_text,
-                                            'address': self.address
+                                            'agent_id': client_agent_id,
+                                            'image': urljoin(BASE_URL, str(client_signin_image)),
+                                            'select': client_select,
+                                            'select_1': client_select_1,
+                                            'select_2': client_select_2,
+                                            'select_3': client_select_3,
+                                            'select_4': client_select_4,
+                                            'select_5': client_select_5,
+                                            'select_6': client_select_6,
+                                            'select_7': client_select_7,
+                                            'select_8': client_select_8,
+                                            'number': client_number,
+                                            'price_for_number': client_price_for_number,
+                                            'price_for_text': client_price_for_text,
+                                            'address': client_address
                                         })
         pdf_file = pdfkit.from_string(html_content, False) 
         response = HttpResponse(pdf_file, content_type='application/pdf') 
