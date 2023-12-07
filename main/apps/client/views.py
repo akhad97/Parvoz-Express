@@ -270,8 +270,8 @@ class ClientPDFView(APIView):
         tourpackage_end_month = client.tour_package.end_date.strftime('%B')
         tourpackage_end_day = client.tour_package.end_date.day
 
-        # BASE_URL = 'https://c513-84-54-74-20.ngrok-free.app/'
-        BASE_URL = ' https://api.parvoz.site.uz/'
+        # BASE_URL = 'https://c513-84-54-74-20.ngrok-free.app/media/'
+        BASE_URL = 'https://api.parvoz.site.uz/media/'
         complete_signin_image_url = urljoin(BASE_URL, str(client_signin_image))
         year =  datetime.now().year
         month =  datetime.now().strftime('%B')
