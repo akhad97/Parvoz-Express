@@ -74,4 +74,9 @@ urlpatterns = [
         view=views.client_pdf_api_view,
         name='client_pdf'
     ),
+    path(
+        'test/<uuid:guid>/',
+        view=views.test,
+        name='client_pdf'
+    ),
 ]

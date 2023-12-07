@@ -295,7 +295,7 @@ class ClientPDFView(APIView):
                                             'tourpackage_end_month': tourpackage_end_month,
                                             'tourpackage_end_day': tourpackage_end_day,
                                             'agent_id': client_agent_id,
-                                            'image': complete_signin_image_url,
+                                            'image': client_signin_image.url,
                                             'select': client_select,
                                             'select_1': client_select_1,
                                             'select_2': client_select_2,
@@ -328,3 +328,19 @@ class ClientPDFView(APIView):
 
 
 client_pdf_api_view = ClientPDFView.as_view()
+
+from django.shortcuts import render
+from django.views.generic import View
+
+
+class ExampleView(View):
+    def get(self, request, guid, *args, **kwargs):
+        client = Client.objects.get(guid=guid)
+        client_signin_image = client.contract_signin_image
+        data = {
+            'image':client_signin_image.url
+        }
+        return render(request, 'client.html', data)
+    
+
+test = ExampleView.as_view()
