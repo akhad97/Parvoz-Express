@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Region
-from .models import User
+from .models import User, AgentCalculation
 
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -44,7 +44,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'is_outfit',
             'agent_id',
             'password',
-            'confirm_password'
+            'confirm_password',
+            'percent'
         )    
 
     def create(self, validated_data):
@@ -77,6 +78,7 @@ class UserLoginSerializer(TokenObtainPairSerializer):
         data['is_outfit'] = self.user.is_outfit
         data['is_superuser'] = self.user.is_superuser
         data['agent_id'] = self.user.agent_id
+        data['percent'] = self.user.percent
         return data
     
 
@@ -104,7 +106,8 @@ class UserListSerializer(serializers.ModelSerializer):
             'agent_id',
             'is_active',
             'created_at',
-            'is_superuser'
+            'is_superuser',
+            'percent'
         ) 
     
     def get_region(self, obj):
@@ -128,7 +131,25 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'is_manager',
             'is_agent',
             'is_outfit',
-            'is_active'
+            'is_active',
+            'percent'
+        ) 
+
+
+class AgentListSerializer(serializers.ModelSerializer): 
+    created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M")
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'guid',
+            'phone_number',
+            "full_name",
+            "email",
+            'agent_id',
+            'created_at',
+            'percent',
+            'is_active',
         ) 
 
 
@@ -136,3 +157,35 @@ class PasswordChangeSerializer(serializers.Serializer):
     user_id = serializers.IntegerField(required=False)
     new_password1 = serializers.CharField()
     new_password2 = serializers.CharField()
+
+
+class UserUpdateSerializer(serializers.ModelSerializer): 
+    class Meta:
+        model = User
+        fields = (
+            'is_moderator',
+            'is_for_flight',
+            'is_for_hotel',
+            'is_for_visa',
+            'is_working_with_agent',
+            'is_for_finance',
+            'is_manager',
+            'is_agent',
+            'is_outfit',
+            'is_active',
+            'percent'
+        )
+
+
+class AgentCalculationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AgentCalculation
+        fields = (
+            'id',
+            'guid',
+            'agent',
+            'tourpackage',
+            'date',
+            'amount',
+            'is_confirmed'
+        )

@@ -11,7 +11,9 @@ from .models import (
     TourPackage, 
     TourPackageBook, 
     Contact,
-    LandingData
+    LandingData,
+    TourpackageExpense,
+    MonthlyExpense
 )
 from ..outfit.models import FastContact
 from .serializer import (
@@ -26,7 +28,10 @@ from .serializer import (
     FastContanctSerializer,
     FastContactUpdateSerializer,
     LandingDataSerializer,
-    TourPackageManagerGuideSerializer
+    TourPackageManagerGuideSerializer,
+    TourPackageExpenseSerializer,
+    MonthlyExpenseSerializer,
+    FinanceDataSerializer
 )
 from ..common.views import CustomListView, CustomCreateAPIView, CustomDetailView
 from ..client.models import Client
@@ -415,18 +420,21 @@ class ReportDataAPIView(generics.ListAPIView):
             for room_counts in client_count_by_room_type:
                 fourth_element = room_counts[3] if room_counts else None
                 fourth_elements.append(fourth_element)
+            
+            single_counts = [hotel_counts['single'] for hotel_counts in hotel_client_counts.values()]
+            double_counts = [hotel_counts['double'] for hotel_counts in hotel_client_counts.values()]
+            triple_counts = [hotel_counts['triple'] for hotel_counts in hotel_client_counts.values()]
+            quad_counts = [hotel_counts['quad'] for hotel_counts in hotel_client_counts.values()]
 
-            hotel_single_room_total_price = [price * first_element * nights for hotel, first_element, price, nights in zip(tourpackage.hotel.all(), first_elements, single_room_price, hotel_nights)]
-            hotel_double_room_total_price = [price * second_element * nights for hotel, second_element, price, nights in zip(tourpackage.hotel.all(), second_elements, single_room_price, hotel_nights)]
-            hotel_triple_room_total_price = [price * third_element * nights for hotel, third_element, price, nights in zip(tourpackage.hotel.all(), third_elements, single_room_price, hotel_nights)]
-            hotel_quad_room_total_price = [price * fourth_element * nights for hotel, fourth_element, price, nights in zip(tourpackage.hotel.all(), fourth_elements, single_room_price, hotel_nights)]
+            hotel_single_room_total_price = [price * count * nights for count, price, nights in zip(single_counts, single_room_price, hotel_nights)]
+            hotel_double_room_total_price = [price * count * nights for count, price, nights in zip(double_counts, double_room_price, hotel_nights)]
+            hotel_triple_room_total_price = [price * count * nights for count, price, nights in zip(triple_counts, triple_room_price, hotel_nights)]
+            hotel_quad_room_total_price = [price * count * nights for count, price, nights in zip(quad_counts, quadruple_room_price, hotel_nights)]
 
-            # total_prices_with_room_counts = []
-            # for room_counts, total_price in zip(client_count_by_room_type, hotel_quad_room_total_price):
-            #     multiplied_prices = [count * total_price for count in room_counts]
-            #     total_prices_with_room_counts.append(multiplied_prices)
-
-            # print(total_prices_with_room_counts)
+            # hotel_single_room_total_price = [price * first_element * nights for hotel, first_element, price, nights in zip(tourpackage.hotel.all(), first_elements, single_room_price, hotel_nights)]
+            # hotel_double_room_total_price = [price * second_element * nights for hotel, second_element, price, nights in zip(tourpackage.hotel.all(), second_elements, double_room_price, hotel_nights)]
+            # hotel_triple_room_total_price = [price * third_element * nights for hotel, third_element, price, nights in zip(tourpackage.hotel.all(), third_elements, triple_room_price, hotel_nights)]
+            # hotel_quad_room_total_price = [price * fourth_element * nights for hotel, fourth_element, price, nights in zip(tourpackage.hotel.all(), fourth_elements, quadruple_room_price, hotel_nights)]
 
             hotel_total_price = [
                 sum(prices) for prices in zip(
@@ -521,7 +529,7 @@ class ReportDataAPIView(generics.ListAPIView):
                 'ticket_price': ticket_price,
                 'visa_price': visa_price,
                 'service_price': service_price,
-                'otper_expense': drug_amount,
+                'other_expense': drug_amount,
                 'number_of_room': number_of_room,
                 'single_room_price': single_room_price,
                 'double_room_price': double_room_price,
@@ -696,16 +704,11 @@ manager_guide_tourpakcage_list_api_view = ManagerGuidePackageListAPIView.as_view
 
 
 
-
-from django.http import HttpResponse
-from django.template.loader import get_template
 import pdfkit
 from .models import TourPackage
-
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from rest_framework.generics import RetrieveAPIView
-import logging
 
 
 class TourPackagePDFView(RetrieveAPIView):
@@ -741,14 +744,117 @@ class TourPackagePDFView(RetrieveAPIView):
 tourpackage_pdf_api_view = TourPackagePDFView.as_view()
 
 
-# import uuid, pdfkit
-# from datetime import datetime
-# from django.template.loader import render_to_string
-# from django.core.files.base import ContentFile
-# from io import BytesIO
+class TourpackageExpenseListAPIView(generics.ListAPIView):
+    queryset = TourpackageExpense.objects.all()
+    serializer_class = TourPackageExpenseSerializer
+    lookup_field='guid'
 
-# from posox.celery import app
-# from celery import shared_task
+    def get_queryset(self):
+        qs = TourpackageExpense.objects.filter(tourpackage__guid=self.kwargs['guid'])
+        return qs
+    
+
+tourpackage_expense_list_api_view = TourpackageExpenseListAPIView.as_view()
 
 
+class TourpackageExpenseCreateAPIView(generics.CreateAPIView):
+    queryset = TourpackageExpense.objects.all()
+    serializer_class = TourPackageExpenseSerializer    
 
+tourpackage_expense_create_api_view = TourpackageExpenseCreateAPIView.as_view()
+
+
+class TourpackageExpenseUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TourpackageExpense.objects.all()
+    serializer_class = TourPackageExpenseSerializer
+    lookup_field='guid'
+
+tourpackage_expense_update_delete_api_view = TourpackageExpenseUpdateDeleteAPIView.as_view()
+
+
+class MonthlyExpenseCreateAPIView(generics.CreateAPIView):
+    queryset = MonthlyExpense.objects.all()
+    serializer_class = MonthlyExpenseSerializer           
+
+monthly_expense_create_api_view = MonthlyExpenseCreateAPIView.as_view()
+
+
+from django.db.models import Q, Sum
+
+
+class MonthlyExpenseListAPIView(generics.ListAPIView):
+    queryset = MonthlyExpense.objects.all()
+    serializer_class = MonthlyExpenseSerializer   
+
+    def get(self, request,*args, **kwargs):
+        params = self.request.query_params
+        year = params.get('year')
+        month = params.get('month')
+        if params:
+            expense_month_year = MonthlyExpense.objects.filter(
+                Q(date__year=year) & Q(date__month=month)
+            )
+            total_expense = expense_month_year.aggregate(
+                total=Sum('communal_expense')+
+                    Sum('employee_salary')+
+                    Sum('tax')+
+                    Sum('telephone')+
+                    Sum('meet')+
+                    Sum('taxi')+
+                    Sum('employee_salary_mecca')+
+                    Sum('field_1')+
+                    Sum('field_2')+
+                    Sum('field_3')
+            )['total']
+        serializer = self.serializer_class(expense_month_year, many=True)
+        response_data = {
+            'data': serializer.data,
+            'total_expense': total_expense
+        }
+        return Response({"response_data": response_data})        
+
+monthly_expense_list_api_view = MonthlyExpenseListAPIView.as_view()
+
+
+class MonthlyExpenseUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MonthlyExpense.objects.all()
+    serializer_class = MonthlyExpenseSerializer
+    lookup_field='guid'
+
+monthly_expense_update_delete_api_view = MonthlyExpenseUpdateDeleteAPIView.as_view()
+
+
+class FinanceDAtaPIView(generics.ListAPIView):
+    queryset = TourPackage.objects.filter(is_active=True)
+    serializer_class = FinanceDataSerializer
+
+
+    def get_queryset(self):
+        queryset = TourPackage.objects.filter(is_active=True).select_related(
+            'flight', 
+            'manager'
+            ).prefetch_related(
+            'hotel',
+            'outfit',
+            'transport'
+            )
+        month = self.request.query_params.get('month')
+        year = self.request.query_params.get('year')
+        if month and year:
+            queryset = queryset.filter(
+                Q(start_date__month=month, start_date__year=year) |
+                Q(start_date__month=month, start_date__year=year)
+                )
+        elif month:
+            queryset = queryset.filter(
+                Q(start_date__month=month) |
+                Q(start_date__month=month)
+            ) 
+        elif year:
+            queryset = queryset.filter(
+                Q(start_date__year=year) |
+                Q(start_date__year=year)
+                )
+        return queryset
+    
+finance_data_api_view = FinanceDAtaPIView.as_view()

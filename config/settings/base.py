@@ -259,7 +259,7 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "https://api.parvoz.site.uz",
     "https://expressparvoz.uz",
-    'https://5d63-84-54-74-20.ngrok-free.app',
+    'https://77ee-84-54-74-20.ngrok-free.app',
     "http://45.129.170.136",
     'http://localhost:5173',
     'http://localhost:3000',

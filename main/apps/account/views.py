@@ -15,9 +15,11 @@ from .serializers import (
     UserRegistrationSerializer,
     UserListSerializer,
     UserUpdateSerializer,
-    PasswordChangeSerializer
+    PasswordChangeSerializer,
+    AgentCalculationSerializer,
+    AgentListSerializer
 )
-from .models import User
+from .models import User, AgentCalculation
 
 User = get_user_model()
 
@@ -124,6 +126,13 @@ class UserUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
 user_update_delete_api_view = UserUpdateAPIView.as_view()
 
 
+class AgentListAPIView(generics.ListAPIView):
+    queryset = User.objects.filter(is_agent=True)
+    serializer_class = AgentListSerializer
+
+agent_list_api_view = AgentListAPIView.as_view()
+
+
 
 class PasswordChangeAPIView(generics.GenericAPIView):
     serializer_class = PasswordChangeSerializer
@@ -166,3 +175,32 @@ class PasswordChangeAPIView(generics.GenericAPIView):
 
 password_change_api_view = PasswordChangeAPIView.as_view()
 
+
+class AgentCalculationCreateAPIView(generics.CreateAPIView):
+    queryset = AgentCalculation.objects.all()
+    serializer_class = AgentCalculationSerializer
+
+agentcalculation_create_api_view = AgentCalculationCreateAPIView.as_view()
+
+
+class AgentCalculationListAPIView(generics.ListAPIView):
+    queryset = AgentCalculation.objects.all()
+    serializer_class = AgentCalculationSerializer
+
+    def get_queryset(self):
+        param = self.request.query_params
+        agent=param.get('agent')
+        tourpackage=param.get('tourpackage')
+        if agent is not None or tourpackage is not None:
+            qs = AgentCalculation.objects.filter(agent__guid=agent, tourpackage__guid=tourpackage)
+        return qs
+    
+
+agentcalculation_list_api_view = AgentCalculationListAPIView.as_view()
+
+class AgentCalculationUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AgentCalculation.objects.all()
+    serializer_class = AgentCalculationSerializer
+    lookup_field='guid'
+
+agentcalculation_update_delete_api_view = AgentCalculationUpdateDeleteAPIView.as_view()

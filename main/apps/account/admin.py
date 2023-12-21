@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Region
+from .models import User, Region, AgentCalculation
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Region)
+admin.site.register(AgentCalculation)

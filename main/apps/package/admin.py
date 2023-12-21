@@ -3,7 +3,9 @@ from .models import (
     TourPackage, 
     Contact,
     TourPackageBook,
-    LandingData
+    LandingData,
+    TourpackageExpense,
+    MonthlyExpense
 )
 
 
@@ -60,3 +62,5 @@ class LandingDataAdmin(admin.ModelAdmin):
     search_fields = ["title", ]
 
 admin.site.register(LandingData, LandingDataAdmin)
+admin.site.register(MonthlyExpense)
+admin.site.register(TourpackageExpense)

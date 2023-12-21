@@ -115,3 +115,42 @@ class PDFImage(BaseModel):
     visa = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
     wave = models.ImageField(upload_to=upload_images(path='pdf_imgs/'), null=True)
 
+
+class TourpackageExpense(BaseModel):
+    tourpackage = models.ForeignKey(TourPackage, on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    num_of_people = models.PositiveIntegerField(default=0)
+    price_for_one = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta(BaseMeta):
+        verbose_name = _("TourpackageExpense")
+        verbose_name_plural = _("TourpackageExpenses")
+
+
+    def __str__(self):
+        return f'{self.title}'
+    
+
+class MonthlyExpense(BaseModel):
+    communal_expense = models.DecimalField(max_digits=20, decimal_places=2)
+    employee_salary = models.DecimalField(max_digits=20, decimal_places=2)
+    tax = models.DecimalField(max_digits=20, decimal_places=2)
+    telephone = models.DecimalField(max_digits=20, decimal_places=2)
+    meet = models.DecimalField(max_digits=20, decimal_places=2)
+    taxi = models.DecimalField(max_digits=20, decimal_places=2)
+    employee_salary_mecca = models.DecimalField(max_digits=20, decimal_places=2)
+    field_1 = models.DecimalField(max_digits=20, decimal_places=2)
+    field_2 = models.DecimalField(max_digits=20, decimal_places=2)
+    field_3 = models.DecimalField(max_digits=20, decimal_places=2)
+    date = models.DateField()
+    margin = models.PositiveBigIntegerField(default=0)
+    
+
+    class Meta(BaseMeta):
+        verbose_name = _("MonthlyExpense")
+        verbose_name_plural = _("MonthlyExpenses")
+
+
+    def __str__(self):
+        return f'{self.id}'
+    

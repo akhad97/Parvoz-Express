@@ -12,9 +12,9 @@ class ClientAdmin(admin.ModelAdmin):
         "first_name", 
         "last_name",
         "dob", 
+        "hotel",
         "room_type", 
         "total_amount", 
-        "remained_amount"
         )
     list_display_links = ("guid",)
     search_fields = ["id", "first_name"]

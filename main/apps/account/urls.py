@@ -37,5 +37,25 @@ urlpatterns = [
         "password-change/", 
         view=views.password_change_api_view, 
         name="password_change"
-    )
+    ),
+    path(
+        'agent-list/', 
+        views.agent_list_api_view, 
+        name='agent_list'
+    ),
+    path(
+        'agentcalculation-create/', 
+        views.agentcalculation_create_api_view, 
+        name='agentcalculation_create'
+    ),
+    path(
+        'agentcalculation-list/', 
+        views.agentcalculation_list_api_view, 
+        name='agentcalculation_list'
+    ),
+    path(
+        'agentcalculation-retrieve/<uuid:guid>/', 
+        views.agentcalculation_update_delete_api_view, 
+        name='agentcalculation_update_delete'
+    ),
 ]

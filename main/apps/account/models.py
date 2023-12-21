@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from ..common.models import BaseModel, BaseMeta
 from .managers.user import UserManager
-from django.conf import settings
+from ..package.models import TourPackage
 
 
 
@@ -17,17 +17,18 @@ class Region(BaseModel):
 
     def __str__(self):
         return f'{self.title}'
+    
 
 class AgentIDTypeChoices(models.TextChoices):
-    NMA10001 = 'NMA1', _('NMA1')
-    NMA20001 = 'NMA2', _('NMA2')
-    NMA30001 = 'NMA3', _('NMA3')
-    NMA40001 = 'NMA4', _('NMA4')
-    QQN0001 = 'QQN', _('QQN')
-    MRN0001 = 'MRN', _('MRN')
-    AZN0001 = 'AZN', _('AZN')
-    TAS0001 = 'TAS', _('TAS')
-    SKD0001 = 'SKD', _('SKD')
+    NMA1 = 'NMA1', _('NMA1')
+    NMA2 = 'NMA2', _('NMA2')
+    NMA3 = 'NMA3', _('NMA3')
+    NMA4 = 'NMA4', _('NMA4')
+    QQN = 'QQN', _('QQN')
+    MRN = 'MRN', _('MRN')
+    AZN = 'AZN', _('AZN')
+    TAS = 'TAS', _('TAS')
+    SKD = 'SKD', _('SKD')
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -63,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         ),
     )
     is_superuser = models.BooleanField(_("superuser status"), default=False)
+    percent = models.IntegerField(null=True, blank=True)
     objects = UserManager()
 
     USERNAME_FIELD = "phone_number"
@@ -75,3 +77,21 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     def __str__(self):
         return f"{self.full_name}"
+    
+
+
+class AgentCalculation(BaseModel):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    tourpackage = models.ForeignKey(TourPackage, on_delete=models.CASCADE, null=True)
+    date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    is_confirmed = models.BooleanField(default=False)
+
+
+    class Meta(BaseMeta):
+        verbose_name = _("AgentCalculation")
+        verbose_name_plural = _("AgentCalculation")
+
+
+    def __str__(self):
+        return f'{self.id}'

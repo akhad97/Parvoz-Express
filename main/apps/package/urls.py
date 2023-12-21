@@ -128,4 +128,39 @@ urlpatterns = [
         view=views.tourpackage_pdf_api_view,
         name='tourpackage_pdf'
     ),
+    path(
+        '<uuid:guid>/tourpackage-expense-list/',
+        view=views.tourpackage_expense_list_api_view,
+        name='tourpackage_expense_list'
+    ),
+    path(
+        'tourpackage-expense-create/',
+        view=views.tourpackage_expense_create_api_view,
+        name='tourpackage_expense_create'
+    ),
+    path(
+        '<uuid:guid>/tourpackage-expense-update-delete/',
+        view=views.tourpackage_expense_update_delete_api_view,
+        name='tourpackage_expense_update_delete'
+    ),
+    path(
+        'monthly-expense-list/',
+        view=views.monthly_expense_list_api_view,
+        name='tourpackage_expense_list'
+    ),
+    path(
+        'monthly-expense-create/',
+        view=views.monthly_expense_create_api_view,
+        name='tourpackage_expense_create'
+    ),
+    path(
+        '<uuid:guid>/monthly-expense-update-delete/',
+        view=views.monthly_expense_update_delete_api_view,
+        name='tourpackage_expense_update_delete'
+    ),
+    path(
+        'finance-data/',
+        view=views.finance_data_api_view,
+        name='finance_data'
+    ),
 ]
