@@ -35,6 +35,7 @@
       td {
         border: 1px solid #ccc;
         font-size: 14px;
+        padding: 0 0.5cm;
       }
 
       .lined {
@@ -221,13 +222,11 @@
         қоида ва талабларга риоя қилиши шарт. <br />1.4. Шартнома бўйича
         Хизматларни кўрсатиш Туризм хизматларни кўрсатишнинг бошланиши ва амал
         қилиш муддати тугаши шартноманинг 1.5. бандида кўрсатилади. <br />1.5.
-        Хизматлар кўрсатиш муддати: {{tourpackage_start_year}} йил «<span
-          class="lined"
-          >{{tourpackage_start_day}}</span
-        >» <span class="lined">{{tourpackage_start_month}}</span> дан
-        {{tourpackage_end_year}} йил «<span class="lined"
-          >{{tourpackage_end_day}}</span
-        >» <span class="lined">{{tourpackage_end_month}}</span> гача. <br />1.6.
+        Хизматлар кўрсатиш муддати: «<span class="lined">{{tourpackage_start_day}}</span>» 
+        <span class="lined">{{tourpackage_start_month}}</span> {{tourpackage_start_year}} йил дан
+        «<span class="lined"> {{tourpackage_end_day}} </span>» 
+        <span class="lined">{{tourpackage_end_month}}</span>
+        {{tourpackage_end_year}} йил  гача. <br />1.6.
         Тўловларни амалга ошириш тартиби - Буюртмачи тур операторга хужжатларни
         топшириш вақида тўлов қийматини 50% амалга оширади, қолган 50% виза
         чиққач 2 иш кунида амалга оширади. Лекин бу муддат жўнаб кетиш вақтидан
@@ -373,7 +372,7 @@
         <br />6.2. Ушбу шартнома икки нусхада тузилди. Иккала нусха бир хил
         кучга эга. Хар бир Тарафга ушбу шартноманинг бир нусхаси берилади.
       </p>
-      <br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br /><br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br />
       <h3 style="text-align: center; margin-bottom: 0.4cm">
         VII. ТАРАФЛАРНИНГ МАНЗИЛЛАРИ ВА БОШҚА РЕКВИЗИТЛАРИ
       </h3>
@@ -455,6 +454,7 @@
           </td>
         </tr>
       </table>
+      <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br /><br /> <br />
       <br />
       <br />
       <div
@@ -496,15 +496,17 @@
         кўмаклашади.
       </p>
       <p>
-        Сафар давомида Мадинада {{hotel_name}} меҳмонхонасига, Маккада
-        {{hotel_name}} мехмонхонасига жойлашишга (ёки айни даражадаги
-        меҳмонхонага жойлаштирилади); Мадинада ___маҳал, Маккада ___маҳал таом
+        Сафар давомида Мадинада {{hotel_name_1.title}} меҳмонхонасига, Маккада
+        {{hotel_name_2.title}} мехмонхонасига жойлашишга (ёки айни даражадаги
+        меҳмонхонага жойлаштирилади); Мадинада {{madina_meal}} маҳал, Маккада {{mecca_meal}} маҳал таом
         билан таъминланишига келишилди. {{client_first_name}}
         {{client_last_name}}
-        <img
+    
+        {% comment %} <img
           style="width: 3cm; height: 2cm; object-fit: contain"
           src="{{ image }}"
-        />
+        /> {% endcomment %}
+        
       </p>
     </div>
   </body>

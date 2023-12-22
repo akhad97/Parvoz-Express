@@ -229,6 +229,8 @@ class ClientContractDataAPIView(APIView):
         client.contract_price_for_number = request.data.get('price_for_number')
         client.contract_price_for_text = request.data.get('price_for_text')
         client.contract_address = request.data.get('address')
+        client.mecca_meal = request.data.get('mecca_meal')
+        client.madina_meal = request.data.get('madina_meal')
         client.save()
         return Response({'message': 'Data saved successfully'})
         
@@ -238,7 +240,6 @@ from urllib.parse import urljoin
 import random
 
 class ClientPDFView(APIView):
-
     def get(self, request, guid, *args, **kwargs):
         client = Client.objects.get(guid=guid)
         serializer = ClientSerializer(client)
@@ -246,7 +247,6 @@ class ClientPDFView(APIView):
         client_last_name = client.last_name
         client_middle_name = client.middle_name
         client_passport_series = client.passport_series
-
         client_signin_image = client.image_data
         client_agent_id = client.contract_agent_id
         client_select = client.contract_select
@@ -258,6 +258,8 @@ class ClientPDFView(APIView):
         client_select_6 = client.contract_select_6
         client_select_7 = client.contract_select_7
         client_select_8 = client.contract_select_8
+        mecca_meal = client.mecca_meal
+        madina_meal = client.madina_meal
         client_number = client.contract_number
         client_price_for_number = client.contract_price_for_number
         client_price_for_text = client.contract_price_for_text
@@ -270,13 +272,33 @@ class ClientPDFView(APIView):
         tourpackage_end_month = client.tour_package.end_date.strftime('%B')
         tourpackage_end_day = client.tour_package.end_date.day
 
-        # BASE_URL = 'https://c513-84-54-74-20.ngrok-free.app/media/'
-        BASE_URL = 'https://api.parvoz.site.uz/media/'
+        months = {
+            "January": "Январь",
+            "February": "Февраль",
+            "March": "Март",
+            "April": "Апрель",
+            "May": "Май",
+            "June": "Июнь",
+            "July": "Июль",
+            "August": "Август",
+            "September": "Сентябрь",
+            "October": "Октябрь",
+            "November": "Ноябрь",
+            'December': 'Декабрь'
+        }
+        tourpackage_start_month = months.get(tourpackage_start_month, tourpackage_start_month)
+        tourpackage_end_month = months.get(tourpackage_end_month, tourpackage_end_month)
+
+        BASE_URL = 'https://68a2-84-54-74-20.ngrok-free.app/media/'
+        # BASE_URL = 'https://api.parvoz.site.uz/media/'
         complete_signin_image_url = urljoin(BASE_URL, str(client_signin_image))
         year =  datetime.now().year
-        month =  datetime.now().strftime('%B')
+        date_month =  datetime.now().strftime('%B')
+        month = months.get(date_month, date_month)
         day =  datetime.now().day
-        hotel_name = client.hotel.title
+        hotel_name_1 = client.tour_package.hotel.all()[0]
+        hotel_name_2 = client.tour_package.hotel.all()[1]
+
         html_content = render_to_string('client.html', 
                                         {
                                             'data': serializer.data, 
@@ -287,7 +309,8 @@ class ClientPDFView(APIView):
                                             'year': year,
                                             'month': month,
                                             'day': day,
-                                            'hotel_name': hotel_name,
+                                            'hotel_name_1': hotel_name_1,
+                                            'hotel_name_2': hotel_name_2,
                                             'tourpackage_start_year': tourpackage_start_year,
                                             'tourpackage_start_month': tourpackage_start_month,
                                             'tourpackage_start_day': tourpackage_start_day,
@@ -309,6 +332,8 @@ class ClientPDFView(APIView):
                                             'price_for_number': client_price_for_number,
                                             'price_for_text': client_price_for_text,
                                             'address': client_address,
+                                            'mecca_meal': mecca_meal,
+                                            'madina_meal': madina_meal,
                                         })
         random_number = random.randint(1, 100000)
         pdf_file = pdfkit.from_string(html_content, False) 

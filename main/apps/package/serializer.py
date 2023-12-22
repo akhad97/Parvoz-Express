@@ -290,6 +290,7 @@ class MonthlyExpenseSerializer(serializers.ModelSerializer):
 from ..visa.models import Visa
 from ..client.models import Client
 from ..package.models import TourpackageExpense
+from decimal import Decimal
 
 class FinanceDataSerializer(serializers.ModelSerializer):
     visa = serializers.SerializerMethodField()
@@ -349,6 +350,7 @@ class FinanceDataSerializer(serializers.ModelSerializer):
     def get_hotel_food(self, obj):
         hotel_nights = [int(hotel.booking_duration) for hotel in obj.hotel.all()]
         num_of_client = obj.number_of_seats
+        currency = obj.currency
         # num_of_client = Client.objects.filter(tour_package=obj).select_related('tour_package').count()
         additional_expense_for_hotel = []
         if obj.hotel_data:
@@ -360,10 +362,11 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         else:
             additional_expense_for_hotel = [0] * obj.hotel.count()
         food_price_for_each_hotel = [
-            num_of_client * nights * expense
+            ((num_of_client * nights * expense) / currency)
             for nights, expense in zip(hotel_nights, additional_expense_for_hotel)
         ]
-        return food_price_for_each_hotel
+        hotel_total_food = [round(value, 2) for value in food_price_for_each_hotel]
+        return hotel_total_food
 
 
     def get_visa(self, obj):
@@ -385,13 +388,87 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         return total
 
 
+    def get_first_non_zero_value(self, values):
+        for value in values:
+            if value != 0:
+                return value
+        return 0
+
+
     def get_hotel(self, obj):
         hotel_nights = [int(hotel.booking_duration) for hotel in obj.hotel.all()]
         num_of_client = obj.number_of_seats
-        hotel_room_price = [int(hotel.single_room_price) for hotel in obj.hotel.all()]
-        print('hotel_nights', hotel_nights)
-        print('num_of_client', num_of_client)
-        print('hotel_room_price', hotel_room_price)
+        hotel_single_room_price = [int(hotel.single_room_price) for hotel in obj.hotel.all()]
+        hotel_double_room_price = [int(hotel.double_room_price) for hotel in obj.hotel.all()]
+        hotel_triple_room_price = [int(hotel.triple_room_price) for hotel in obj.hotel.all()]
+        hotel_quad_room_price = [int(hotel.quadruple_room_price) for hotel in obj.hotel.all()]
+        currency = obj.currency
+
+        # print('hotel_sinle_room_price', hotel_sinle_room_price)
+        # print('hotel_double_room_price', hotel_double_room_price)
+        # print('hotel_triple_room_price', hotel_triple_room_price)
+        # print('hotel_quad_room_price', hotel_quad_room_price)
+        # print('hotel_nights', hotel_nights)
+
+        # if hotel_sinle_room_price == 0:
+        #     # total = ((hotel_sinle_room_price * hotel_nights)/currency)/1
+        #     hotel_sinle_room_price = 0
+        #     # total = [((Decimal(nights) * room_price) / currency) / Decimal(1) for nights, room_price in zip(hotel_nights, hotel_sinle_room_price)]
+        # else: 
+        #     total = [((Decimal(nights) * room_price) / currency) / Decimal(1) for nights, room_price in zip(hotel_nights, hotel_sinle_room_price)]
+
+
+        # if hotel_double_room_price == 0:
+        #     hotel_double_room_price = 0
+        #     # total = ((hotel_double_room_price * hotel_nights)/currency)/2
+        #     # total = [((Decimal(nights) * room_price) / currency) / Decimal(2) for nights, room_price in zip(hotel_nights, hotel_double_room_price)]
+        # else:
+        #     total = [((Decimal(nights) * room_price) / currency) / Decimal(2) for nights, room_price in zip(hotel_nights, hotel_double_room_price)]
+
+        # if hotel_triple_room_price == 0:
+        #     hotel_triple_room_price = 0
+        #     # total = ((hotel_triple_room_price * hotel_nights)/currency)/3
+        #     # total = [((Decimal(nights) * room_price) / currency) / Decimal(3) for nights, room_price in zip(hotel_nights, hotel_triple_room_price)]
+        # else:
+        #     total = [((Decimal(nights) * room_price) / currency) / Decimal(3) for nights, room_price in zip(hotel_nights, hotel_triple_room_price)]
+        #     print('total>>>>>', total)
+
+        # if hotel_quad_room_price == 0:
+        #     hotel_quad_room_price = 0
+        #     # total = ((hotel_quad_room_price * hotel_nights)/currency)/3
+        #     # total = [((Decimal(nights) * room_price) / currency) / Decimal(4) for nights, room_price in zip(hotel_nights, hotel_quad_room_price)]
+        # else:
+        #     total = [((Decimal(nights) * room_price) / currency) / Decimal(4) for nights, room_price in zip(hotel_nights, hotel_quad_room_price)]
+
+        non_zero_price = self.get_first_non_zero_value([
+            self.get_first_non_zero_value(hotel_single_room_price),
+            self.get_first_non_zero_value(hotel_double_room_price),
+            self.get_first_non_zero_value(hotel_triple_room_price),
+            self.get_first_non_zero_value(hotel_quad_room_price)
+        ])
+
+        if non_zero_price:
+            room_type_divisors = {
+                'single': 1,
+                'double': 2,
+                'triple': 3,
+                'quad': 4
+            }
+
+            room_type = None
+            for room_type, room_prices in zip(room_type_divisors.keys(), [hotel_single_room_price, hotel_double_room_price, hotel_triple_room_price, hotel_quad_room_price]):
+                if non_zero_price in room_prices:
+                    break
+
+            if room_type:
+                total = [((Decimal(nights) * non_zero_price * num_of_client) / currency) / Decimal(room_type_divisors[room_type]) for nights in hotel_nights]
+            else:
+                total = []
+        else:
+            total = []
+
+
+        # total = ((hotel_price * hotel_nights)/currency)/(2 or 3 or 4)
         # hotel_clients = Client.objects.filter(tour_package=obj)
         # hotel_client_counts = {
         #         hotel.title: {
@@ -425,8 +502,9 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         #         hotel_quad_room_total_price
         #     )
         # ]
-        hotel_total_price = [nights * num_of_client * room_price for nights, room_price in zip(hotel_nights, hotel_room_price)]
-        return hotel_total_price
+        # hotel_total_price = [nights * num_of_client * room_price for nights, room_price in zip(hotel_nights, hotel_room_price)]
+        hotel_total = [round(value, 2) for value in total]
+        return hotel_total
 
     
     def get_total_expense(self, obj):

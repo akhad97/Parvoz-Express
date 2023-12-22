@@ -25,7 +25,7 @@ class Client(BaseModel):
     visa  = models.ForeignKey(Visa, on_delete=models.SET_NULL, null=True)
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
-    middle_name = models.CharField(max_length=200, null=True)
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
     passport_series = models.CharField(max_length=100, null=True)
     dob = models.DateField()
     passport_expiration_date = models.DateField()
@@ -56,6 +56,8 @@ class Client(BaseModel):
     contract_price_for_text = models.CharField(max_length=255, null=True, blank=True)
     contract_address = models.CharField(max_length=255, null=True, blank=True)
     image_data = models.TextField(null=True, blank=True)
+    mecca_meal = models.IntegerField(default=0)
+    madina_meal = models.IntegerField(default=0)
 
 
     class Meta(BaseMeta):
