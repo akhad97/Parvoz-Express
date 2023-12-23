@@ -289,14 +289,31 @@ class ReportDataAPIView(generics.ListAPIView):
             total_price = sum(outfit_price)
             # first_expense = total_price * clients
 
+            # outfit_prices = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()]
+            # outfitdata = tourpackage.outfit_data
+            # first_expense = 0 
+            # for i, outfit_data in enumerate(outfitdata):
+            #     outfit_sum = sum(map(int, outfit_data.values()))
+            #     outfit_multiplier = outfit_prices[i]
+            #     first_expense += int(outfit_sum * outfit_multiplier) 
+            # print('first_expense', first_expense)
             outfit_prices = [outfit.outfit_type.price_for_one for outfit in tourpackage.outfit.all()]
             outfitdata = tourpackage.outfit_data
-            first_expense = 0 
+
+            first_expense = 0
+
             for i, outfit_data in enumerate(outfitdata):
-                outfit_sum = sum(map(int, outfit_data.values()))
-                outfit_multiplier = outfit_prices[i]
-                first_expense += int(outfit_sum * outfit_multiplier) 
+                # Ensure the index 'i' is within the range of 'outfit_prices'
+                if i < len(outfit_prices):
+                    outfit_sum = sum(map(int, outfit_data.values()))
+                    outfit_multiplier = outfit_prices[i]
+                    first_expense += int(outfit_sum * outfit_multiplier)
+                else:
+                    # Handle the case where the index is out of range
+                    print(f"Warning: outfit_prices index {i} is out of range.")
+
             print('first_expense', first_expense)
+
 
             each_room_type_count = tourpackage.hotel_data
             client_count_by_room_type = []
