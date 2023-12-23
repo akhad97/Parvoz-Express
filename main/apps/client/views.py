@@ -74,8 +74,9 @@ class AllClientListAPIView(CustomListView):
         if search:
             qs = qs.filter(
                 Q(first_name__icontains=search) |
-                Q(last_name__icontains=search)
-                  )
+                Q(last_name__icontains=search)  |
+                Q(passport_series__icontains=search) 
+                )
         return qs
             
     
