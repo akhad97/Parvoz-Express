@@ -404,11 +404,11 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         hotel_quad_room_price = [int(hotel.quadruple_room_price) for hotel in obj.hotel.all()]
         currency = obj.currency
 
-        print('hotel_sinle_room_price', hotel_single_room_price)
-        print('hotel_double_room_price', hotel_double_room_price)
-        print('hotel_triple_room_price', hotel_triple_room_price)
-        print('hotel_quad_room_price', hotel_quad_room_price)
-        print('hotel_nights', hotel_nights)
+        # print('hotel_sinle_room_price', hotel_single_room_price)
+        # print('hotel_double_room_price', hotel_double_room_price)
+        # print('hotel_triple_room_price', hotel_triple_room_price)
+        # print('hotel_quad_room_price', hotel_quad_room_price)
+        # print('hotel_nights', hotel_nights)
 
         # if hotel_sinle_room_price == 0:
         #     # total = ((hotel_sinle_room_price * hotel_nights)/currency)/1
@@ -440,21 +440,31 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         # else:
         #     total = [((Decimal(nights) * room_price) / currency) / Decimal(4) for nights, room_price in zip(hotel_nights, hotel_quad_room_price)]
 
-        non_zero_price = self.get_first_non_zero_value([
-            self.get_first_non_zero_value(hotel_single_room_price),
-            self.get_first_non_zero_value(hotel_double_room_price),
-            self.get_first_non_zero_value(hotel_triple_room_price),
-            self.get_first_non_zero_value(hotel_quad_room_price)
-        ])
 
+        # non_zero_price = self.get_first_non_zero_value([
+        #     self.get_first_non_zero_value(hotel_single_room_price),
+        #     self.get_first_non_zero_value(hotel_double_room_price),
+        #     self.get_first_non_zero_value(hotel_triple_room_price),
+        #     self.get_first_non_zero_value(hotel_quad_room_price)
+        # ])
+        # print('non_zero_price', non_zero_price)
+
+        tests = [hotel_single_room_price, hotel_double_room_price, hotel_triple_room_price, hotel_quad_room_price]
+        non_zero_price = [0] * len(tests[0])
+        for i in range(len(tests)):
+            for x in range(len(tests[i])):
+                price = tests[i][x]
+                if price > 0:
+                    non_zero_price[x] = price
+                    print('non_zero_price', non_zero_price[x])
+                
         if non_zero_price:
             room_type_divisors = {
                 'single': 1,
                 'double': 2,
                 'triple': 3,
                 'quad': 4
-            }
-            print('room_type_divisors', room_type_divisors)
+            }            
 
             room_type = None
             for room_type, room_prices in zip(room_type_divisors.keys(), [hotel_single_room_price, hotel_double_room_price, hotel_triple_room_price, hotel_quad_room_price]):
@@ -462,11 +472,14 @@ class FinanceDataSerializer(serializers.ModelSerializer):
                     break
 
             if room_type:
-                total = [((Decimal(nights) * non_zero_price * num_of_client) / currency) / Decimal(room_type_divisors[room_type]) for nights in hotel_nights]
+                total = [((Decimal(nights) * non_zero_price[x] * num_of_client) / currency) / Decimal(room_type_divisors[room_type]) for x, nights in enumerate(hotel_nights)]
             else:
                 total = []
         else:
             total = []
+        
+        hotel_total = [round(value, 2) for value in total]
+        return hotel_total
 
 
         # total = ((hotel_price * hotel_nights)/currency)/(2 or 3 or 4)
@@ -504,8 +517,8 @@ class FinanceDataSerializer(serializers.ModelSerializer):
         #     )
         # ]
         # hotel_total_price = [nights * num_of_client * room_price for nights, room_price in zip(hotel_nights, hotel_room_price)]
-        hotel_total = [round(value, 2) for value in total]
-        return hotel_total
+        # hotel_total = [round(value, 2) for value in total]
+        # return hotel_total
 
     
     def get_total_expense(self, obj):
