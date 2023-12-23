@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path(
         '<uuid:guid>/client-list/',
-        view=views.client_list_api_view,
+        view=views.tourpackage_client_list_api_view,
         name='client_list'
     ),
     path(
@@ -73,5 +73,10 @@ urlpatterns = [
         'client-pdf/<uuid:guid>/',
         view=views.client_pdf_api_view,
         name='client_pdf'
-    )
+    ),
+    path(
+        'all-client-list/',
+        view=views.all_client_list_api_view,
+        name='all_client_list'
+    ),
 ]

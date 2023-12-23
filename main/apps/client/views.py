@@ -27,7 +27,7 @@ from django.core.files.base import ContentFile
 
 
 
-class ClientListAPIView(CustomListView):
+class TourPackageClientListAPIView(CustomListView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     lookup_field = 'guid'
@@ -59,7 +59,27 @@ class ClientListAPIView(CustomListView):
         return clients
     
     
-client_list_api_view = ClientListAPIView.as_view()
+tourpackage_client_list_api_view = TourPackageClientListAPIView.as_view()
+
+
+class AllClientListAPIView(CustomListView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    lookup_field = 'guid'
+
+    def get_queryset(self):
+        params = self.request.query_params
+        search = params.get('search', None)
+        qs = Client.objects.all()
+        if search:
+            qs = qs.filter(
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search)
+                  )
+        return qs
+            
+    
+all_client_list_api_view = AllClientListAPIView.as_view()
 
 
 
