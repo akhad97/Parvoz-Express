@@ -9,7 +9,8 @@ from .models import (
     GuideCalculation
 )
 from .serializers import (
-    ManagerSerializer, 
+    ManagerCreateSerializer,
+    ManagerUpdateSerializer, 
     GuideSerializer,
     ManagerCalculationListSerializer,
     ManagerCalculationCreateSerializer,
@@ -83,7 +84,7 @@ manager_login_api_view = ManagerLoginAPIView.as_view()
 
 class ManagerListAPIView(CustomListView):
     queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
+    serializer_class = ManagerUpdateSerializer
 
     def get_queryset(self):
         params = self.request.query_params
@@ -103,14 +104,15 @@ manager_list_api_view = ManagerListAPIView.as_view()
 
 class ManagerDetailAPIView(generics.RetrieveAPIView):
     queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
+    serializer_class = ManagerUpdateSerializer
     lookup_field = 'guid'
 
 manager_detail_api_view = ManagerDetailAPIView.as_view()
 
+
 class ManagerDestroyAPIView(generics.DestroyAPIView):
     queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
+    serializer_class = ManagerUpdateSerializer
     lookup_field = 'guid'
 
 manager_delete_api_view = ManagerDestroyAPIView.as_view()
@@ -118,7 +120,7 @@ manager_delete_api_view = ManagerDestroyAPIView.as_view()
 
 class ManagerUpdateAPIView(generics.UpdateAPIView):
     queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
+    serializer_class = ManagerUpdateSerializer
     lookup_field = 'guid'
 
 manager_update_api_view = ManagerUpdateAPIView.as_view()
@@ -126,7 +128,7 @@ manager_update_api_view = ManagerUpdateAPIView.as_view()
 
 class ManagerCreateAPIView(generics.CreateAPIView):
     queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
+    serializer_class = ManagerCreateSerializer
 
 manager_create_api_view = ManagerCreateAPIView.as_view()
 

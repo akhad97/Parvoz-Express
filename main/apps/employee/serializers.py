@@ -8,7 +8,23 @@ from .models import (
 )
 
 
-class ManagerSerializer(serializers.ModelSerializer):
+class ManagerUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manager
+        fields = (
+            'id',
+            'guid',
+            'full_name',
+            'nickname',
+            'city',
+            'phone_number',
+            'price',
+            'password',
+            'is_active',
+        )
+
+
+class ManagerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manager
         fields = (
