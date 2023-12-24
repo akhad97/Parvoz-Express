@@ -98,6 +98,13 @@ class TourPackageUpdateSerializer(serializers.ModelSerializer):
             'currency'
         )
 
+class TourPackagePriceUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourPackage
+        fields = (
+            'price_for_person',
+        )
+
 
 
 class TourPackageCreateSerializer(serializers.ModelSerializer):
@@ -301,6 +308,11 @@ class FinanceDataSerializer(serializers.ModelSerializer):
     num_of_client = serializers.SerializerMethodField()
     tourpackage_expense = serializers.SerializerMethodField()
     total_expense = serializers.SerializerMethodField()
+    hotel_title = serializers.SerializerMethodField()
+    flight_title_1 = serializers.CharField(source='flight.flight_name_1')
+    flight_title_2 = serializers.CharField(source='flight.flight_name_2')
+    flight_title_3 = serializers.CharField(source='flight.flight_name_3')
+    flight_title_4 = serializers.CharField(source='flight.flight_name_4')
 
     class Meta:
         model = TourPackage
@@ -317,8 +329,17 @@ class FinanceDataSerializer(serializers.ModelSerializer):
             'outfit',
             'num_of_client',
             'tourpackage_expense',
-            'total_expense'
+            'total_expense',
+            'hotel_title',
+            'flight_title_1',
+            'flight_title_2',
+            'flight_title_3',
+            'flight_title_4'
         )
+    
+    def get_hotel_title(self, obj):
+        hotel_titles = obj.hotel.all() 
+        return [hotel.title for hotel in hotel_titles]
 
 
     def get_tourpackage_expense(self, obj):

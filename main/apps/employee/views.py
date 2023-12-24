@@ -1,8 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.utils import timezone
-from datetime import datetime
+from django.db.models import Q
 from .models import (
     Guide, 
     Manager,
@@ -56,7 +55,7 @@ guide_login_api_view = GuideLoginAPIView.as_view()
 
 
 class ManagerLoginAPIView(generics.GenericAPIView):
-    queryset = Manager.objects.all()
+    queryset = Manager.objects.filter(is_active=True)
     serializer_class = ManagerLoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -131,7 +130,6 @@ class ManagerCreateAPIView(generics.CreateAPIView):
 
 manager_create_api_view = ManagerCreateAPIView.as_view()
 
-from django.db.models import Q
 
 class GuideListAPIView(CustomListView):
     queryset = Guide.objects.all()

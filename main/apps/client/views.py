@@ -294,18 +294,18 @@ class ClientPDFView(APIView):
         tourpackage_end_day = client.tour_package.end_date.day
 
         months = {
-            "January": "Январь",
-            "February": "Февраль",
-            "March": "Март",
-            "April": "Апрель",
-            "May": "Май",
-            "June": "Июнь",
-            "July": "Июль",
-            "August": "Август",
-            "September": "Сентябрь",
-            "October": "Октябрь",
-            "November": "Ноябрь",
-            'December': 'Декабрь'
+        'January': 'Январ',
+        'February': 'Феврал',
+        'March': 'Март',
+        'April': 'Апрел',
+        'May': 'Май',
+        'June': 'Июн',
+        'July': 'Июл',
+        'August': 'Август',
+        'September': 'Сентябр',
+        'October': 'Октябр',
+        'November': 'Ноябр',
+        'December': 'Декабр',
         }
         tourpackage_start_month = months.get(tourpackage_start_month, tourpackage_start_month)
         tourpackage_end_month = months.get(tourpackage_end_month, tourpackage_end_month)

@@ -163,4 +163,9 @@ urlpatterns = [
         view=views.finance_data_api_view,
         name='finance_data'
     ),
+    path(
+        '<uuid:guid>/tourpackage-price-update/',
+        view=views.tourpackage_price_update_api_view,
+        name='tourpackage_price_update'
+    ),
 ]

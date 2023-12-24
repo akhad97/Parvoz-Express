@@ -31,7 +31,8 @@ from .serializer import (
     TourPackageManagerGuideSerializer,
     TourPackageExpenseSerializer,
     MonthlyExpenseSerializer,
-    FinanceDataSerializer
+    FinanceDataSerializer,
+    TourPackagePriceUpdateSerializer
 )
 from ..common.views import CustomListView, CustomCreateAPIView, CustomDetailView
 from ..client.models import Client
@@ -81,10 +82,10 @@ class TourPackageUpdateAPIVIew(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         guid = self.kwargs['guid']
+        tourpackage = TourPackage.objects.get(guid=guid)
         hotels = self.request.data['hotel']
         outfits = self.request.data['outfit']
         transports = self.request.data['transport']
-        tourpackage = TourPackage.objects.get(guid=guid)
         tourpackage.hotel.set(hotels)
         tourpackage.outfit.set(outfits) 
         tourpackage.transport.set(transports) 
@@ -94,6 +95,22 @@ class TourPackageUpdateAPIVIew(generics.UpdateAPIView):
 
 
 tourpackage_update_api_view = TourPackageUpdateAPIVIew.as_view()
+
+
+class TourPackagePriceUpdateAPIVIew(generics.UpdateAPIView):
+    queryset = TourPackage.objects.all()
+    serializer_class = TourPackagePriceUpdateSerializer
+    lookup_field = 'guid'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'price for one updated succesfully'})
+        return Response({'message':' failed', 'details': serializer.errors})
+
+tourpackage_price_update_api_view = TourPackagePriceUpdateAPIVIew.as_view()
 
 
 class TourPackageDeleteAPIVIew(generics.DestroyAPIView):
@@ -844,7 +861,6 @@ monthly_expense_update_delete_api_view = MonthlyExpenseUpdateDeleteAPIView.as_vi
 class FinanceDAtaPIView(generics.ListAPIView):
     queryset = TourPackage.objects.filter(is_active=True)
     serializer_class = FinanceDataSerializer
-
 
     def get_queryset(self):
         queryset = TourPackage.objects.filter(is_active=True).select_related(
