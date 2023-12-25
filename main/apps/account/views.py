@@ -133,7 +133,6 @@ class AgentListAPIView(generics.ListAPIView):
 agent_list_api_view = AgentListAPIView.as_view()
 
 
-
 class PasswordChangeAPIView(generics.GenericAPIView):
     serializer_class = PasswordChangeSerializer
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]

@@ -4,10 +4,12 @@ from .models import (
     Partner,
     VisaClient
 )
+from ..package.models import TourPackage
 
 
 class ClientSerializer(serializers.ModelSerializer):
     hotel = serializers.SerializerMethodField()
+    num_of_clients = serializers.SerializerMethodField()
     class Meta:
         model = Client
         fields = (
@@ -33,7 +35,8 @@ class ClientSerializer(serializers.ModelSerializer):
             'human_development',
             'gender_type',
             'created_by',
-            'contract_file'
+            'contract_file',
+            'num_of_clients'
         )
     
     def get_hotel(self, obj):
@@ -43,6 +46,14 @@ class ClientSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_num_of_clients(self, obj):
+        tour_package = obj.tour_package
+        if isinstance(tour_package, TourPackage):
+            client_counts = Client.objects.filter(tour_package=tour_package).count()
+            return client_counts
+        else:
+            return 0
+    
 
 class ClientCreateSerializer(serializers.ModelSerializer):
     visa_file = serializers.FileField(required=False)

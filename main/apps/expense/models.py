@@ -31,6 +31,7 @@ class OtherExpense(BaseModel):
     title = models.CharField(max_length=200)
     description = models.TextField()
     amount = models.DecimalField(max_digits=20, decimal_places=2)
+    office = models.IntegerField(blank=True, default=0)
     confirmed = models.BooleanField(default=False)
 
 

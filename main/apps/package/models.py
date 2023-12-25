@@ -8,6 +8,8 @@ from ..outfit.models import Outfit
 from ..flight.models.flight import Flight
 from ..employee.models import Manager, Guide
 from ..common.utils import upload_images
+# from main.apps.account.models import User
+
 
 
 class StatusChoices(models.TextChoices):
@@ -36,9 +38,11 @@ class TourPackage(BaseModel):
     transport = models.ManyToManyField(Transport)
     manager = models.ForeignKey(Manager, on_delete=models.PROTECT, related_name='tourpackage_managers', null=True)
     guide = models.ManyToManyField(Guide)
+    agent = models.ManyToManyField('account.User')
     date_data = models.JSONField(null=True, blank=True)
     outfit_data = models.JSONField(null=True, blank=True)
     hotel_data = models.JSONField(null=True, blank=True)
+    agent_data = models.JSONField(null=True, blank=True)
     status = models.CharField(
         max_length=100, 
         choices=StatusChoices.choices,
@@ -121,6 +125,7 @@ class TourpackageExpense(BaseModel):
     title = models.CharField(max_length=255, null=True, blank=True)
     num_of_people = models.PositiveIntegerField(default=0)
     price_for_one = models.DecimalField(max_digits=20, decimal_places=2)
+    group = models.IntegerField(null=True, blank=True)
 
     class Meta(BaseMeta):
         verbose_name = _("TourpackageExpense")

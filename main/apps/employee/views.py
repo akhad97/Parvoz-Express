@@ -55,8 +55,6 @@ class GuideLoginAPIView(generics.GenericAPIView):
 guide_login_api_view = GuideLoginAPIView.as_view()
 
 
-from django.contrib.auth.hashers import check_password
-
 class ManagerLoginAPIView(generics.GenericAPIView):
     queryset = Manager.objects.filter(is_active=True)
     serializer_class = ManagerLoginSerializer
@@ -69,19 +67,17 @@ class ManagerLoginAPIView(generics.GenericAPIView):
             try:
                 manager = Manager.objects.get(phone_number=phone_number)
             except Manager.DoesNotExist:
-                return Response({'message': 'Manager not found!'}, status=status.HTTP_404_NOT_FOUND)
-
+                return Response({'message':'Manager not found!'}, status=status.HTTP_404_NOT_FOUND)
+            response_data = {
+                'data': serializer.data,
+                'guid':manager.guid
+            }
             if check_password(password, manager.password):
-                response_data = {
-                    'data': serializer.data,
-                    'guid': manager.guid
-                }
                 return Response(response_data, status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'Invalid phone number or password', 'status': status.HTTP_401_UNAUTHORIZED})
+                return Response({'error': 'Invalid phone number or password', 'status':status.HTTP_401_UNAUTHORIZED})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 manager_login_api_view = ManagerLoginAPIView.as_view()
 

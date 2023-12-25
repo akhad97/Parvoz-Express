@@ -109,7 +109,7 @@ class UserListSerializer(serializers.ModelSerializer):
             'is_superuser',
             'percent'
         ) 
-    
+        
     def get_region(self, obj):
         region = obj.region
         if region:
@@ -117,6 +117,27 @@ class UserListSerializer(serializers.ModelSerializer):
         else:
             return None
 
+
+class AgentListSerializer(serializers.ModelSerializer): 
+    created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M")
+    region = serializers.SerializerMethodField() 
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'guid',
+            'phone_number',
+            "full_name",
+            "email",
+            'region',
+            'is_agent',
+            'agent_id',
+            'is_active',
+            'created_at',
+            'percent'
+        ) 
+    
+    
 
 class UserUpdateSerializer(serializers.ModelSerializer): 
     class Meta:

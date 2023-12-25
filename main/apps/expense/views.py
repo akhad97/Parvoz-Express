@@ -24,16 +24,29 @@ class OtherExpenseListAPIView(CustomListView):
     serializer_class = OtherExpenseListSerializer
 
     def get_queryset(self):
-        # user = self.request.user
         params = self.request.query_params
         query = params.get('query', None)
-
-        expenses = OtherExpense.objects.all() # need to filter based on user or smth 
-
+        year = params.get('year', None)
+        month = params.get('month', None)
+        queryset = OtherExpense.objects.all()
         if query:
-            expenses = expenses.filter(Q(title__icontains=query) | Q(amount__icontains=query))
-
-        return expenses
+            queryset = queryset.filter(Q(title__icontains=query) | Q(amount__icontains=query))
+        if month and year:
+            queryset = queryset.filter(
+                Q(created_at__month=month, created_at__year=year) |
+                Q(created_at__month=month, created_at__year=year)
+                )
+        elif month:
+            queryset = queryset.filter(
+                Q(created_at__month=month) |
+                Q(created_at__month=month)
+            ) 
+        elif year:
+            queryset = queryset.filter(
+                Q(created_at__year=year) |
+                Q(created_at__year=year)
+                )
+        return queryset
 
 otherexpense_list_api_view = OtherExpenseListAPIView.as_view()
 
@@ -57,7 +70,6 @@ otherexpense_update_api_view = OtherExpenseDetailAPIView.as_view()
 def otherexpense_view(request):
     category_percentages = calculate_category_percentages()
     return Response({'category_percentages': category_percentages})
-
 
 otherexpense_view_data_api_view = otherexpense_view
 

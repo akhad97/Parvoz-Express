@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from ..common.models import BaseModel, BaseMeta
 from .managers.user import UserManager
-from ..package.models import TourPackage
+from main.apps.package.models import TourPackage
 
 
 

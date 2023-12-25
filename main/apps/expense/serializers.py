@@ -17,6 +17,7 @@ class OtherExpenseListSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'amount',
+            'office',
             'confirmed'
         )
 
@@ -34,6 +35,7 @@ class OtherExpenseCreateSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'amount',
+            'office',
             'confirmed'
         )
 

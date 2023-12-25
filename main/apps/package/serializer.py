@@ -13,6 +13,7 @@ from ..outfit.serializers import OutfitListSerializer
 from ..transport.serializers import TransportSerializer
 from ..flight.serializer.flight import FlightSerializer
 from ..employee.serializers import GuideSerializer
+from ..account.serializers import AgentListSerializer
 
 
 class TourPackageManagerGuideSerializer(serializers.ModelSerializer):
@@ -40,6 +41,7 @@ class TourPackageSerializer(serializers.ModelSerializer):
     outfit = OutfitListSerializer(many=True)
     transport = TransportSerializer(many=True)
     guide = GuideSerializer(many=True)
+    agent = AgentListSerializer(many=True)
     transport_full_names = serializers.SerializerMethodField()
 
     class Meta:
@@ -57,11 +59,13 @@ class TourPackageSerializer(serializers.ModelSerializer):
             'hotel',
             'outfit',
             'transport',
+            'agent',
             'manager',
             'guide',
             'date_data',
             'outfit_data',
             'hotel_data',
+            'agent_data',
             'status',
             'currency',
             'is_active',
@@ -88,11 +92,13 @@ class TourPackageUpdateSerializer(serializers.ModelSerializer):
             'hotel',
             'outfit',
             'transport',
+            'agent',
             'manager',
             'guide',
             'date_data',
             'outfit_data',
             'hotel_data',
+            'agent_data',
             'status',
             'is_active',
             'currency'
@@ -123,11 +129,13 @@ class TourPackageCreateSerializer(serializers.ModelSerializer):
             'hotel',
             'outfit',
             'transport',
+            'agent',
             'manager',
             'guide',
             'date_data',
             'outfit_data',
             'hotel_data',
+            'agent_data',
             'currency',
             'status'
         )
@@ -268,7 +276,8 @@ class TourPackageExpenseSerializer(serializers.ModelSerializer):
             'tourpackage',
             'title',
             'num_of_people',
-            'price_for_one'
+            'price_for_one',
+            'group'
         )
 
 from django.db.models import Q, Sum

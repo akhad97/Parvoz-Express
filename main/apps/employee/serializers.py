@@ -147,6 +147,7 @@ class GuideLoginSerializer(serializers.ModelSerializer):
 
 
 class ManagerLoginSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = Manager 
         fields = (
