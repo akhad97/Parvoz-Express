@@ -43,6 +43,7 @@ class TourPackageSerializer(serializers.ModelSerializer):
     guide = GuideSerializer(many=True)
     agent = AgentListSerializer(many=True)
     transport_full_names = serializers.SerializerMethodField()
+    clients = serializers.SerializerMethodField()
 
     class Meta:
         model = TourPackage
@@ -69,11 +70,36 @@ class TourPackageSerializer(serializers.ModelSerializer):
             'status',
             'currency',
             'is_active',
-            'transport_full_names'
+            'transport_full_names',
+            'clients'
         )
 
     def get_transport_full_names(self, obj):
         return [transport.full_name for transport in obj.transport.all()]
+    
+    # def get_clients(self, obj):
+    #     request = self.context.get('request')
+    #     agent = request.query_params.get('agent')
+    #     clients = Client.objects.filter(tour_package=obj, created_by=agent).count()
+    #     return clients 
+    def get_clients(self, obj):
+        request = self.context.get('request')
+        if request:
+            agent = request.query_params.get('agent')
+            if agent:
+                clients_queryset = Client.objects.filter(tour_package=obj, created_by=agent)
+                print(f"Clients Queryset: {clients_queryset}")
+                clients = clients_queryset.count()
+                return clients
+        return 0
+
+
+
+
+    # def get_clients(self, obj):
+    #     clients = Client.objects.filter(tour_package=obj, created_by='NMA3').count()
+    #     return clients
+
 
 
 class TourPackageUpdateSerializer(serializers.ModelSerializer):
