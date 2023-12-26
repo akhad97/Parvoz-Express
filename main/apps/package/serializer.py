@@ -322,7 +322,7 @@ class FinanceDataSerializer(serializers.ModelSerializer):
     flight_title_2 = serializers.CharField(source='flight.flight_name_2')
     flight_title_3 = serializers.CharField(source='flight.flight_name_3')
     flight_title_4 = serializers.CharField(source='flight.flight_name_4')
-    group = serializers.SerializerMethodField()
+    # group = serializers.SerializerMethodField()
 
     class Meta:
         model = TourPackage
@@ -341,16 +341,17 @@ class FinanceDataSerializer(serializers.ModelSerializer):
             'tourpackage_expense',
             'total_expense',
             'hotel_title',
-            'group',
+            # 'group',
             'flight_title_1',
             'flight_title_2',
             'flight_title_3',
             'flight_title_4'
         )
     
-    def get_group(self, obj):
-        group = TourpackageExpense.objects.get(tourpackage=obj).group
-        return group
+    # def get_group(self, obj):
+    #     tourpackage_expenses = list(TourpackageExpense.objects.filter(tourpackage=obj))
+    #     for tourpackage_expense in tourpackage_expenses:
+    #         return tourpackage_expense.group
 
     def get_hotel_title(self, obj):
         hotel_titles = obj.hotel.all() 
@@ -364,7 +365,8 @@ class FinanceDataSerializer(serializers.ModelSerializer):
             'tourpackage', 
             'title', 
             'num_of_people', 
-            'price_for_one'
+            'price_for_one',
+            'group'
             )
         return expense
 
