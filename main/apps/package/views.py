@@ -46,15 +46,11 @@ class TourPackageListAPIVIew(CustomListView):
         params = self.request.query_params
         title = params.get('title')
         status = params.get('status')
-
         qs = TourPackage.objects.filter(is_active=True)
-
         if title:
             qs = qs.filter(title__icontains=title)
-
         if status:
             qs = qs.filter(status__icontains=status)
-        
         return qs
 
 tourpackage_list_api_view = TourPackageListAPIVIew.as_view()

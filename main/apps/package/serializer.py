@@ -43,7 +43,15 @@ class TourPackageSerializer(serializers.ModelSerializer):
     guide = GuideSerializer(many=True)
     agent = AgentListSerializer(many=True)
     transport_full_names = serializers.SerializerMethodField()
-    clients = serializers.SerializerMethodField()
+    NMA1 = serializers.SerializerMethodField()
+    NMA2 = serializers.SerializerMethodField()
+    NMA3 = serializers.SerializerMethodField()
+    NMA4 = serializers.SerializerMethodField()
+    QQN = serializers.SerializerMethodField()
+    MRN = serializers.SerializerMethodField()
+    AZN = serializers.SerializerMethodField()
+    TAS = serializers.SerializerMethodField()
+    SKD = serializers.SerializerMethodField()
 
     class Meta:
         model = TourPackage
@@ -71,34 +79,57 @@ class TourPackageSerializer(serializers.ModelSerializer):
             'currency',
             'is_active',
             'transport_full_names',
-            'clients'
+            'NMA1',
+            'NMA2',
+            'NMA3',
+            'NMA4',
+            'QQN',
+            'MRN',
+            'AZN',
+            'TAS',
+            'SKD',
         )
+    
+    def get_NMA1(self, obj):
+        NMA1 = Client.objects.filter(tour_package=obj, created_by='NMA1').count()
+        return NMA1
+    
+    def get_NMA2(self, obj):
+        NMA2 = Client.objects.filter(tour_package=obj, created_by='NMA2').count()
+        return NMA2
+    
+    def get_NMA3(self, obj):
+        NMA3 = Client.objects.filter(tour_package=obj, created_by='NMA3').count()
+        return NMA3
+    
+    def get_NMA4(self, obj):
+        NMA4 = Client.objects.filter(tour_package=obj, created_by='NMA4').count()
+        return NMA4
+    
+    def get_QQN(self, obj):
+        QQN = Client.objects.filter(tour_package=obj, created_by='QQN').count()
+        return QQN
+    
+    def get_MRN(self, obj):
+        MRN = Client.objects.filter(tour_package=obj, created_by='MRN').count()
+        return MRN
+    
+    def get_AZN(self, obj):
+        AZN = Client.objects.filter(tour_package=obj, created_by='AZN').count()
+        return AZN
+    
+    def get_TAS(self, obj):
+        TAS = Client.objects.filter(tour_package=obj, created_by='TAS').count()
+        return TAS
+    
+    def get_SKD(self, obj):
+        SKD = Client.objects.filter(tour_package=obj, created_by='SKD').count()
+        return SKD
+    
 
     def get_transport_full_names(self, obj):
         return [transport.full_name for transport in obj.transport.all()]
-    
-    # def get_clients(self, obj):
-    #     request = self.context.get('request')
-    #     agent = request.query_params.get('agent')
-    #     clients = Client.objects.filter(tour_package=obj, created_by=agent).count()
-    #     return clients 
-    def get_clients(self, obj):
-        request = self.context.get('request')
-        if request:
-            agent = request.query_params.get('agent')
-            if agent:
-                clients_queryset = Client.objects.filter(tour_package=obj, created_by=agent)
-                print(f"Clients Queryset: {clients_queryset}")
-                clients = clients_queryset.count()
-                return clients
-        return 0
 
-
-
-
-    # def get_clients(self, obj):
-    #     clients = Client.objects.filter(tour_package=obj, created_by='NMA3').count()
-    #     return clients
 
 
 
