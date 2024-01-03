@@ -193,7 +193,6 @@ class AgentCalculationListAPIView(generics.ListAPIView):
         if agent is not None or tourpackage is not None:
             qs = AgentCalculation.objects.filter(agent__guid=agent, tourpackage__guid=tourpackage)
         return qs
-    
 
 agentcalculation_list_api_view = AgentCalculationListAPIView.as_view()
 
